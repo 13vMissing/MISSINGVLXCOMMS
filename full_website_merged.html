@@ -1,0 +1,4771 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Whisker Studio - Cute Cat Artist Portfolio</title>
+ <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+ <style>
+  :root {
+   --cream: #FFF6F7;
+   --blush: #F7C6D9;
+   --lavender: #D9C6F7;
+   --mint: #CFF7E6;
+   --baby-blue: #CDE7FF;
+   --peach: #FFD9C8;
+   --soft-coral: #FFB8A8;
+  }
+  
+  * { box-sizing: border-box; }
+  
+  html, body {
+   height: 100%;
+   margin: 0;
+   font-family: 'Quicksand', sans-serif;
+  }
+  
+  .app-wrapper {
+   min-height: 100%;
+   width: 100%;
+   background: linear-gradient(135deg, var(--cream) 0%, #FFF0F3 50%, #F8F0FF 100%);
+   overflow-y: auto;
+   overflow-x: hidden;
+  }
+  
+  .nav-tab {
+   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+   position: relative;
+  }
+  
+  .nav-tab:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 8px 25px rgba(247, 198, 217, 0.4);
+  }
+  
+  .nav-tab.active {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 20px rgba(247, 198, 217, 0.5);
+  }
+  
+  .card-hover {
+   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card-hover:hover {
+   transform: translateY(-5px) scale(1.02);
+   box-shadow: 0 15px 40px rgba(217, 198, 247, 0.3);
+  }
+  
+  .btn-pastel {
+   transition: all 0.3s ease;
+   position: relative;
+   overflow: hidden;
+  }
+  
+  .btn-pastel:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-pastel::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   width: 0;
+   height: 0;
+   background: rgba(255, 255, 255, 0.3);
+   border-radius: 50%;
+   transform: translate(-50%, -50%);
+   transition: width 0.4s, height 0.4s;
+  }
+  
+  .btn-pastel:hover::after {
+   width: 300px;
+   height: 300px;
+  }
+  
+  .sparkle {
+   position: absolute;
+   width: 8px;
+   height: 8px;
+   background: radial-gradient(circle, #FFE4EC 0%, transparent 70%);
+   border-radius: 50%;
+   animation: sparkle 3s ease-in-out infinite;
+   pointer-events: none;
+  }
+  
+  @keyframes sparkle {
+   0%, 100% { opacity: 0; transform: scale(0); }
+   50% { opacity: 1; transform: scale(1); }
+  }
+  
+  .floating-paw {
+   position: absolute;
+   font-size: 20px;
+   opacity: 0.3;
+   animation: float 6s ease-in-out infinite;
+   pointer-events: none;
+  }
+  
+  @keyframes float {
+   0%, 100% { transform: translateY(0) rotate(0deg); }
+   50% { transform: translateY(-20px) rotate(10deg); }
+  }
+  
+  .cat-peek {
+   position: absolute;
+   bottom: -30px;
+   left: 50%;
+   transform: translateX(-50%);
+   font-size: 40px;
+   transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+   pointer-events: none;
+  }
+  
+  .profile-container:hover .cat-peek {
+   bottom: -5px;
+  }
+  
+  .gallery-item {
+   transition: all 0.35s ease;
+   position: relative;
+   overflow: hidden;
+   cursor: pointer;
+  }
+  
+  .gallery-item:hover {
+   transform: scale(1.08);
+   z-index: 10;
+   filter: drop-shadow(0 10px 30px rgba(247, 198, 217, 0.4));
+  }
+  
+  .gallery-item:hover .gallery-overlay {
+   opacity: 1;
+  }
+  
+  .gallery-sparkles {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   opacity: 0;
+   font-size: 20px;
+   animation: twinkle 0.6s ease-in-out;
+  }
+  
+  .gallery-item:hover .gallery-sparkles {
+   opacity: 1;
+  }
+  
+  @keyframes twinkle {
+   0%, 100% { opacity: 0; transform: scale(0); }
+   50% { opacity: 1; transform: scale(1); }
+  }
+  
+  .gallery-overlay {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background: linear-gradient(transparent, rgba(247, 198, 217, 0.9));
+   padding: 20px 15px 15px;
+   opacity: 0;
+   transition: opacity 0.3s ease;
+   border-radius: 0 0 16px 16px;
+  }
+  
+  .page-content {
+   animation: fadeIn 0.4s ease;
+  }
+  
+  @keyframes fadeIn {
+   from { opacity: 0; transform: translateY(10px); }
+   to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .input-pastel {
+   transition: all 0.3s ease;
+   border: 2px solid transparent;
+  }
+  
+  .input-pastel:focus {
+   border-color: var(--lavender);
+   box-shadow: 0 0 20px rgba(217, 198, 247, 0.4);
+   outline: none;
+  }
+  
+  .commission-card {
+   background: linear-gradient(145deg, #FFFFFF 0%, var(--cream) 100%);
+  }
+  
+  .secret-paw {
+   cursor: pointer;
+   transition: transform 0.3s ease;
+   opacity: 0.4;
+  }
+  
+  .secret-paw:hover {
+   transform: scale(1.3) rotate(15deg);
+   opacity: 0.7;
+  }
+  
+  .confetti {
+   position: fixed;
+   pointer-events: none;
+   z-index: 1000;
+   animation: confettiFall 3s ease-out forwards;
+  }
+  
+  @keyframes confettiFall {
+   0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+   100% { transform: translateY(100%) rotate(720deg); opacity: 0; }
+  }
+  
+  .running-cat {
+   position: fixed;
+   font-size: 40px;
+   z-index: 1001;
+   animation: runAcross 6s ease-in-out forwards;
+  }
+  
+  @keyframes runAcross {
+   0% { left: -80px; bottom: 50%; }
+   25% { left: 30%; bottom: 48%; transform: scaleX(1); }
+   50% { left: 60%; bottom: 52%; transform: scaleX(1); }
+   75% { left: 80%; bottom: 50%; }
+   100% { left: 110%; bottom: 50%; }
+  }
+  
+  .falling-cat {
+   position: fixed;
+   font-size: 40px;
+   z-index: 1001;
+   animation: catFall 3s ease-in forwards;
+   pointer-events: none;
+  }
+  
+  @keyframes catFall {
+   0% { top: -50px; opacity: 1; transform: rotate(0deg); }
+   100% { top: 100%; opacity: 0; transform: rotate(360deg); }
+  }
+  
+  .paw-print {
+   position: fixed;
+   font-size: 20px;
+   z-index: 999;
+   opacity: 0.5;
+   animation: pawFade 2s ease-out forwards;
+   pointer-events: none;
+  }
+  
+  @keyframes pawFade {
+   0% { opacity: 0.7; transform: scale(1); }
+   100% { opacity: 0; transform: scale(0.5); }
+  }
+  
+  .yarn-ball {
+   position: fixed;
+   font-size: 30px;
+   cursor: pointer;
+   z-index: 35;
+   transition: all 0.2s ease;
+   animation: yarnBob 3s ease-in-out infinite;
+  }
+  
+  .yarn-ball:hover {
+   transform: scale(1.2);
+  }
+  
+  @keyframes yarnBob {
+   0%, 100% { transform: translateY(0); }
+   50% { transform: translateY(-10px); }
+  }
+  
+  .popup-overlay {
+   background: rgba(255, 246, 247, 0.95);
+   backdrop-filter: blur(10px);
+  }
+  
+  .chat-button {
+   position: fixed;
+   bottom: 20px;
+   right: 20px;
+   width: 70px;
+   height: 70px;
+   background: #F4A6C1;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   font-size: 40px;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+   transition: all 0.3s ease;
+   z-index: 40;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  }
+  
+  .chat-button:hover {
+   background: #E68BB0;
+   transform: scale(1.1);
+   animation: wiggle 0.5s ease-in-out;
+  }
+  
+  @keyframes wiggle {
+   0%, 100% { transform: scale(1.1) rotate(0deg); }
+   25% { transform: scale(1.1) rotate(-5deg); }
+   75% { transform: scale(1.1) rotate(5deg); }
+  }
+  
+  .chat-tooltip {
+   position: absolute;
+   bottom: 100%;
+   right: 0;
+   background: #F4A6C1;
+   color: #8B5A6B;
+   padding: 8px 12px;
+   border-radius: 20px;
+   font-size: 12px;
+   font-weight: 600;
+   white-space: nowrap;
+   margin-bottom: 10px;
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity 0.3s ease;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-button:hover .chat-tooltip {
+   opacity: 1;
+  }
+  
+  .chat-window {
+   position: fixed;
+   bottom: 100px;
+   right: 20px;
+   width: 320px;
+   height: 420px;
+   background: linear-gradient(145deg, #FFE4F0, #FFF6F7);
+   border-radius: 30px;
+   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+   display: flex;
+   flex-direction: column;
+   z-index: 40;
+   animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+   overflow: hidden;
+  }
+  
+  @keyframes slideUp {
+   from { transform: translateY(50px); opacity: 0; }
+   to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .chat-window.hidden { display: none; }
+  
+  .chat-header {
+   background: linear-gradient(145deg, #F4A6C1, #E68BB0);
+   padding: 15px;
+   text-align: center;
+   color: #8B5A6B;
+   font-weight: bold;
+   position: relative;
+   border-radius: 30px 30px 0 0;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 8px;
+  }
+  
+  .chat-avatar {
+   width: 40px;
+   height: 40px;
+   background: #D9C6F7;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 24px;
+  }
+  
+  .chat-messages {
+   flex: 1;
+   overflow-y: auto;
+   padding: 15px;
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+  }
+  
+  .message {
+   padding: 10px 14px;
+   border-radius: 18px;
+   max-width: 80%;
+   word-wrap: break-word;
+   font-size: 13px;
+   animation: fadeIn 0.3s ease;
+  }
+  
+  .message.visitor {
+   background: #CDE7FF;
+   color: #5A6B8B;
+   align-self: flex-end;
+  }
+  
+  .message.artist {
+   background: #D9C6F7;
+   color: #6B5A8B;
+   align-self: flex-start;
+  }
+  
+  .message-time {
+   font-size: 11px;
+   opacity: 0.7;
+   margin-top: 4px;
+  }
+  
+  .message-reactions {
+   display: flex;
+   gap: 4px;
+   margin-top: 6px;
+   flex-wrap: wrap;
+  }
+  
+  .reaction-btn {
+   font-size: 14px;
+   background: rgba(255, 255, 255, 0.5);
+   border: none;
+   padding: 2px 6px;
+   border-radius: 12px;
+   cursor: pointer;
+   transition: all 0.2s ease;
+  }
+  
+  .reaction-btn:hover {
+   background: rgba(255, 255, 255, 0.8);
+   transform: scale(1.15);
+  }
+  
+  .chat-input-area {
+   padding: 12px;
+   border-top: 2px solid rgba(247, 198, 217, 0.3);
+   display: flex;
+   gap: 8px;
+  }
+  
+  .chat-input {
+   flex: 1;
+   padding: 10px 14px;
+   border: 2px solid #F4A6C1;
+   border-radius: 20px;
+   font-family: 'Quicksand', sans-serif;
+   font-size: 13px;
+   transition: all 0.3s ease;
+   background: #FFFFFF;
+   color: #8B7A8B;
+  }
+  
+  .chat-input:focus {
+   outline: none;
+   border-color: #E68BB0;
+   box-shadow: 0 0 10px rgba(244, 166, 193, 0.3);
+  }
+  
+  .chat-send-btn {
+   width: 40px;
+   height: 40px;
+   background: #F4A6C1;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   font-size: 18px;
+   transition: all 0.3s ease;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  }
+  
+  .chat-send-btn:hover {
+   background: #E68BB0;
+   transform: scale(1.1);
+  }
+  
+  .chat-close-btn {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   background: none;
+   border: none;
+   font-size: 20px;
+   cursor: pointer;
+   color: #8B5A6B;
+   transition: transform 0.2s ease;
+  }
+  
+  .chat-close-btn:hover {
+   transform: scale(1.2);
+  }
+  
+  .typing-indicator {
+   display: flex;
+   gap: 4px;
+   align-items: flex-end;
+   padding: 10px 14px;
+   background: #D9C6F7;
+   border-radius: 18px;
+   width: fit-content;
+  }
+  
+  .typing-dot {
+   width: 6px;
+   height: 6px;
+   background: #6B5A8B;
+   border-radius: 50%;
+   animation: typing 1.4s infinite;
+  }
+  
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes typing {
+   0%, 60%, 100% { transform: translateY(0); }
+   30% { transform: translateY(-10px); }
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  
+  .paw-emoji {
+   margin-right: 6px;
+   opacity: 0.6;
+   animation: pawBounce 0.6s ease-in-out;
+  }
+  
+  @keyframes pawBounce {
+   0%, 100% { transform: scale(1); }
+   50% { transform: scale(1.2); }
+  }
+  
+  .unread-badge {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 22px;
+   height: 22px;
+   background: #E88B8B;
+   color: white;
+   border-radius: 50%;
+   font-size: 11px;
+   font-weight: bold;
+  }
+  
+  .conversation-card {
+   padding: 12px;
+   border-radius: 15px;
+   background: #FFFFFF;
+   border: 2px solid transparent;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   margin-bottom: 8px;
+  }
+  
+  .conversation-card:hover {
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 12px rgba(244, 166, 193, 0.2);
+   transform: translateX(4px);
+  }
+  
+  .conversation-card.active {
+   background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 15px rgba(244, 166, 193, 0.3);
+  }
+  
+  .dashboard-messages-section {
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: 16px;
+   height: 600px;
+  }
+  
+  @media (min-width: 1024px) {
+   .dashboard-messages-section {
+    grid-template-columns: 280px 1fr;
+   }
+  }
+  
+  .conversations-sidebar {
+   border-radius: 20px;
+   background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+   padding: 16px;
+   overflow-y: auto;
+   border: 2px solid #F4A6C1;
+  }
+  
+  .conversation-detail-area {
+   border-radius: 20px;
+   background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+   padding: 16px;
+   border: 2px solid #F4A6C1;
+  }
+  
+  .bounce-in {
+   animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes bounceIn {
+   0% { transform: scale(0); opacity: 0; }
+   50% { transform: scale(1.1); }
+   100% { transform: scale(1); opacity: 1; }
+  }
+  
+  .status-pending { background: var(--peach); }
+  .status-accepted { background: var(--mint); }
+  .status-declined { background: var(--blush); }
+  .status-finished { background: var(--lavender); }
+  
+  .progress-bar-container {
+   background: #F0E8F5;
+   border-radius: 10px;
+   height: 8px;
+   overflow: hidden;
+   margin-top: 8px;
+  }
+  
+  .progress-bar-fill {
+   background: linear-gradient(90deg, #F7C6D9, #D9C6F7);
+   height: 100%;
+   transition: width 0.4s ease;
+   border-radius: 10px;
+  }
+  
+  .pose-grid, .expression-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+   gap: 10px;
+   margin-bottom: 16px;
+  }
+  
+  .pose-option, .expression-option {
+   padding: 12px;
+   border: 2px solid #E0E0E0;
+   border-radius: 12px;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   text-align: center;
+   background: #FFFFFF;
+  }
+  
+  .pose-option:hover, .expression-option:hover {
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 12px rgba(244, 166, 193, 0.2);
+   transform: translateY(-2px);
+  }
+  
+  .pose-option.selected, .expression-option.selected {
+   background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 15px rgba(244, 166, 193, 0.3);
+  }
+  
+  .upload-area {
+   border: 2px dashed #F4A6C1;
+   border-radius: 12px;
+   padding: 20px;
+   text-align: center;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   background: rgba(247, 198, 217, 0.05);
+   margin-bottom: 12px;
+  }
+  
+  .upload-area:hover {
+   background: rgba(247, 198, 217, 0.1);
+   border-color: #E68BB0;
+  }
+  
+  .upload-preview {
+   width: 80px;
+   height: 80px;
+   border-radius: 8px;
+   object-fit: cover;
+   margin-top: 8px;
+  }
+  
+  .checkbox-group {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+  }
+  
+  .checkbox-item {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   padding: 10px;
+   border-radius: 8px;
+   background: #FFFFFF;
+  }
+  
+  .checkbox-item input[type="checkbox"] {
+   width: 20px;
+   height: 20px;
+   cursor: pointer;
+   accent-color: #F4A6C1;
+  }
+  
+  .checkbox-item label {
+   cursor: pointer;
+   flex: 1;
+   margin: 0;
+  }
+  
+  .commission-progress {
+   display: flex;
+   justify-content: space-between;
+   gap: 8px;
+   margin-top: 12px;
+   font-size: 12px;
+  }
+  
+  .progress-stage {
+   flex: 1;
+   padding: 8px;
+   border-radius: 8px;
+   text-align: center;
+   background: #F0F0F0;
+   color: #999;
+   transition: all 0.3s ease;
+  }
+  
+  .progress-stage.active, .progress-stage.completed {
+   background: linear-gradient(145deg, #F7C6D9, #D9C6F7);
+   color: #6B5A8B;
+   font-weight: bold;
+  }
+  
+  .file-upload {
+   display: none;
+  }
+  
+  .dashboard-tab.active {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .detail-panel {
+   position: fixed;
+   top: 0;
+   right: 0;
+   width: 100%;
+   max-width: 400px;
+   height: 100%;
+   background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+   box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+   z-index: 999;
+   overflow-y: auto;
+   animation: slideInRight 0.4s ease;
+  }
+  
+  @keyframes slideInRight {
+   from { transform: translateX(100%); }
+   to { transform: translateX(0); }
+  }
+  
+  .detail-panel.hidden { display: none; }
+  
+  .detail-header {
+   background: linear-gradient(145deg, #F4A6C1, #E68BB0);
+   padding: 20px;
+   color: #8B5A6B;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   font-weight: bold;
+  }
+  
+  .detail-close {
+   background: none;
+   border: none;
+   font-size: 24px;
+   cursor: pointer;
+   color: #8B5A6B;
+   transition: transform 0.2s ease;
+  }
+  
+  .detail-close:hover {
+   transform: scale(1.2);
+  }
+  
+  .detail-section {
+   padding: 16px;
+   border-bottom: 2px solid rgba(244, 166, 193, 0.2);
+  }
+  
+  .detail-section-title {
+   font-weight: bold;
+   color: #E8A4BF;
+   font-size: 14px;
+   margin-bottom: 10px;
+   text-transform: uppercase;
+  }
+  
+  .detail-item {
+   margin-bottom: 12px;
+   color: #8B7A8B;
+   font-size: 14px;
+  }
+  
+  .detail-item strong {
+   color: #E8A4BF;
+  }
+  
+  .image-preview-grid {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: 10px;
+   margin-top: 10px;
+  }
+  
+  .image-preview-item {
+   border-radius: 12px;
+   overflow: hidden;
+   background: #F0E8F5;
+   aspect-ratio: 1;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: transform 0.2s ease;
+   border: 2px solid #F4A6C1;
+  }
+  
+  .image-preview-item:hover {
+   transform: scale(1.05);
+  }
+  
+  .image-preview-item img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+  }
+  
+  .image-preview-label {
+   font-size: 12px;
+   text-align: center;
+   color: #A88B9D;
+   margin-top: 6px;
+  }
+  
+  .modal-backdrop {
+   position: fixed;
+   inset: 0;
+   background: rgba(0, 0, 0, 0.7);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 1001;
+  }
+  
+  .modal-backdrop.hidden {
+   display: none;
+  }
+  
+  .image-modal {
+   background: white;
+   border-radius: 20px;
+   padding: 20px;
+   max-width: 90%;
+   max-height: 80%;
+   position: relative;
+   animation: zoomIn 0.3s ease;
+  }
+  
+  @keyframes zoomIn {
+   from { transform: scale(0.9); opacity: 0; }
+   to { transform: scale(1); opacity: 1; }
+  }
+  
+  .image-modal img {
+   max-width: 100%;
+   max-height: 60vh;
+   border-radius: 12px;
+  }
+  
+  .image-modal-close {
+   position: absolute;
+   top: -15px;
+   right: -15px;
+   background: #E68BB0;
+   border: none;
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;
+   cursor: pointer;
+   font-size: 24px;
+   color: white;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: transform 0.2s ease;
+  }
+  
+  .image-modal-close:hover {
+   transform: scale(1.1);
+  }
+ </style>
+ <style>body { box-sizing: border-box; }</style>
+</head>
+<body class="h-full">
+ <div class="app-wrapper scrollbar-hide" id="app"><!-- Floating Decorations -->
+ <div class="floating-paw" style="top: 10%; left: 5%; animation-delay: 0s;">
+  🐾
+ </div>
+ <div class="floating-paw" style="top: 30%; right: 8%; animation-delay: 1s;">
+  ✨
+ </div>
+ <div class="floating-paw" style="top: 60%; left: 3%; animation-delay: 2s;">
+  🧶
+ </div>
+ <div class="floating-paw" style="top: 80%; right: 5%; animation-delay: 1.5s;">
+  ⭐
+ </div>
+ <div class="floating-paw" style="top: 45%; left: 95%; animation-delay: 0.5s;">
+  🐱
+ </div>
+ <div class="sparkle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+ <div class="sparkle" style="top: 25%; right: 25%; animation-delay: 0.5s;"></div>
+ <div class="sparkle" style="top: 55%; left: 15%; animation-delay: 1s;"></div>
+ <div class="sparkle" style="top: 75%; right: 20%; animation-delay: 1.5s;"></div><!-- Yarn Ball for interaction -->
+ <div id="yarn-ball" class="yarn-ball" onclick="playWithYarn()">
+  🧶
+ </div><!-- Navigation -->
+ <nav class="sticky top-0 z-50 px-4 py-4" style="background: linear-gradient(to bottom, rgba(255,246,247,0.98), rgba(255,246,247,0.9));">
+  <div class="max-w-4xl mx-auto">
+  <div class="flex items-center justify-between mb-4">
+   <div class="flex items-center gap-2">
+   <div style="position: relative; display: inline-block;">
+    <span class="text-3xl">🐱</span>
+    <div id="unread-dot" class="hidden" style="position: absolute; top: -5px; left: -5px; width: 14px; height: 14px; background: #E88B8B; border-radius: 50%; border: 2px solid white; font-size: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"></div>
+   </div>
+   <h1 class="text-2xl font-bold" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;" id="site-title">Whisker Studio</h1>
+   </div>
+   <div class="secret-paw text-xl" onclick="triggerEasterEgg()" title="What's this?">
+   🐾
+   </div><button id="dashboard-nav-btn" class="hidden nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" onclick="showPage('dashboard')" style="background: #FFD9C8; color: #8B6B5A;" data-tab="dashboard">📊 Dashboard</button>
+  </div>
+  <div class="flex flex-wrap gap-2 justify-center"><button onclick="showPage('home')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #F7C6D9; color: #8B5A6B;" data-tab="home">🏠 Home</button> <button onclick="showPage('commissions')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #CFF7E6; color: #5A8B6B;" data-tab="commissions">🎨 Commissions</button> <button onclick="showPage('my-requests')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #FFECD9; color: #8B7A5A;" data-tab="my-requests">📋 My Requests</button> <button onclick="showPage('portfolio')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #D9C6F7; color: #6B5A8B;" data-tab="portfolio">🖼️ Portfolio</button> <button onclick="showPage('extra')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #CDE7FF; color: #5A6B8B;" data-tab="extra">✨ Extra</button>
+  </div>
+  </div>
+ </nav><!-- Main Content -->
+ <main class="max-w-5xl mx-auto px-4 py-8 pb-20"><!-- HOME PAGE -->
+  <div id="page-home" class="page-content">
+  <div class="text-center mb-10">
+   <div class="profile-container relative inline-block mb-6">
+   <div class="w-40 h-40 rounded-full mx-auto overflow-hidden shadow-lg" style="background: linear-gradient(145deg, #F7C6D9, #D9C6F7); padding: 4px;">
+    <div class="w-full h-full rounded-full flex items-center justify-center text-7xl" style="background: #FFF6F7;">
+    🎨
+    </div>
+   </div>
+   <div class="cat-peek">
+    😺
+   </div>
+   </div>
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;" id="artist-name-display">Meowy Artist</h2>
+   <p class="text-lg" style="color: #A88B9D;" id="welcome-msg-display">Welcome to my cozy art corner! ✨</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🐱</span>
+    <h3 class="text-xl font-bold" style="color: #E8A4BF;">About Me</h3>
+   </div>
+   <p class="leading-relaxed" style="color: #8B7A8B;" id="artist-bio-display">Hi there! I'm a digital artist who loves creating cute, kawaii-style artwork featuring adorable cats and whimsical characters. I've been drawing for over 5 years and specialize in soft, pastel aesthetics. When I'm not drawing, you can find me cuddling with my three cats! 🐾</p>
+   </div>
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF0FF);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">✨</span>
+    <h3 class="text-xl font-bold" style="color: #C4A4E8;">What I Create</h3>
+   </div>
+   <div class="flex flex-wrap gap-2"><span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #F7C6D9; color: #8B5A6B;">Character Art</span> <span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #CFF7E6; color: #5A8B6B;">Cute Animals</span> <span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #D9C6F7; color: #6B5A8B;">Chibi</span> <span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #FFD9C8; color: #8B6B5A;">Kawaii</span>
+   </div>
+   </div>
+  </div>
+  <div class="text-center">
+   <h3 class="text-lg font-semibold mb-4" style="color: #A88B9D;">Find Me Here 💕</h3>
+   <div class="flex flex-wrap justify-center gap-3"><button class="btn-pastel px-5 py-2.5 rounded-full font-medium flex items-center gap-2" style="background: #CDE7FF; color: #5A6B8B;"><span>🐦</span> Twitter</button> <button class="btn-pastel px-5 py-2.5 rounded-full font-medium flex items-center gap-2" style="background: #F7C6D9; color: #8B5A6B;"><span>📸</span> Instagram</button> <button class="btn-pastel px-5 py-2.5 rounded-full font-medium flex items-center gap-2" style="background: #D9C6F7; color: #6B5A8B;"><span>🎨</span> DeviantArt</button>
+   </div>
+  </div>
+  <div class="flex justify-center gap-4 mt-10 text-4xl opacity-60"><span class="animate-bounce" style="animation-delay: 0s;">😺</span> <span class="animate-bounce" style="animation-delay: 0.2s;">😸</span> <span class="animate-bounce" style="animation-delay: 0.4s;">😻</span>
+  </div>
+  </div><!-- COMMISSIONS PAGE -->
+  <div id="page-commissions" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎨 Commission Menu</h2>
+   <p style="color: #A88B9D;">Choose your purrfect art style!</p>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+   <div class="card-hover commission-card rounded-3xl p-5 shadow-md text-center">
+   <div class="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center text-5xl" style="background: linear-gradient(145deg, #F7C6D9, #FFD9C8);">
+    ✏️
+   </div>
+   <h4 class="text-lg font-bold mb-1" style="color: #E8A4BF;">Sketch</h4>
+   <p class="text-2xl font-bold mb-2" style="color: #8B5A6B;">$15</p>
+   <p class="text-sm" style="color: #A88B9D;">Clean lined sketch with soft shading</p>
+   </div>
+   <div class="card-hover commission-card rounded-3xl p-5 shadow-md text-center">
+   <div class="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center text-5xl" style="background: linear-gradient(145deg, #CFF7E6, #CDE7FF);">
+    👤
+   </div>
+   <h4 class="text-lg font-bold mb-1" style="color: #7BC4A8;">Bust</h4>
+   <p class="text-2xl font-bold mb-2" style="color: #5A8B6B;">$30</p>
+   <p class="text-sm" style="color: #A88B9D;">Head to chest, fully colored</p>
+   </div>
+   <div class="card-hover commission-card rounded-3xl p-5 shadow-md text-center">
+   <div class="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center text-5xl" style="background: linear-gradient(145deg, #D9C6F7, #F7C6D9);">
+    🧑‍🎨
+   </div>
+   <h4 class="text-lg font-bold mb-1" style="color: #C4A4E8;">Half Body</h4>
+   <p class="text-2xl font-bold mb-2" style="color: #6B5A8B;">$50</p>
+   <p class="text-sm" style="color: #A88B9D;">Waist up with detailed rendering</p>
+   </div>
+  </div>
+  <div class="text-center"><button onclick="openCommissionForm()" class="btn-pastel px-8 py-4 rounded-full text-lg font-bold shadow-lg" style="background: linear-gradient(145deg, #F7C6D9, #D9C6F7); color: #6B5A8B;">🐾 Request Commission</button>
+  </div>
+  <div id="commission-form-container" class="hidden mt-10">
+   <div class="rounded-3xl p-6 md:p-8 shadow-lg" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+   <div class="flex items-center justify-between mb-6">
+    <h3 class="text-2xl font-bold" style="color: #E8A4BF;">📝 Commission Request</h3><button onclick="closeCommissionForm()" class="text-2xl hover:scale-110 transition-transform">❌</button>
+   </div>
+   <form id="commission-form" class="space-y-6">
+    <div class="grid md:grid-cols-2 gap-5">
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-name">Your Name 🐱</label> <input type="text" id="comm-name" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="What should I call you?">
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-contact">Contact 📧</label> <input type="text" id="comm-contact" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="Email or social media">
+    </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5">
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-type">Commission Type 🎨</label> <select id="comm-type" required class="input-pastel w-full px-4 py-3 rounded-2xl appearance-none cursor-pointer" style="background: #FFF6F7;"> <option value="">Select a type...</option> <option value="Sketch">Sketch - $15</option> <option value="Bust">Bust - $30</option> <option value="Half Body">Half Body - $50</option> </select>
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-budget">Budget 💰</label> <input type="text" id="comm-budget" class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="Your budget range">
+    </div>
+    </div><!-- POSE SELECTOR -->
+    <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Character Pose 💃</label>
+    <div class="pose-grid">
+     <div class="pose-option" onclick="selectPose('standing')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🧍
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Standing
+     </div>
+     </div>
+     <div class="pose-option" onclick="selectPose('sitting')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🧘
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Sitting
+     </div>
+     </div>
+     <div class="pose-option" onclick="selectPose('action')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🤸
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Action
+     </div>
+     </div>
+     <div class="pose-option" onclick="selectPose('custom')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🎭
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Custom
+     </div>
+     </div>
+    </div>
+    <div id="pose-description-area" class="hidden"><textarea class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" id="pose-description" placeholder="Describe the custom pose..." rows="2"></textarea>
+    </div>
+    </div><!-- POSE REFERENCE UPLOAD -->
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Pose Reference (Optional)</label>
+    <div class="upload-area" onclick="document.getElementById('pose-upload').click()">
+     <div style="font-size: 24px; margin-bottom: 8px;">
+     📸
+     </div>
+     <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload pose reference</p><input type="file" id="pose-upload" class="file-upload" accept="image/png,image/jpeg" onchange="previewPoseImage(event)">
+    </div>
+    <div id="pose-preview-area"></div>
+    </div><!-- EXPRESSION PICKER -->
+    <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Character Expression 😊</label>
+    <div class="expression-grid">
+     <div class="expression-option" onclick="selectExpression('happy')">
+     <div style="font-size: 28px;">
+      😊
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Happy
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('angry')">
+     <div style="font-size: 28px;">
+      😠
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Angry
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('shy')">
+     <div style="font-size: 28px;">
+      🥰
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Shy
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('smug')">
+     <div style="font-size: 28px;">
+      😏
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Smug
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('sad')">
+     <div style="font-size: 28px;">
+      😢
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Sad
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('surprised')">
+     <div style="font-size: 28px;">
+      😲
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Surprised
+     </div>
+     </div>
+    </div>
+    </div><!-- COLOR PALETTE UPLOAD -->
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Color Palette Reference (Optional)</label>
+    <div class="upload-area" onclick="document.getElementById('palette-upload').click()">
+     <div style="font-size: 24px; margin-bottom: 8px;">
+     🎨
+     </div>
+     <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload color palette</p><input type="file" id="palette-upload" class="file-upload" accept="image/png,image/jpeg" onchange="previewPaletteImage(event)">
+    </div>
+    <div id="palette-preview-area"></div>
+    </div><!-- CHARACTER DESCRIPTION -->
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-desc">Description 📋</label> <textarea id="comm-desc" required rows="4" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="Tell me about your character!"></textarea>
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="character-name">Character Name 🐱</label> <input type="text" id="character-name" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="What's your character called?">
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="character-species">Character Species/Type 🦁</label> <input type="text" id="character-species" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="e.g., Cat, Wolf, Dragon, Human, etc.">
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="color-prefs">Color Preferences 🎨</label> <textarea id="color-prefs" rows="2" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="e.g., Pastels, warm tones, dark colors, etc."></textarea>
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-notes">Extra Notes 📝</label> <textarea id="comm-notes" rows="2" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="Any additional details?"></textarea>
+    </div><!-- REFERENCE CHECKLIST -->
+    <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Before You Submit ✓</label>
+    <div class="checkbox-group">
+     <div class="checkbox-item"><input type="checkbox" id="check-references" onchange="updateSubmitButton()"> <label for="check-references">I included character references</label>
+     </div>
+     <div class="checkbox-item"><input type="checkbox" id="check-terms" onchange="updateSubmitButton()"> <label for="check-terms">I read the Terms of Service</label>
+     </div>
+     <div class="checkbox-item"><input type="checkbox" id="check-turnaround" onchange="updateSubmitButton()"> <label for="check-turnaround">I understand the 2-4 week turnaround time</label>
+     </div>
+    </div>
+    </div>
+    <div class="text-center pt-4"><button type="submit" id="submit-btn" disabled class="btn-pastel px-8 py-4 rounded-full text-lg font-bold shadow-lg" style="background: linear-gradient(145deg, #CFF7E6, #CDE7FF); color: #5A8B6B; opacity: 0.5;">🐾 Submit Commission</button>
+    </div>
+   </form>
+   </div>
+  </div>
+  </div><!-- MY REQUESTS PAGE -->
+  <div id="page-my-requests" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">📋 My Commission Requests</h2>
+   <p style="color: #A88B9D;">Track the status of your requests</p>
+  </div>
+  <div id="my-requests-container" class="space-y-4">
+   <div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span>
+   <p>You haven't submitted any requests yet!</p>
+   </div>
+  </div>
+  </div><!-- PORTFOLIO PAGE -->
+  <div id="page-portfolio" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🖼️ Art Gallery</h2>
+   <p style="color: #A88B9D;">Browse my latest creations! (Hover for details)</p>
+  </div>
+  <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+  </div><!-- EXTRA PAGE -->
+  <div id="page-extra" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">✨ Extra Info</h2>
+   <p style="color: #A88B9D;">Everything else you need to know!</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">📜</span>
+    <h3 class="text-xl font-bold" style="color: #E8A4BF;">Terms of Service</h3>
+   </div>
+   <ul class="space-y-2 text-sm" style="color: #8B7A8B;">
+    <li class="flex items-start gap-2"><span>🐾</span> Payment required upfront</li>
+    <li class="flex items-start gap-2"><span>🐾</span> Turnaround 2-4 weeks</li>
+    <li class="flex items-start gap-2"><span>🐾</span> May post on social media</li>
+   </ul>
+   </div>
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #F8F0FF);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🔐</span>
+    <h3 class="text-xl font-bold" style="color: #C4A4E8;">Owner Area</h3>
+   </div>
+   <p class="text-sm mb-4" style="color: #A88B9D;">Access your commission dashboard</p><button onclick="toggleOwnerLogin()" id="login-toggle-btn" class="btn-pastel px-6 py-3 rounded-full font-semibold" style="background: #FFFFFF; color: #8B6B5A;">🐱 Owner Login</button>
+   <div id="login-form" class="hidden mt-6">
+    <div class="max-w-xs mx-auto space-y-4"><input type="password" id="owner-password" class="input-pastel w-full px-4 py-3 rounded-2xl text-center" style="background: #FFFFFF;" placeholder="Enter password"> <button onclick="attemptLogin()" class="btn-pastel w-full py-3 rounded-full font-semibold" style="background: #CFF7E6; color: #5A8B6B;">✨ Login</button>
+    <p id="login-error" class="text-sm hidden" style="color: #E88B8B;"></p>
+    </div>
+   </div>
+   </div>
+  </div>
+  </div><!-- OWNER DASHBOARD (Hidden until login) -->
+  <div id="page-dashboard" class="page-content hidden">
+  <div class="flex items-center justify-between mb-8">
+   <div>
+   <h2 class="text-3xl font-bold" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎀 Commission Dashboard</h2>
+   <p style="color: #A88B9D;">Manage your commission requests</p>
+   </div><button onclick="logout()" class="btn-pastel px-5 py-2 rounded-full font-medium" style="background: #FFD9C8; color: #8B6B5A;">🚪 Logout</button>
+  </div><!-- Stats -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+   <div class="rounded-2xl p-4 text-center" style="background: #FFD9C8;">
+   <p class="text-2xl font-bold" style="color: #8B6B5A;" id="stat-pending">0</p>
+   <p class="text-xs font-medium" style="color: #A88B7A;">Pending</p>
+   </div>
+   <div class="rounded-2xl p-4 text-center" style="background: #CFF7E6;">
+   <p class="text-2xl font-bold" style="color: #5A8B6B;" id="stat-accepted">0</p>
+   <p class="text-xs font-medium" style="color: #7AA88B;">Accepted</p>
+   </div>
+   <div class="rounded-2xl p-4 text-center" style="background: #D9C6F7;">
+   <p class="text-2xl font-bold" style="color: #6B5A8B;" id="stat-finished">0</p>
+   <p class="text-xs font-medium" style="color: #8B7AA8;">Finished</p>
+   </div>
+   <div class="rounded-2xl p-4 text-center" style="background: #F7C6D9;">
+   <p class="text-2xl font-bold" style="color: #8B5A6B;" id="stat-total">0</p>
+   <p class="text-xs font-medium" style="color: #A87A8B;">Total</p>
+   </div>
+  </div><!-- Dashboard Tabs -->
+  <div class="flex flex-wrap gap-2 mb-6 justify-center"><button onclick="showDashboardTab('active')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm active" style="background: #FFD9C8; color: #8B6B5A;" data-tab="active">📋 Active</button> <button onclick="showDashboardTab('history')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #D9C6F7; color: #6B5A8B;" data-tab="history">📜 History</button> <button onclick="showDashboardTab('messages')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #CDE7FF; color: #5A6B8B;" data-tab="messages">💬 Messages</button>
+  </div><!-- Sorting Controls -->
+  <div class="mb-6 flex gap-2 justify-center flex-wrap"><button onclick="sortCommissions('newest')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Newest</button> <button onclick="sortCommissions('oldest')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Oldest</button> <button onclick="sortCommissions('status')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Status</button>
+  </div><!-- Active Commissions -->
+  <div id="dashboard-active">
+   <div id="commission-list" class="space-y-4">
+   <div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">😺</span>
+    <p>No commission requests yet!</p>
+   </div>
+   </div>
+  </div><!-- History Section -->
+  <div id="dashboard-history" class="hidden">
+   <div class="space-y-6">
+   <div>
+    <h3 class="text-xl font-bold mb-4" style="color: #E8A4BF;">✅ Accepted &amp; Completed</h3>
+    <div id="commission-history-accepted" class="space-y-4">
+    <div class="text-center py-8" style="color: #A88B9D;">
+     <p class="text-sm">No accepted or completed commissions yet</p>
+    </div>
+    </div>
+   </div>
+   <div>
+    <h3 class="text-xl font-bold mb-4" style="color: #E8A4BF;">❌ Declined</h3>
+    <div id="commission-history-declined" class="space-y-4">
+    <div class="text-center py-8" style="color: #A88B9D;">
+     <p class="text-sm">No declined commissions yet</p>
+    </div>
+    </div>
+   </div>
+   </div>
+  </div><!-- Messages Section -->
+  <div id="dashboard-messages" class="hidden">
+   <div class="dashboard-messages-section">
+   <div class="conversations-sidebar">
+    <h3 class="font-bold mb-4" style="color: #E8A4BF;">💬 Conversations</h3>
+    <div id="dashboard-conversations-list"></div>
+   </div>
+   <div class="conversation-detail-area" id="conversation-detail">
+    <div class="text-center py-10" style="color: #A88B9D;">
+    <p>Select a conversation to view messages</p>
+    </div>
+   </div>
+   </div>
+  </div>
+  </div>
+ </main>
+ </div><!-- Detail Panel for Commission Details -->
+ <div id="detail-panel" class="detail-panel hidden">
+ <div class="detail-header">
+  <span>Commission Details</span> <button class="detail-close" onclick="closeDetailPanel()">✕</button>
+ </div>
+ <div id="detail-content"></div>
+ </div><!-- Image Modal -->
+ <div id="image-modal-backdrop" class="modal-backdrop hidden" onclick="closeImageModal()">
+ <div class="image-modal" onclick="event.stopPropagation()">
+  <button class="image-modal-close" onclick="closeImageModal()">✕</button> <img id="modal-image" src="" alt="Full size preview">
+ </div>
+ </div><!-- Chat Button --> <button id="chat-button" class="chat-button" onclick="openChat()">
+ <div class="chat-tooltip">
+  Chat with the artist!
+ </div> 🐱 </button> <!-- Chat Window -->
+ <div id="chat-window" class="chat-window hidden">
+ <div class="chat-header">
+  <div class="chat-avatar">
+  🐱
+  </div>
+  <div class="flex-1">
+  Chat with the Artist 🐾
+  </div><button onclick="minimizeChat()" class="chat-close-btn" title="Minimize">−</button> <button onclick="closeChat()" class="chat-close-btn" title="Close">✕</button>
+ </div>
+ <div id="chat-messages" class="chat-messages scrollbar-hide"></div>
+ <div class="chat-input-area">
+  <input type="text" id="chat-input" class="chat-input" placeholder="Type a message..." autocomplete="off"> <button onclick="sendChatMessage()" class="chat-send-btn">🐾</button>
+ </div>
+ </div><!-- Success Popup -->
+ <div id="success-popup" class="fixed inset-0 hidden z-50 flex items-center justify-center popup-overlay">
+ <div class="bounce-in rounded-3xl p-8 text-center max-w-sm mx-4 shadow-2xl" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+  <div class="text-6xl mb-4">
+  😻
+  </div>
+  <h3 class="text-2xl font-bold mb-2" style="color: #E8A4BF;">Meow-velous!</h3>
+  <p style="color: #8B7A8B;" id="popup-message">Your commission request has been sent!</p><button onclick="closePopup()" class="btn-pastel mt-6 px-6 py-2 rounded-full font-semibold" style="background: #F7C6D9; color: #8B5A6B;">Okay! 💕</button>
+ </div>
+ </div>
+ <script>
+  const defaultConfig = {
+   artist_name: 'Meowy Artist',
+   artist_bio: "Hi there! I'm a digital artist who loves creating cute, kawaii-style artwork featuring adorable cats and whimsical characters. I've been drawing for over 5 years and specialize in soft, pastel aesthetics. When I'm not drawing, you can find me cuddling with my three cats! 🐾",
+   welcome_message: 'Welcome to my cozy art corner! ✨',
+   background_color: '#FFF6F7',
+   surface_color: '#FFFFFF',
+   text_color: '#8B7A8B',
+   primary_action_color: '#F7C6D9',
+   secondary_action_color: '#D9C6F7'
+  };
+  
+  let currentPage = 'home';
+  let isOwnerLoggedIn = false;
+  let commissionData = [];
+  let userEmail = null;
+  let chatMessages = [];
+  let currentChatId = null;
+  let chatConversations = [];
+  let currentViewingConversation = null;
+  let selectedPose = null;
+  let selectedExpression = null;
+  let sortOrder = 'newest';
+  let yarnBallPosition = { x: Math.random() * 80, y: Math.random() * 80 };
+  
+  // Progress stages for commissions
+  const progressStages = ['Requested', 'Sketching', 'Lineart', 'Coloring', 'Finished'];
+  
+  // Gallery items with hover preview
+  const galleryItems = [
+   { id: 1, title: 'Sleepy Kitty', category: 'finished', emoji: '😴', bg: '#F7C6D9' },
+   { id: 2, title: 'Character Sketch', category: 'sketches', emoji: '✏️', bg: '#FFD9C8' },
+   { id: 3, title: 'Magical Cat Girl', category: 'commissions', emoji: '🧙‍♀️', bg: '#D9C6F7' },
+   { id: 4, title: 'Flower Crown', category: 'finished', emoji: '🌸', bg: '#CFF7E6' },
+   { id: 5, title: 'Quick Doodle', category: 'sketches', emoji: '🖊️', bg: '#CDE7FF' },
+   { id: 6, title: 'Pet Portrait', category: 'commissions', emoji: '🐱', bg: '#FFECD9' }
+  ];
+  
+  // ELEMENT SDK
+  window.elementSdk.init({
+   defaultConfig,
+   onConfigChange: async (config) => {
+    document.getElementById('artist-name-display').textContent = config.artist_name || defaultConfig.artist_name;
+    document.getElementById('artist-bio-display').textContent = config.artist_bio || defaultConfig.artist_bio;
+    document.getElementById('welcome-msg-display').textContent = config.welcome_message || defaultConfig.welcome_message;
+   },
+   mapToCapabilities: (config) => ({
+    recolorables: [
+     { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+     { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+     { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+     { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+     { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || 'Quicksand', set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || 16, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+   }),
+   mapToEditPanelValues: (config) => new Map([
+    ['artist_name', config.artist_name || defaultConfig.artist_name],
+    ['artist_bio', config.artist_bio || defaultConfig.artist_bio],
+    ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+   ])
+  });
+  
+  // DATA SDK
+  const dataHandler = {
+   onDataChanged(data) {
+    commissionData = data;
+    renderCommissionList();
+    renderMyRequests();
+    updateStats();
+   }
+  };
+  
+  window.dataSdk.init(dataHandler);
+  
+  // Pose selection
+  function selectPose(pose) {
+   selectedPose = pose;
+   document.querySelectorAll('.pose-option').forEach(el => el.classList.remove('selected'));
+   event.target.closest('.pose-option').classList.add('selected');
+   
+   const descArea = document.getElementById('pose-description-area');
+   if (pose === 'custom') {
+    descArea.classList.remove('hidden');
+   } else {
+    descArea.classList.add('hidden');
+   }
+  }
+  
+  // Expression selection
+  function selectExpression(expression) {
+   selectedExpression = expression;
+   document.querySelectorAll('.expression-option').forEach(el => el.classList.remove('selected'));
+   event.target.closest('.expression-option').classList.add('selected');
+  }
+  
+  let poseImageName = null;
+  let paletteImageName = null;
+  
+  // Store images as base64 for display
+  let uploadedImages = {};
+  
+  // Pose reference preview
+  function previewPoseImage(e) {
+   const file = e.target.files[0];
+   if (!file) return;
+   
+   poseImageName = file.name;
+   const reader = new FileReader();
+   
+   reader.onload = function(event) {
+    uploadedImages['pose'] = event.target.result;
+    const previewArea = document.getElementById('pose-preview-area');
+    previewArea.innerHTML = `
+     <div style="margin-top: 12px; padding: 10px; background: #F0E8F5; border-radius: 8px;">
+      <div style="width: 100%; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;">
+       <img src="${event.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <p style="font-size: 0.9rem; color: #8B7A8B; margin: 0;">✅ ${file.name} (${(file.size / 1024).toFixed(1)}KB)</p>
+     </div>
+    `;
+   };
+   
+   reader.readAsDataURL(file);
+  }
+  
+  // Palette preview
+  function previewPaletteImage(e) {
+   const file = e.target.files[0];
+   if (!file) return;
+   
+   paletteImageName = file.name;
+   const reader = new FileReader();
+   
+   reader.onload = function(event) {
+    uploadedImages['palette'] = event.target.result;
+    const previewArea = document.getElementById('palette-preview-area');
+    previewArea.innerHTML = `
+     <div style="margin-top: 12px; padding: 10px; background: #F0E8F5; border-radius: 8px;">
+      <div style="width: 100%; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;">
+       <img src="${event.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <p style="font-size: 0.9rem; color: #8B7A8B; margin: 0;">✅ ${file.name} (${(file.size / 1024).toFixed(1)}KB)</p>
+     </div>
+    `;
+   };
+   
+   reader.readAsDataURL(file);
+  }
+  
+  // Update submit button state
+  function updateSubmitButton() {
+   const check1 = document.getElementById('check-references').checked;
+   const check2 = document.getElementById('check-terms').checked;
+   const check3 = document.getElementById('check-turnaround').checked;
+   
+   const btn = document.getElementById('submit-btn');
+   if (check1 && check2 && check3) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+   } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+   }
+  }
+  
+  function showPage(pageName) {
+   document.querySelectorAll('.page-content').forEach(page => page.classList.add('hidden'));
+   const targetPage = document.getElementById(`page-${pageName}`);
+   if (targetPage) targetPage.classList.remove('hidden');
+   
+   document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.classList.remove('active');
+    if (tab.dataset.tab === pageName) tab.classList.add('active');
+   });
+   currentPage = pageName;
+  }
+  
+  function openCommissionForm() {
+   document.getElementById('commission-form-container').classList.remove('hidden');
+  }
+  
+  function closeCommissionForm() {
+   document.getElementById('commission-form-container').classList.add('hidden');
+  }
+  
+  document.getElementById('commission-form').addEventListener('submit', async function(e) {
+   e.preventDefault();
+   
+   if (commissionData.length >= 999) {
+    showPopup('Maximum commission limit reached!');
+    return;
+   }
+   
+   // Show loading state
+   const submitBtn = document.getElementById('submit-btn');
+   const originalText = submitBtn.textContent;
+   submitBtn.disabled = true;
+   submitBtn.textContent = '⏳ Submitting...';
+   
+   try {
+    // Collect all required fields
+    const name = document.getElementById('comm-name').value.trim();
+    const contact = document.getElementById('comm-contact').value.trim();
+    const commissionType = document.getElementById('comm-type').value;
+    const description = document.getElementById('comm-desc').value.trim();
+    const characterName = document.getElementById('character-name').value.trim();
+    const characterSpecies = document.getElementById('character-species').value.trim();
+    
+    // Validate required fields
+    if (!name || !contact || !commissionType || !description || !characterName || !characterSpecies) {
+     showPopup('Please fill in all required fields! 🐾');
+     submitBtn.disabled = false;
+     submitBtn.textContent = originalText;
+     return;
+    }
+    
+    // Validate checkboxes
+    if (!document.getElementById('check-references').checked || !document.getElementById('check-terms').checked || !document.getElementById('check-turnaround').checked) {
+     showPopup('Please check all boxes before submitting! ✓');
+     submitBtn.disabled = false;
+     submitBtn.textContent = originalText;
+     return;
+    }
+    
+    // Store files as simple string (Data SDK doesn't support complex objects)
+    let filesDescription = 'No files uploaded';
+    if (poseImageName || paletteImageName) {
+     filesDescription = `Files: ${poseImageName ? 'pose (' + poseImageName + ')' : ''}${poseImageName && paletteImageName ? ', ' : ''}${paletteImageName ? 'palette (' + paletteImageName + ')' : ''}`;
+    }
+    
+    const commissionRequest = {
+     name: name,
+     contact: contact,
+     commission_type: commissionType,
+     description: description,
+     budget: document.getElementById('comm-budget').value.trim() || 'Not specified',
+     extra_notes: document.getElementById('comm-notes').value.trim() || 'None',
+     character_name: characterName,
+     character_species: characterSpecies,
+     color_preferences: document.getElementById('color-prefs').value.trim() || 'No preference',
+     status: 'pending',
+     pose: selectedPose || 'standing',
+     expression: selectedExpression || 'happy',
+     progress_stage: 'Requested',
+     files: filesDescription,
+     created_at: new Date().toISOString()
+    };
+    
+    userEmail = contact;
+    
+    const result = await window.dataSdk.create(commissionRequest);
+    
+    if (result.isOk) {
+     showPopup('Your commission request has been sent! I\'ll get back to you soon! 💕');
+     // Reset form completely
+     document.getElementById('commission-form').reset();
+     document.querySelectorAll('.pose-option, .expression-option').forEach(el => el.classList.remove('selected'));
+     selectedPose = null;
+     selectedExpression = null;
+     poseImageName = null;
+     paletteImageName = null;
+     document.getElementById('pose-description-area').classList.add('hidden');
+     document.getElementById('pose-preview-area').innerHTML = '';
+     document.getElementById('palette-preview-area').innerHTML = '';
+     document.getElementById('check-references').checked = false;
+     document.getElementById('check-terms').checked = false;
+     document.getElementById('check-turnaround').checked = false;
+     updateSubmitButton();
+     setTimeout(() => closeCommissionForm(), 1500);
+    } else {
+     const errorMsg = result.error ? (result.error.message || 'Submission failed') : 'Unknown error';
+     console.error('Submission error:', result.error);
+     showPopup('Oops! ' + errorMsg + ' 😿');
+    }
+   } catch (error) {
+    console.error('Exception during submission:', error);
+    showPopup('Oops! Something went wrong. Please try again! 😿');
+   } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+   }
+  });
+  
+  function renderGallery() {
+   const grid = document.getElementById('gallery-grid');
+   grid.innerHTML = galleryItems.map(item => `
+    <div class="gallery-item rounded-2xl aspect-square shadow-md" style="background: ${item.bg};">
+     <div class="w-full h-full flex items-center justify-center text-5xl">
+      ${item.emoji}
+      <div class="gallery-sparkles">✨</div>
+      <div class="gallery-overlay rounded-b-2xl">
+       <p class="font-semibold text-sm" style="color: #6B5A8B;">${item.title}</p>
+      </div>
+     </div>
+    </div>
+   `).join('');
+  }
+  
+  function renderMyRequests() {
+   const container = document.getElementById('my-requests-container');
+   if (!userEmail) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span><p>You haven't submitted any requests yet!</p></div>`;
+    return;
+   }
+   
+   const userRequests = commissionData.filter(comm => comm.contact === userEmail);
+   if (userRequests.length === 0) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span><p>You haven't submitted any requests yet!</p></div>`;
+    return;
+   }
+   
+   container.innerHTML = userRequests.map(comm => {
+    let statusEmoji, statusColor, statusText;
+    if (comm.status === 'pending') {
+     statusEmoji = '⏳'; statusColor = '#FFD9C8'; statusText = 'Pending';
+    } else if (comm.status === 'accepted') {
+     statusEmoji = '✅'; statusColor = '#CFF7E6'; statusText = 'Accepted';
+    } else if (comm.status === 'finished') {
+     statusEmoji = '🎨'; statusColor = '#D9C6F7'; statusText = 'Completed';
+    } else if (comm.status === 'declined') {
+     statusEmoji = '❌'; statusColor = '#F7C6D9'; statusText = 'Declined';
+    }
+    
+    const progressPercent = (progressStages.indexOf(comm.progress_stage || 'Requested') + 1) / progressStages.length * 100;
+    
+    return `
+     <div class="rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div><h4 class="text-lg font-bold mb-2" style="color: #E8A4BF;">${comm.commission_type}</h4><p style="color: #8B7A8B; font-size: 0.9rem;">${comm.name}</p></div>
+       <div class="text-center rounded-2xl p-3" style="background: ${statusColor};"><div style="font-size: 1.5rem; margin-bottom: 0.25rem;">${statusEmoji}</div><p style="font-size: 0.75rem; font-weight: 600; color: #6B5A8B;">${statusText}</p></div>
+      </div>
+      <div class="mt-4 space-y-3">
+       <p style="color: #8B7A8B;"><strong>Pose:</strong> ${comm.pose || 'Standing'}</p>
+       <p style="color: #8B7A8B;"><strong>Expression:</strong> ${comm.expression || 'Happy'}</p>
+       <p style="color: #8B7A8B;"><strong>Request:</strong> ${comm.description}</p>
+       <p style="color: #8B7A8B;"><strong>Budget:</strong> ${comm.budget}</p>
+       <div>
+        <p style="font-size: 0.85rem; color: #A88B9D; margin-bottom: 8px;">Progress: ${comm.progress_stage || 'Requested'}</p>
+        <div class="progress-bar-container">
+         <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+    `;
+   }).join('');
+  }
+  
+  function sortCommissions(order) {
+   sortOrder = order;
+   if (sortOrder === 'newest') {
+    commissionData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+   } else if (sortOrder === 'oldest') {
+    commissionData.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+   } else if (sortOrder === 'status') {
+    const statusOrder = { 'pending': 0, 'accepted': 1, 'finished': 2, 'declined': 3 };
+    commissionData.sort((a, b) => (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99));
+   }
+   renderCommissionList();
+  }
+  
+  function renderCommissionList() {
+   const container = document.getElementById('commission-list');
+   if (commissionData.length === 0) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">😺</span><p>No commission requests yet!</p></div>`;
+    return;
+   }
+   
+   container.innerHTML = commissionData.filter(c => c.status === 'pending' || c.status === 'accepted').map(comm => {
+    const progressPercent = (progressStages.indexOf(comm.progress_stage || 'Requested') + 1) / progressStages.length * 100;
+    
+    return `
+     <div class="rounded-3xl p-5 shadow-md commission-card">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div class="flex items-center gap-3 flex-1 cursor-pointer" onclick="showCommissionDetails('${comm.__backendId}')">
+        <span class="text-3xl">😺</span>
+        <div>
+         <h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4>
+         <p class="text-sm" style="color: #A88B9D;">${comm.contact}</p>
+        </div>
+       </div>
+       <span class="px-3 py-1 rounded-full text-xs font-semibold status-${comm.status}" style="color: #6B5A8B;">${comm.status.charAt(0).toUpperCase() + comm.status.slice(1)}</span>
+      </div>
+      <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+      <div class="mt-3 space-y-2">
+       <p style="color: #8B7A8B; font-size: 0.85rem;"><strong>Pose:</strong> ${comm.pose || 'Standing'} | <strong>Expression:</strong> ${comm.expression || 'Happy'}</p>
+       <div>
+        <p style="font-size: 0.8rem; color: #A88B9D; margin-bottom: 6px;">Stage: ${comm.progress_stage || 'Requested'}</p>
+        <div class="progress-bar-container">
+         <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+       </div>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+       <button onclick="updateCommissionProgress('${comm.__backendId}', 'next')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #FFD9C8; color: #8B6B5A;">⏭️ Next Stage</button>
+       <button onclick="updateCommissionStatus('${comm.__backendId}', 'accepted')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #CFF7E6; color: #5A8B6B;">✅ Accept</button>
+       <button onclick="updateCommissionStatus('${comm.__backendId}', 'finished')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #D9C6F7; color: #6B5A8B;">🎨 Finished</button>
+       <button onclick="updateCommissionStatus('${comm.__backendId}', 'declined')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #F7C6D9; color: #8B5A6B;">❌ Decline</button>
+      </div>
+     </div>
+    `;
+   }).join('');
+  }
+  
+  function updateCommissionProgress(backendId, action) {
+   const commission = commissionData.find(c => c.__backendId === backendId);
+   if (!commission) return;
+   
+   const currentIndex = progressStages.indexOf(commission.progress_stage || 'Requested');
+   let newStage = commission.progress_stage || 'Requested';
+   
+   if (action === 'next' && currentIndex < progressStages.length - 1) {
+    newStage = progressStages[currentIndex + 1];
+   }
+   
+   updateCommissionField(backendId, 'progress_stage', newStage);
+  }
+  
+  async function updateCommissionField(backendId, field, value) {
+   const commission = commissionData.find(c => c.__backendId === backendId);
+   if (!commission) return;
+   
+   const updated = { ...commission, [field]: value };
+   if (field === 'status' && value === 'finished') {
+    updated.progress_stage = 'Finished';
+   }
+   
+   const result = await window.dataSdk.update(updated);
+   if (!result.isOk) showPopup('Failed to update! 😿');
+  }
+  
+  async function updateCommissionStatus(backendId, newStatus) {
+   await updateCommissionField(backendId, 'status', newStatus);
+  }
+  
+  function renderDashboardHistory() {
+   const acceptedFinished = commissionData.filter(c => c.status === 'accepted' || c.status === 'finished');
+   const acceptedContainer = document.getElementById('commission-history-accepted');
+   
+   if (acceptedFinished.length === 0) {
+    acceptedContainer.innerHTML = `<div class="text-center py-8" style="color: #A88B9D;"><p class="text-sm">No accepted or completed commissions yet</p></div>`;
+   } else {
+    acceptedContainer.innerHTML = acceptedFinished.map(comm => `
+     <div class="rounded-3xl p-5 shadow-md commission-card" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div class="flex items-center gap-3">
+        <span class="text-3xl">${comm.status === 'finished' ? '🎨' : '✅'}</span>
+        <div><h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4><p class="text-sm" style="color: #A88B9D;">${comm.contact}</p></div>
+       </div>
+       <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background: ${comm.status === 'finished' ? '#D9C6F7' : '#CFF7E6'}; color: #6B5A8B;">${comm.status === 'finished' ? '🎨 Completed' : '✅ Accepted'}</span>
+      </div>
+      <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+     </div>
+    `).join('');
+   }
+   
+   const declined = commissionData.filter(c => c.status === 'declined');
+   const declinedContainer = document.getElementById('commission-history-declined');
+   
+   if (declined.length === 0) {
+    declinedContainer.innerHTML = `<div class="text-center py-8" style="color: #A88B9D;"><p class="text-sm">No declined commissions yet</p></div>`;
+   } else {
+    declinedContainer.innerHTML = declined.map(comm => `
+     <div class="rounded-3xl p-5 shadow-md commission-card" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div class="flex items-center gap-3">
+        <span class="text-3xl">❌</span>
+        <div><h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4><p class="text-sm" style="color: #A88B9D;">${comm.contact}</p></div>
+       </div>
+       <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background: #F7C6D9; color: #8B5A6B;">❌ Declined</span>
+      </div>
+      <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+     </div>
+    `).join('');
+   }
+  }
+  
+  function showDashboardTab(tabName) {
+   document.getElementById('dashboard-active').classList.add('hidden');
+   document.getElementById('dashboard-history').classList.add('hidden');
+   if (document.getElementById('dashboard-messages')) {
+    document.getElementById('dashboard-messages').classList.add('hidden');
+   }
+   
+   if (tabName === 'active') {
+    document.getElementById('dashboard-active').classList.remove('hidden');
+   } else if (tabName === 'history') {
+    document.getElementById('dashboard-history').classList.remove('hidden');
+    renderDashboardHistory();
+   } else if (tabName === 'messages') {
+    if (document.getElementById('dashboard-messages')) {
+     document.getElementById('dashboard-messages').classList.remove('hidden');
+     renderDashboardConversations();
+    }
+   }
+   
+   document.querySelectorAll('.dashboard-tab').forEach(tab => {
+    tab.classList.remove('active');
+    if (tab.dataset.tab === tabName) tab.classList.add('active');
+   });
+  }
+  
+  function updateStats() {
+   document.getElementById('stat-pending').textContent = commissionData.filter(c => c.status === 'pending').length;
+   document.getElementById('stat-accepted').textContent = commissionData.filter(c => c.status === 'accepted').length;
+   document.getElementById('stat-finished').textContent = commissionData.filter(c => c.status === 'finished').length;
+   document.getElementById('stat-total').textContent = commissionData.length;
+   updateUnreadDot();
+  }
+  
+  function updateUnreadDot() {
+   let totalUnread = 0;
+   chatConversations.forEach(conv => { totalUnread += conv.unread; });
+   
+   const dot = document.getElementById('unread-dot');
+   if (totalUnread > 0) {
+    dot.classList.remove('hidden');
+    dot.textContent = totalUnread > 9 ? '9+' : totalUnread;
+   } else {
+    dot.classList.add('hidden');
+   }
+  }
+  
+  function toggleOwnerLogin() {
+   document.getElementById('login-form').classList.toggle('hidden');
+  }
+  
+  function attemptLogin() {
+   const password = document.getElementById('owner-password').value;
+   const errorEl = document.getElementById('login-error');
+   if (password === '102710') {
+    isOwnerLoggedIn = true;
+    errorEl.classList.add('hidden');
+    document.getElementById('dashboard-nav-btn').classList.remove('hidden');
+    showPage('dashboard');
+   } else {
+    errorEl.textContent = 'Wrong password!';
+    errorEl.classList.remove('hidden');
+   }
+  }
+  
+  function logout() {
+   isOwnerLoggedIn = false;
+   document.getElementById('owner-password').value = '';
+   document.getElementById('dashboard-nav-btn').classList.add('hidden');
+   showPage('extra');
+  }
+  
+  function showPopup(message) {
+   document.getElementById('popup-message').textContent = message;
+   document.getElementById('success-popup').classList.remove('hidden');
+  }
+  
+  function closePopup() {
+   document.getElementById('success-popup').classList.add('hidden');
+  }
+  
+  // Cat rain easter egg
+  function triggerEasterEgg() {
+   for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+     const cat = document.createElement('div');
+     cat.className = 'falling-cat';
+     cat.innerHTML = ['🐱', '😺', '😸', '😻'][Math.floor(Math.random() * 4)];
+     cat.style.left = Math.random() * 100 + '%';
+     document.body.appendChild(cat);
+     setTimeout(() => cat.remove(), 3000);
+    }, i * 150);
+   }
+  }
+  
+  // Yarn ball interaction
+  function playWithYarn() {
+   const yarnBall = document.getElementById('yarn-ball');
+   
+   // Move yarn ball to random position
+   yarnBallPosition.x = Math.random() * 80 + 10;
+   yarnBallPosition.y = Math.random() * 80 + 10;
+   yarnBall.style.left = yarnBallPosition.x + '%';
+   yarnBall.style.top = yarnBallPosition.y + '%';
+   
+   // Trigger cat chase
+   triggerYarnChase();
+   
+   // Add paw prints
+   for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+     const print = document.createElement('div');
+     print.className = 'paw-print';
+     print.innerHTML = '🐾';
+     print.style.left = (yarnBallPosition.x + (Math.random() - 0.5) * 20) + '%';
+     print.style.top = (yarnBallPosition.y + (Math.random() - 0.5) * 20) + '%';
+     document.body.appendChild(print);
+     setTimeout(() => print.remove(), 2000);
+    }, i * 100);
+   }
+  }
+  
+  function triggerYarnChase() {
+   const cat = document.createElement('div');
+   cat.className = 'running-cat';
+   cat.innerHTML = '🐱';
+   cat.style.left = Math.random() > 0.5 ? '-80px' : 'calc(100% + 80px)';
+   cat.style.bottom = yarnBallPosition.y + '%';
+   document.body.appendChild(cat);
+   setTimeout(() => cat.remove(), 6000);
+  }
+  
+  // Random cat visitor
+  function spawnRandomCat() {
+   setInterval(() => {
+    if (Math.random() < 0.3) {
+     const cat = document.createElement('div');
+     cat.className = 'running-cat';
+     cat.innerHTML = ['🐱', '😺', '😸', '😻'][Math.floor(Math.random() * 4)];
+     cat.style.left = Math.random() > 0.5 ? '-80px' : 'calc(100% + 80px)';
+     document.body.appendChild(cat);
+     setTimeout(() => cat.remove(), 6000);
+    }
+   }, 15000);
+  }
+  
+  function showCommissionDetails(backendId) {
+   const commission = commissionData.find(c => c.__backendId === backendId);
+   if (!commission) return;
+   
+   const detailContent = document.getElementById('detail-content');
+   
+   // Files are stored as simple text strings like "Files: pose (filename.jpg), palette (filename.png)"
+   const filesText = commission.files || 'No files uploaded';
+   const hasFiles = filesText && filesText !== 'No files uploaded' && filesText.includes('Files:');
+   
+   detailContent.innerHTML = `
+    <div class="detail-section">
+     <div class="detail-section-title">Client Info</div>
+     <div class="detail-item"><strong>Name:</strong> ${commission.name}</div>
+     <div class="detail-item"><strong>Contact:</strong> ${commission.contact}</div>
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Commission Details</div>
+     <div class="detail-item"><strong>Type:</strong> ${commission.commission_type}</div>
+     <div class="detail-item"><strong>Budget:</strong> ${commission.budget}</div>
+     <div class="detail-item"><strong>Status:</strong> ${commission.status.charAt(0).toUpperCase() + commission.status.slice(1)}</div>
+     <div class="detail-item"><strong>Progress:</strong> ${commission.progress_stage || 'Requested'}</div>
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Character Info</div>
+     <div class="detail-item"><strong>Name:</strong> ${commission.character_name || 'Not specified'}</div>
+     <div class="detail-item"><strong>Species:</strong> ${commission.character_species || 'Not specified'}</div>
+     <div class="detail-item"><strong>Pose:</strong> ${commission.pose || 'Standing'}</div>
+     <div class="detail-item"><strong>Expression:</strong> ${commission.expression || 'Happy'}</div>
+     <div class="detail-item"><strong>Colors:</strong> ${commission.color_preferences || 'No preference'}</div>
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Description</div>
+     <div class="detail-item">${commission.description}</div>
+    </div>
+    
+    ${commission.extra_notes && commission.extra_notes !== 'None' ? `
+    <div class="detail-section">
+     <div class="detail-section-title">Extra Notes</div>
+     <div class="detail-item">${commission.extra_notes}</div>
+    </div>
+    ` : ''}
+    
+    <div class="detail-section">
+     <div class="detail-section-title">📁 Uploaded Files</div>
+     <div class="detail-item" style="color: #8B7A8B; font-size: 0.9rem;">${filesText}</div>
+     ${hasFiles ? `
+      <div class="mt-4 space-y-3">
+       ${commission.files.includes('pose') ? `
+        <div style="border: 2px solid #F4A6C1; border-radius: 12px; overflow: hidden; background: rgba(247, 198, 217, 0.1);">
+         <div style="background: #F4A6C1; padding: 8px 12px; font-weight: 600; color: white; font-size: 0.9rem;">📸 Pose Reference</div>
+         <div style="padding: 12px; cursor: pointer;" onclick="openImageModal('${uploadedImages['pose'] || ''}')">
+          <img src="${uploadedImages['pose'] || ''}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;" alt="Pose reference">
+          <p style="font-size: 0.8rem; color: #A88B9D; margin-top: 8px; margin-bottom: 0; text-align: center;">Click to view full size</p>
+         </div>
+        </div>
+       ` : ''}
+       ${commission.files.includes('palette') ? `
+        <div style="border: 2px solid #D9C6F7; border-radius: 12px; overflow: hidden; background: rgba(217, 198, 247, 0.1);">
+         <div style="background: #D9C6F7; padding: 8px 12px; font-weight: 600; color: white; font-size: 0.9rem;">🎨 Color Palette</div>
+         <div style="padding: 12px; cursor: pointer;" onclick="openImageModal('${uploadedImages['palette'] || ''}')">
+          <img src="${uploadedImages['palette'] || ''}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;" alt="Color palette">
+          <p style="font-size: 0.8rem; color: #A88B9D; margin-top: 8px; margin-bottom: 0; text-align: center;">Click to view full size</p>
+         </div>
+        </div>
+       ` : ''}
+      </div>
+     ` : ''}
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Submitted</div>
+     <div class="detail-item">${new Date(commission.created_at).toLocaleString()}</div>
+    </div>
+   `;
+   
+   document.getElementById('detail-panel').classList.remove('hidden');
+  }
+  
+  function closeDetailPanel() {
+   document.getElementById('detail-panel').classList.add('hidden');
+  }
+  
+  function openImageModal(src) {
+   document.getElementById('modal-image').src = src;
+   document.getElementById('image-modal-backdrop').classList.remove('hidden');
+  }
+  
+  function closeImageModal() {
+   document.getElementById('image-modal-backdrop').classList.add('hidden');
+  }
+  
+  // Chat functions
+  function openChat() {
+   document.getElementById('chat-window').classList.remove('hidden');
+   document.getElementById('chat-input').focus();
+   renderChatMessages();
+  }
+  
+  function sendChatMessage() {
+   const input = document.getElementById('chat-input');
+   const message = input.value.trim();
+   
+   if (!message) return;
+   
+   if (!userEmail) {
+    userEmail = 'visitor@' + Date.now() + '.com';
+   }
+   
+   if (!currentChatId) {
+    currentChatId = 'chat_' + userEmail.replace(/[^a-z0-9]/g, '_');
+   }
+   
+   const messageObj = {
+    id: 'msg_' + Date.now(),
+    chat_id: currentChatId,
+    sender: 'visitor',
+    sender_email: userEmail,
+    message: message,
+    timestamp: new Date().toISOString()
+   };
+   
+   chatMessages.push(messageObj);
+   localStorage.setItem('whisker_chat_messages', JSON.stringify(chatMessages));
+   input.value = '';
+   renderChatMessages();
+   
+   if (message.toLowerCase().includes('meow')) {
+    triggerYarnChase();
+   }
+   
+   if (isOwnerLoggedIn) {
+    renderDashboardConversations();
+   }
+  }
+  
+  function renderChatMessages() {
+   const container = document.getElementById('chat-messages');
+   container.innerHTML = chatMessages.map(msg => {
+    const date = new Date(msg.timestamp);
+    const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `
+     <div class="message ${msg.sender}">
+      <span class="paw-emoji">🐾</span>
+      ${msg.message}
+      <div class="message-time">${time}</div>
+      <div class="message-reactions">
+       <button class="reaction-btn" onclick="addReaction(this)">❤️</button>
+       <button class="reaction-btn" onclick="addReaction(this)">👍</button>
+       <button class="reaction-btn" onclick="addReaction(this)">🐾</button>
+      </div>
+     </div>
+    `;
+   }).join('');
+   container.scrollTop = container.scrollHeight;
+  }
+  
+  function addReaction(btn) {
+   btn.style.opacity = '0.7';
+   setTimeout(() => { btn.style.opacity = '1'; }, 200);
+  }
+  
+  function renderDashboardConversations() {
+   const container = document.getElementById('dashboard-conversations-list');
+   if (!container) return;
+   
+   if (chatMessages.length === 0) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-4xl mb-4 block">💬</span><p>No messages yet!</p></div>`;
+    return;
+   }
+   
+   const uniqueChats = [...new Set(chatMessages.map(m => m.chat_id))];
+   
+   container.innerHTML = uniqueChats.map(chatId => {
+    const chatMsgs = chatMessages.filter(m => m.chat_id === chatId);
+    const lastMsg = chatMsgs[chatMsgs.length - 1];
+    const time = new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    return `
+     <div class="conversation-card" onclick="viewConversation('${chatId}')">
+      <div class="font-medium text-sm" style="color: #E8A4BF;">Chat - ${chatId.substring(5, 10)}</div>
+      <div class="text-xs mt-2" style="color: #A88B9D; max-height: 2em; overflow: hidden;">${lastMsg.message}</div>
+      <div class="text-xs mt-2" style="color: #D9A6B8;">${time}</div>
+     </div>
+    `;
+   }).join('');
+  }
+  
+  function viewConversation(chatId) {
+   const convMessages = chatMessages.filter(m => m.chat_id === chatId);
+   const detailContainer = document.getElementById('conversation-detail');
+   
+   detailContainer.innerHTML = `
+    <div class="flex flex-col h-full">
+     <div class="border-b-2 pb-4 mb-4" style="border-color: #F4A6C1;">
+      <div style="color: #E8A4BF;" class="font-bold">Chat - ${chatId.substring(5, 10)}</div>
+     </div>
+     
+     <div id="conversation-messages" class="flex-1 overflow-y-auto space-y-3 mb-4 scrollbar-hide">
+      ${convMessages.map(msg => {
+       const date = new Date(msg.timestamp);
+       const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+       return `
+        <div class="message ${msg.sender}">
+         <span class="paw-emoji">🐾</span>
+         ${msg.message}
+         <div class="message-time">${time}</div>
+        </div>
+       `;
+      }).join('')}
+     </div>
+     
+     <div class="chat-input-area mt-auto">
+      <input type="text" id="dashboard-chat-input" class="chat-input" placeholder="Reply..." autocomplete="off">
+      <button onclick="sendDashboardMessage('${chatId}')" class="chat-send-btn">🐾</button>
+     </div>
+    </div>
+   `;
+   
+   setTimeout(() => {
+    const messagesContainer = document.getElementById('conversation-messages');
+    if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    const input = document.getElementById('dashboard-chat-input');
+    if (input) {
+     input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+       e.preventDefault();
+       sendDashboardMessage(chatId);
+      }
+     });
+    }
+   }, 0);
+  }
+  
+  function sendDashboardMessage(chatId) {
+   const input = document.getElementById('dashboard-chat-input');
+   const message = input.value.trim();
+   
+   if (!message) return;
+   
+   const messageObj = {
+    id: 'msg_' + Date.now(),
+    chat_id: chatId,
+    sender: 'artist',
+    sender_email: 'artist@whiskerai.com',
+    message: message,
+    timestamp: new Date().toISOString()
+   };
+   
+   chatMessages.push(messageObj);
+   localStorage.setItem('whisker_chat_messages', JSON.stringify(chatMessages));
+   input.value = '';
+   
+   viewConversation(chatId);
+   renderDashboardConversations();
+  }
+  
+  function minimizeChat() {
+   document.getElementById('chat-window').classList.add('hidden');
+  }
+  
+  function closeChat() {
+   document.getElementById('chat-window').classList.add('hidden');
+  }
+  
+  // Initialize
+  showPage('home');
+  renderGallery();
+  
+  const saved = localStorage.getItem('whisker_chat_messages');
+  if (saved) {
+   try {
+    chatMessages = JSON.parse(saved);
+   } catch (e) {}
+  }
+  
+  document.getElementById('chat-input').addEventListener('keypress', function(e) {
+   if (e.key === 'Enter') {
+    e.preventDefault();
+    sendChatMessage();
+   }
+  });
+  
+  spawnRandomCat();
+ </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d9c7fe9e123f04d',t:'MTc3MzA4NDY4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+
+<!-- Mood Board Builder -->
+<section id="moodboard_section" style="margin-top:40px;">
+<h2>Mood Board Builder</h2>
+<p>Add inspiration images (poses, lighting, outfits, vibe).</p>
+<input type="file" id="moodBoardUpload" accept="image/png,image/jpeg" multiple>
+<div id="moodBoardPreview" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;"></div>
+</section>
+
+<!-- Automatic Palette Extractor -->
+<section id="palette_section" style="margin-top:40px;">
+<h2>Automatic Color Palette Extractor</h2>
+<p>Upload a PNG. Generate a palette, download it, and upload it in the optional PNG palette slot if you want.</p>
+<input type="file" id="paletteUpload" accept="image/png,image/jpeg">
+<div id="palettePreview" style="display:flex;flex-wrap:wrap;margin-top:10px;"></div>
+<br>
+<button onclick="downloadPalette()">Download Palette PNG</button>
+<canvas id="paletteCanvas" width="400" height="80" style="display:none;"></canvas>
+</section>
+
+
+
+<script>
+
+const moodUpload=document.getElementById("moodBoardUpload");
+const moodPreview=document.getElementById("moodBoardPreview");
+
+if(moodUpload){
+moodUpload.addEventListener("change",function(){
+moodPreview.innerHTML="";
+Array.from(this.files).forEach(file=>{
+const reader=new FileReader();
+reader.onload=function(e){
+const img=document.createElement("img");
+img.src=e.target.result;
+img.style.width="120px";
+img.style.borderRadius="8px";
+moodPreview.appendChild(img);
+}
+reader.readAsDataURL(file);
+});
+});
+}
+
+let paletteColors=[];
+
+const paletteUpload=document.getElementById("paletteUpload");
+const palettePreview=document.getElementById("palettePreview");
+
+if(paletteUpload){
+paletteUpload.addEventListener("change",function(){
+
+const file=this.files[0];
+const img=new Image();
+const reader=new FileReader();
+
+reader.onload=function(e){
+img.src=e.target.result;
+img.onload=function(){
+
+palettePreview.innerHTML="";
+
+const canvas=document.createElement("canvas");
+const ctx=canvas.getContext("2d");
+
+canvas.width=img.width;
+canvas.height=img.height;
+ctx.drawImage(img,0,0);
+
+const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+
+paletteColors=[];
+
+for(let i=0;i<data.length;i+=40){
+let r=data[i];
+let g=data[i+1];
+let b=data[i+2];
+paletteColors.push(`rgb(${r},${g},${b})`);
+if(paletteColors.length>=8)break;
+}
+
+paletteColors.forEach(c=>{
+const box=document.createElement("div");
+box.style.width="40px";
+box.style.height="40px";
+box.style.margin="4px";
+box.style.borderRadius="6px";
+box.style.background=c;
+palettePreview.appendChild(box);
+});
+
+}
+}
+
+reader.readAsDataURL(file);
+
+});
+}
+
+function downloadPalette(){
+
+if(!paletteColors.length){
+alert("Generate a palette first.");
+return;
+}
+
+const canvas=document.getElementById("paletteCanvas");
+const ctx=canvas.getContext("2d");
+
+const size=canvas.width/paletteColors.length;
+
+paletteColors.forEach((c,i)=>{
+ctx.fillStyle=c;
+ctx.fillRect(i*size,0,size,canvas.height);
+});
+
+const link=document.createElement("a");
+link.download="palette.png";
+link.href=canvas.toDataURL();
+link.click();
+
+}
+
+</script>
+
+
+</body>
+</html>
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Whisker Studio - Cute Cat Artist Portfolio</title>
+ <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+ <style>
+  :root {
+   --cream: #FFF6F7;
+   --blush: #F7C6D9;
+   --lavender: #D9C6F7;
+   --mint: #CFF7E6;
+   --baby-blue: #CDE7FF;
+   --peach: #FFD9C8;
+   --soft-coral: #FFB8A8;
+  }
+  
+  * { box-sizing: border-box; }
+  
+  html, body {
+   height: 100%;
+   margin: 0;
+   font-family: 'Quicksand', sans-serif;
+  }
+  
+  .app-wrapper {
+   min-height: 100%;
+   width: 100%;
+   background: linear-gradient(135deg, var(--cream) 0%, #FFF0F3 50%, #F8F0FF 100%);
+   overflow-y: auto;
+   overflow-x: hidden;
+  }
+  
+  .nav-tab {
+   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+   position: relative;
+  }
+  
+  .nav-tab:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 8px 25px rgba(247, 198, 217, 0.4);
+  }
+  
+  .nav-tab.active {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 20px rgba(247, 198, 217, 0.5);
+  }
+  
+  .card-hover {
+   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card-hover:hover {
+   transform: translateY(-5px) scale(1.02);
+   box-shadow: 0 15px 40px rgba(217, 198, 247, 0.3);
+  }
+  
+  .btn-pastel {
+   transition: all 0.3s ease;
+   position: relative;
+   overflow: hidden;
+  }
+  
+  .btn-pastel:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-pastel::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   width: 0;
+   height: 0;
+   background: rgba(255, 255, 255, 0.3);
+   border-radius: 50%;
+   transform: translate(-50%, -50%);
+   transition: width 0.4s, height 0.4s;
+  }
+  
+  .btn-pastel:hover::after {
+   width: 300px;
+   height: 300px;
+  }
+  
+  .sparkle {
+   position: absolute;
+   width: 8px;
+   height: 8px;
+   background: radial-gradient(circle, #FFE4EC 0%, transparent 70%);
+   border-radius: 50%;
+   animation: sparkle 3s ease-in-out infinite;
+   pointer-events: none;
+  }
+  
+  @keyframes sparkle {
+   0%, 100% { opacity: 0; transform: scale(0); }
+   50% { opacity: 1; transform: scale(1); }
+  }
+  
+  .floating-paw {
+   position: absolute;
+   font-size: 20px;
+   opacity: 0.3;
+   animation: float 6s ease-in-out infinite;
+   pointer-events: none;
+  }
+  
+  @keyframes float {
+   0%, 100% { transform: translateY(0) rotate(0deg); }
+   50% { transform: translateY(-20px) rotate(10deg); }
+  }
+  
+  .cat-peek {
+   position: absolute;
+   bottom: -30px;
+   left: 50%;
+   transform: translateX(-50%);
+   font-size: 40px;
+   transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+   pointer-events: none;
+  }
+  
+  .profile-container:hover .cat-peek {
+   bottom: -5px;
+  }
+  
+  .gallery-item {
+   transition: all 0.35s ease;
+   position: relative;
+   overflow: hidden;
+   cursor: pointer;
+  }
+  
+  .gallery-item:hover {
+   transform: scale(1.08);
+   z-index: 10;
+   filter: drop-shadow(0 10px 30px rgba(247, 198, 217, 0.4));
+  }
+  
+  .gallery-item:hover .gallery-overlay {
+   opacity: 1;
+  }
+  
+  .gallery-sparkles {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   opacity: 0;
+   font-size: 20px;
+   animation: twinkle 0.6s ease-in-out;
+  }
+  
+  .gallery-item:hover .gallery-sparkles {
+   opacity: 1;
+  }
+  
+  @keyframes twinkle {
+   0%, 100% { opacity: 0; transform: scale(0); }
+   50% { opacity: 1; transform: scale(1); }
+  }
+  
+  .gallery-overlay {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background: linear-gradient(transparent, rgba(247, 198, 217, 0.9));
+   padding: 20px 15px 15px;
+   opacity: 0;
+   transition: opacity 0.3s ease;
+   border-radius: 0 0 16px 16px;
+  }
+  
+  .page-content {
+   animation: fadeIn 0.4s ease;
+  }
+  
+  @keyframes fadeIn {
+   from { opacity: 0; transform: translateY(10px); }
+   to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .input-pastel {
+   transition: all 0.3s ease;
+   border: 2px solid transparent;
+  }
+  
+  .input-pastel:focus {
+   border-color: var(--lavender);
+   box-shadow: 0 0 20px rgba(217, 198, 247, 0.4);
+   outline: none;
+  }
+  
+  .commission-card {
+   background: linear-gradient(145deg, #FFFFFF 0%, var(--cream) 100%);
+  }
+  
+  .secret-paw {
+   cursor: pointer;
+   transition: transform 0.3s ease;
+   opacity: 0.4;
+  }
+  
+  .secret-paw:hover {
+   transform: scale(1.3) rotate(15deg);
+   opacity: 0.7;
+  }
+  
+  .confetti {
+   position: fixed;
+   pointer-events: none;
+   z-index: 1000;
+   animation: confettiFall 3s ease-out forwards;
+  }
+  
+  @keyframes confettiFall {
+   0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+   100% { transform: translateY(100%) rotate(720deg); opacity: 0; }
+  }
+  
+  .running-cat {
+   position: fixed;
+   font-size: 40px;
+   z-index: 1001;
+   animation: runAcross 6s ease-in-out forwards;
+  }
+  
+  @keyframes runAcross {
+   0% { left: -80px; bottom: 50%; }
+   25% { left: 30%; bottom: 48%; transform: scaleX(1); }
+   50% { left: 60%; bottom: 52%; transform: scaleX(1); }
+   75% { left: 80%; bottom: 50%; }
+   100% { left: 110%; bottom: 50%; }
+  }
+  
+  .falling-cat {
+   position: fixed;
+   font-size: 40px;
+   z-index: 1001;
+   animation: catFall 3s ease-in forwards;
+   pointer-events: none;
+  }
+  
+  @keyframes catFall {
+   0% { top: -50px; opacity: 1; transform: rotate(0deg); }
+   100% { top: 100%; opacity: 0; transform: rotate(360deg); }
+  }
+  
+  .paw-print {
+   position: fixed;
+   font-size: 20px;
+   z-index: 999;
+   opacity: 0.5;
+   animation: pawFade 2s ease-out forwards;
+   pointer-events: none;
+  }
+  
+  @keyframes pawFade {
+   0% { opacity: 0.7; transform: scale(1); }
+   100% { opacity: 0; transform: scale(0.5); }
+  }
+  
+  .yarn-ball {
+   position: fixed;
+   font-size: 30px;
+   cursor: pointer;
+   z-index: 35;
+   transition: all 0.2s ease;
+   animation: yarnBob 3s ease-in-out infinite;
+  }
+  
+  .yarn-ball:hover {
+   transform: scale(1.2);
+  }
+  
+  @keyframes yarnBob {
+   0%, 100% { transform: translateY(0); }
+   50% { transform: translateY(-10px); }
+  }
+  
+  .popup-overlay {
+   background: rgba(255, 246, 247, 0.95);
+   backdrop-filter: blur(10px);
+  }
+  
+  .chat-button {
+   position: fixed;
+   bottom: 20px;
+   right: 20px;
+   width: 70px;
+   height: 70px;
+   background: #F4A6C1;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   font-size: 40px;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+   transition: all 0.3s ease;
+   z-index: 40;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  }
+  
+  .chat-button:hover {
+   background: #E68BB0;
+   transform: scale(1.1);
+   animation: wiggle 0.5s ease-in-out;
+  }
+  
+  @keyframes wiggle {
+   0%, 100% { transform: scale(1.1) rotate(0deg); }
+   25% { transform: scale(1.1) rotate(-5deg); }
+   75% { transform: scale(1.1) rotate(5deg); }
+  }
+  
+  .chat-tooltip {
+   position: absolute;
+   bottom: 100%;
+   right: 0;
+   background: #F4A6C1;
+   color: #8B5A6B;
+   padding: 8px 12px;
+   border-radius: 20px;
+   font-size: 12px;
+   font-weight: 600;
+   white-space: nowrap;
+   margin-bottom: 10px;
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity 0.3s ease;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-button:hover .chat-tooltip {
+   opacity: 1;
+  }
+  
+  .chat-window {
+   position: fixed;
+   bottom: 100px;
+   right: 20px;
+   width: 320px;
+   height: 420px;
+   background: linear-gradient(145deg, #FFE4F0, #FFF6F7);
+   border-radius: 30px;
+   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+   display: flex;
+   flex-direction: column;
+   z-index: 40;
+   animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+   overflow: hidden;
+  }
+  
+  @keyframes slideUp {
+   from { transform: translateY(50px); opacity: 0; }
+   to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .chat-window.hidden { display: none; }
+  
+  .chat-header {
+   background: linear-gradient(145deg, #F4A6C1, #E68BB0);
+   padding: 15px;
+   text-align: center;
+   color: #8B5A6B;
+   font-weight: bold;
+   position: relative;
+   border-radius: 30px 30px 0 0;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 8px;
+  }
+  
+  .chat-avatar {
+   width: 40px;
+   height: 40px;
+   background: #D9C6F7;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 24px;
+  }
+  
+  .chat-messages {
+   flex: 1;
+   overflow-y: auto;
+   padding: 15px;
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+  }
+  
+  .message {
+   padding: 10px 14px;
+   border-radius: 18px;
+   max-width: 80%;
+   word-wrap: break-word;
+   font-size: 13px;
+   animation: fadeIn 0.3s ease;
+  }
+  
+  .message.visitor {
+   background: #CDE7FF;
+   color: #5A6B8B;
+   align-self: flex-end;
+  }
+  
+  .message.artist {
+   background: #D9C6F7;
+   color: #6B5A8B;
+   align-self: flex-start;
+  }
+  
+  .message-time {
+   font-size: 11px;
+   opacity: 0.7;
+   margin-top: 4px;
+  }
+  
+  .message-reactions {
+   display: flex;
+   gap: 4px;
+   margin-top: 6px;
+   flex-wrap: wrap;
+  }
+  
+  .reaction-btn {
+   font-size: 14px;
+   background: rgba(255, 255, 255, 0.5);
+   border: none;
+   padding: 2px 6px;
+   border-radius: 12px;
+   cursor: pointer;
+   transition: all 0.2s ease;
+  }
+  
+  .reaction-btn:hover {
+   background: rgba(255, 255, 255, 0.8);
+   transform: scale(1.15);
+  }
+  
+  .chat-input-area {
+   padding: 12px;
+   border-top: 2px solid rgba(247, 198, 217, 0.3);
+   display: flex;
+   gap: 8px;
+  }
+  
+  .chat-input {
+   flex: 1;
+   padding: 10px 14px;
+   border: 2px solid #F4A6C1;
+   border-radius: 20px;
+   font-family: 'Quicksand', sans-serif;
+   font-size: 13px;
+   transition: all 0.3s ease;
+   background: #FFFFFF;
+   color: #8B7A8B;
+  }
+  
+  .chat-input:focus {
+   outline: none;
+   border-color: #E68BB0;
+   box-shadow: 0 0 10px rgba(244, 166, 193, 0.3);
+  }
+  
+  .chat-send-btn {
+   width: 40px;
+   height: 40px;
+   background: #F4A6C1;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   font-size: 18px;
+   transition: all 0.3s ease;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  }
+  
+  .chat-send-btn:hover {
+   background: #E68BB0;
+   transform: scale(1.1);
+  }
+  
+  .chat-close-btn {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   background: none;
+   border: none;
+   font-size: 20px;
+   cursor: pointer;
+   color: #8B5A6B;
+   transition: transform 0.2s ease;
+  }
+  
+  .chat-close-btn:hover {
+   transform: scale(1.2);
+  }
+  
+  .typing-indicator {
+   display: flex;
+   gap: 4px;
+   align-items: flex-end;
+   padding: 10px 14px;
+   background: #D9C6F7;
+   border-radius: 18px;
+   width: fit-content;
+  }
+  
+  .typing-dot {
+   width: 6px;
+   height: 6px;
+   background: #6B5A8B;
+   border-radius: 50%;
+   animation: typing 1.4s infinite;
+  }
+  
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes typing {
+   0%, 60%, 100% { transform: translateY(0); }
+   30% { transform: translateY(-10px); }
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  
+  .paw-emoji {
+   margin-right: 6px;
+   opacity: 0.6;
+   animation: pawBounce 0.6s ease-in-out;
+  }
+  
+  @keyframes pawBounce {
+   0%, 100% { transform: scale(1); }
+   50% { transform: scale(1.2); }
+  }
+  
+  .unread-badge {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   width: 22px;
+   height: 22px;
+   background: #E88B8B;
+   color: white;
+   border-radius: 50%;
+   font-size: 11px;
+   font-weight: bold;
+  }
+  
+  .conversation-card {
+   padding: 12px;
+   border-radius: 15px;
+   background: #FFFFFF;
+   border: 2px solid transparent;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   margin-bottom: 8px;
+  }
+  
+  .conversation-card:hover {
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 12px rgba(244, 166, 193, 0.2);
+   transform: translateX(4px);
+  }
+  
+  .conversation-card.active {
+   background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 15px rgba(244, 166, 193, 0.3);
+  }
+  
+  .dashboard-messages-section {
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: 16px;
+   height: 600px;
+  }
+  
+  @media (min-width: 1024px) {
+   .dashboard-messages-section {
+    grid-template-columns: 280px 1fr;
+   }
+  }
+  
+  .conversations-sidebar {
+   border-radius: 20px;
+   background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+   padding: 16px;
+   overflow-y: auto;
+   border: 2px solid #F4A6C1;
+  }
+  
+  .conversation-detail-area {
+   border-radius: 20px;
+   background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+   padding: 16px;
+   border: 2px solid #F4A6C1;
+  }
+  
+  .bounce-in {
+   animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes bounceIn {
+   0% { transform: scale(0); opacity: 0; }
+   50% { transform: scale(1.1); }
+   100% { transform: scale(1); opacity: 1; }
+  }
+  
+  .status-pending { background: var(--peach); }
+  .status-accepted { background: var(--mint); }
+  .status-declined { background: var(--blush); }
+  .status-finished { background: var(--lavender); }
+  
+  .progress-bar-container {
+   background: #F0E8F5;
+   border-radius: 10px;
+   height: 8px;
+   overflow: hidden;
+   margin-top: 8px;
+  }
+  
+  .progress-bar-fill {
+   background: linear-gradient(90deg, #F7C6D9, #D9C6F7);
+   height: 100%;
+   transition: width 0.4s ease;
+   border-radius: 10px;
+  }
+  
+  .pose-grid, .expression-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+   gap: 10px;
+   margin-bottom: 16px;
+  }
+  
+  .pose-option, .expression-option {
+   padding: 12px;
+   border: 2px solid #E0E0E0;
+   border-radius: 12px;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   text-align: center;
+   background: #FFFFFF;
+  }
+  
+  .pose-option:hover, .expression-option:hover {
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 12px rgba(244, 166, 193, 0.2);
+   transform: translateY(-2px);
+  }
+  
+  .pose-option.selected, .expression-option.selected {
+   background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+   border-color: #F4A6C1;
+   box-shadow: 0 4px 15px rgba(244, 166, 193, 0.3);
+  }
+  
+  .upload-area {
+   border: 2px dashed #F4A6C1;
+   border-radius: 12px;
+   padding: 20px;
+   text-align: center;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   background: rgba(247, 198, 217, 0.05);
+   margin-bottom: 12px;
+  }
+  
+  .upload-area:hover {
+   background: rgba(247, 198, 217, 0.1);
+   border-color: #E68BB0;
+  }
+  
+  .upload-preview {
+   width: 80px;
+   height: 80px;
+   border-radius: 8px;
+   object-fit: cover;
+   margin-top: 8px;
+  }
+  
+  .checkbox-group {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+  }
+  
+  .checkbox-item {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   padding: 10px;
+   border-radius: 8px;
+   background: #FFFFFF;
+  }
+  
+  .checkbox-item input[type="checkbox"] {
+   width: 20px;
+   height: 20px;
+   cursor: pointer;
+   accent-color: #F4A6C1;
+  }
+  
+  .checkbox-item label {
+   cursor: pointer;
+   flex: 1;
+   margin: 0;
+  }
+  
+  .commission-progress {
+   display: flex;
+   justify-content: space-between;
+   gap: 8px;
+   margin-top: 12px;
+   font-size: 12px;
+  }
+  
+  .progress-stage {
+   flex: 1;
+   padding: 8px;
+   border-radius: 8px;
+   text-align: center;
+   background: #F0F0F0;
+   color: #999;
+   transition: all 0.3s ease;
+  }
+  
+  .progress-stage.active, .progress-stage.completed {
+   background: linear-gradient(145deg, #F7C6D9, #D9C6F7);
+   color: #6B5A8B;
+   font-weight: bold;
+  }
+  
+  .file-upload {
+   display: none;
+  }
+  
+  .dashboard-tab.active {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .detail-panel {
+   position: fixed;
+   top: 0;
+   right: 0;
+   width: 100%;
+   max-width: 400px;
+   height: 100%;
+   background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+   box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+   z-index: 999;
+   overflow-y: auto;
+   animation: slideInRight 0.4s ease;
+  }
+  
+  @keyframes slideInRight {
+   from { transform: translateX(100%); }
+   to { transform: translateX(0); }
+  }
+  
+  .detail-panel.hidden { display: none; }
+  
+  .detail-header {
+   background: linear-gradient(145deg, #F4A6C1, #E68BB0);
+   padding: 20px;
+   color: #8B5A6B;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   font-weight: bold;
+  }
+  
+  .detail-close {
+   background: none;
+   border: none;
+   font-size: 24px;
+   cursor: pointer;
+   color: #8B5A6B;
+   transition: transform 0.2s ease;
+  }
+  
+  .detail-close:hover {
+   transform: scale(1.2);
+  }
+  
+  .detail-section {
+   padding: 16px;
+   border-bottom: 2px solid rgba(244, 166, 193, 0.2);
+  }
+  
+  .detail-section-title {
+   font-weight: bold;
+   color: #E8A4BF;
+   font-size: 14px;
+   margin-bottom: 10px;
+   text-transform: uppercase;
+  }
+  
+  .detail-item {
+   margin-bottom: 12px;
+   color: #8B7A8B;
+   font-size: 14px;
+  }
+  
+  .detail-item strong {
+   color: #E8A4BF;
+  }
+  
+  .image-preview-grid {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: 10px;
+   margin-top: 10px;
+  }
+  
+  .image-preview-item {
+   border-radius: 12px;
+   overflow: hidden;
+   background: #F0E8F5;
+   aspect-ratio: 1;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: transform 0.2s ease;
+   border: 2px solid #F4A6C1;
+  }
+  
+  .image-preview-item:hover {
+   transform: scale(1.05);
+  }
+  
+  .image-preview-item img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+  }
+  
+  .image-preview-label {
+   font-size: 12px;
+   text-align: center;
+   color: #A88B9D;
+   margin-top: 6px;
+  }
+  
+  .modal-backdrop {
+   position: fixed;
+   inset: 0;
+   background: rgba(0, 0, 0, 0.7);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 1001;
+  }
+  
+  .modal-backdrop.hidden {
+   display: none;
+  }
+  
+  .image-modal {
+   background: white;
+   border-radius: 20px;
+   padding: 20px;
+   max-width: 90%;
+   max-height: 80%;
+   position: relative;
+   animation: zoomIn 0.3s ease;
+  }
+  
+  @keyframes zoomIn {
+   from { transform: scale(0.9); opacity: 0; }
+   to { transform: scale(1); opacity: 1; }
+  }
+  
+  .image-modal img {
+   max-width: 100%;
+   max-height: 60vh;
+   border-radius: 12px;
+  }
+  
+  .image-modal-close {
+   position: absolute;
+   top: -15px;
+   right: -15px;
+   background: #E68BB0;
+   border: none;
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;
+   cursor: pointer;
+   font-size: 24px;
+   color: white;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: transform 0.2s ease;
+  }
+  
+  .image-modal-close:hover {
+   transform: scale(1.1);
+  }
+ </style>
+ <style>body { box-sizing: border-box; }</style>
+</head>
+<body class="h-full">
+ <div class="app-wrapper scrollbar-hide" id="app"><!-- Floating Decorations -->
+ <div class="floating-paw" style="top: 10%; left: 5%; animation-delay: 0s;">
+  🐾
+ </div>
+ <div class="floating-paw" style="top: 30%; right: 8%; animation-delay: 1s;">
+  ✨
+ </div>
+ <div class="floating-paw" style="top: 60%; left: 3%; animation-delay: 2s;">
+  🧶
+ </div>
+ <div class="floating-paw" style="top: 80%; right: 5%; animation-delay: 1.5s;">
+  ⭐
+ </div>
+ <div class="floating-paw" style="top: 45%; left: 95%; animation-delay: 0.5s;">
+  🐱
+ </div>
+ <div class="sparkle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+ <div class="sparkle" style="top: 25%; right: 25%; animation-delay: 0.5s;"></div>
+ <div class="sparkle" style="top: 55%; left: 15%; animation-delay: 1s;"></div>
+ <div class="sparkle" style="top: 75%; right: 20%; animation-delay: 1.5s;"></div><!-- Yarn Ball for interaction -->
+ <div id="yarn-ball" class="yarn-ball" onclick="playWithYarn()">
+  🧶
+ </div><!-- Navigation -->
+ <nav class="sticky top-0 z-50 px-4 py-4" style="background: linear-gradient(to bottom, rgba(255,246,247,0.98), rgba(255,246,247,0.9));">
+  <div class="max-w-4xl mx-auto">
+  <div class="flex items-center justify-between mb-4">
+   <div class="flex items-center gap-2">
+   <div style="position: relative; display: inline-block;">
+    <span class="text-3xl">🐱</span>
+    <div id="unread-dot" class="hidden" style="position: absolute; top: -5px; left: -5px; width: 14px; height: 14px; background: #E88B8B; border-radius: 50%; border: 2px solid white; font-size: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"></div>
+   </div>
+   <h1 class="text-2xl font-bold" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;" id="site-title">Whisker Studio</h1>
+   </div>
+   <div class="secret-paw text-xl" onclick="triggerEasterEgg()" title="What's this?">
+   🐾
+   </div><button id="dashboard-nav-btn" class="hidden nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" onclick="showPage('dashboard')" style="background: #FFD9C8; color: #8B6B5A;" data-tab="dashboard">📊 Dashboard</button>
+  </div>
+  <div class="flex flex-wrap gap-2 justify-center"><button onclick="showPage('home')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #F7C6D9; color: #8B5A6B;" data-tab="home">🏠 Home</button> <button onclick="showPage('commissions')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #CFF7E6; color: #5A8B6B;" data-tab="commissions">🎨 Commissions</button> <button onclick="showPage('my-requests')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #FFECD9; color: #8B7A5A;" data-tab="my-requests">📋 My Requests</button> <button onclick="showPage('portfolio')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #D9C6F7; color: #6B5A8B;" data-tab="portfolio">🖼️ Portfolio</button> <button onclick="showPage('extra')" class="nav-tab px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #CDE7FF; color: #5A6B8B;" data-tab="extra">✨ Extra</button>
+  </div>
+  </div>
+ </nav><!-- Main Content -->
+ <main class="max-w-5xl mx-auto px-4 py-8 pb-20"><!-- HOME PAGE -->
+  <div id="page-home" class="page-content">
+  <div class="text-center mb-10">
+   <div class="profile-container relative inline-block mb-6">
+   <div class="w-40 h-40 rounded-full mx-auto overflow-hidden shadow-lg" style="background: linear-gradient(145deg, #F7C6D9, #D9C6F7); padding: 4px;">
+    <div class="w-full h-full rounded-full flex items-center justify-center text-7xl" style="background: #FFF6F7;">
+    🎨
+    </div>
+   </div>
+   <div class="cat-peek">
+    😺
+   </div>
+   </div>
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;" id="artist-name-display">Meowy Artist</h2>
+   <p class="text-lg" style="color: #A88B9D;" id="welcome-msg-display">Welcome to my cozy art corner! ✨</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🐱</span>
+    <h3 class="text-xl font-bold" style="color: #E8A4BF;">About Me</h3>
+   </div>
+   <p class="leading-relaxed" style="color: #8B7A8B;" id="artist-bio-display">Hi there! I'm a digital artist who loves creating cute, kawaii-style artwork featuring adorable cats and whimsical characters. I've been drawing for over 5 years and specialize in soft, pastel aesthetics. When I'm not drawing, you can find me cuddling with my three cats! 🐾</p>
+   </div>
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF0FF);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">✨</span>
+    <h3 class="text-xl font-bold" style="color: #C4A4E8;">What I Create</h3>
+   </div>
+   <div class="flex flex-wrap gap-2"><span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #F7C6D9; color: #8B5A6B;">Character Art</span> <span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #CFF7E6; color: #5A8B6B;">Cute Animals</span> <span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #D9C6F7; color: #6B5A8B;">Chibi</span> <span class="px-3 py-1.5 rounded-full text-sm font-medium" style="background: #FFD9C8; color: #8B6B5A;">Kawaii</span>
+   </div>
+   </div>
+  </div>
+  <div class="text-center">
+   <h3 class="text-lg font-semibold mb-4" style="color: #A88B9D;">Find Me Here 💕</h3>
+   <div class="flex flex-wrap justify-center gap-3"><button class="btn-pastel px-5 py-2.5 rounded-full font-medium flex items-center gap-2" style="background: #CDE7FF; color: #5A6B8B;"><span>🐦</span> Twitter</button> <button class="btn-pastel px-5 py-2.5 rounded-full font-medium flex items-center gap-2" style="background: #F7C6D9; color: #8B5A6B;"><span>📸</span> Instagram</button> <button class="btn-pastel px-5 py-2.5 rounded-full font-medium flex items-center gap-2" style="background: #D9C6F7; color: #6B5A8B;"><span>🎨</span> DeviantArt</button>
+   </div>
+  </div>
+  <div class="flex justify-center gap-4 mt-10 text-4xl opacity-60"><span class="animate-bounce" style="animation-delay: 0s;">😺</span> <span class="animate-bounce" style="animation-delay: 0.2s;">😸</span> <span class="animate-bounce" style="animation-delay: 0.4s;">😻</span>
+  </div>
+  </div><!-- COMMISSIONS PAGE -->
+  <div id="page-commissions" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎨 Commission Menu</h2>
+   <p style="color: #A88B9D;">Choose your purrfect art style!</p>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+   <div class="card-hover commission-card rounded-3xl p-5 shadow-md text-center">
+   <div class="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center text-5xl" style="background: linear-gradient(145deg, #F7C6D9, #FFD9C8);">
+    ✏️
+   </div>
+   <h4 class="text-lg font-bold mb-1" style="color: #E8A4BF;">Sketch</h4>
+   <p class="text-2xl font-bold mb-2" style="color: #8B5A6B;">$15</p>
+   <p class="text-sm" style="color: #A88B9D;">Clean lined sketch with soft shading</p>
+   </div>
+   <div class="card-hover commission-card rounded-3xl p-5 shadow-md text-center">
+   <div class="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center text-5xl" style="background: linear-gradient(145deg, #CFF7E6, #CDE7FF);">
+    👤
+   </div>
+   <h4 class="text-lg font-bold mb-1" style="color: #7BC4A8;">Bust</h4>
+   <p class="text-2xl font-bold mb-2" style="color: #5A8B6B;">$30</p>
+   <p class="text-sm" style="color: #A88B9D;">Head to chest, fully colored</p>
+   </div>
+   <div class="card-hover commission-card rounded-3xl p-5 shadow-md text-center">
+   <div class="w-24 h-24 mx-auto mb-4 rounded-2xl flex items-center justify-center text-5xl" style="background: linear-gradient(145deg, #D9C6F7, #F7C6D9);">
+    🧑‍🎨
+   </div>
+   <h4 class="text-lg font-bold mb-1" style="color: #C4A4E8;">Half Body</h4>
+   <p class="text-2xl font-bold mb-2" style="color: #6B5A8B;">$50</p>
+   <p class="text-sm" style="color: #A88B9D;">Waist up with detailed rendering</p>
+   </div>
+  </div>
+  <div class="text-center"><button onclick="openCommissionForm()" class="btn-pastel px-8 py-4 rounded-full text-lg font-bold shadow-lg" style="background: linear-gradient(145deg, #F7C6D9, #D9C6F7); color: #6B5A8B;">🐾 Request Commission</button>
+  </div>
+  <div id="commission-form-container" class="hidden mt-10">
+   <div class="rounded-3xl p-6 md:p-8 shadow-lg" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+   <div class="flex items-center justify-between mb-6">
+    <h3 class="text-2xl font-bold" style="color: #E8A4BF;">📝 Commission Request</h3><button onclick="closeCommissionForm()" class="text-2xl hover:scale-110 transition-transform">❌</button>
+   </div>
+   <form id="commission-form" class="space-y-6">
+    <div class="grid md:grid-cols-2 gap-5">
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-name">Your Name 🐱</label> <input type="text" id="comm-name" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="What should I call you?">
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-contact">Contact 📧</label> <input type="text" id="comm-contact" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="Email or social media">
+    </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5">
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-type">Commission Type 🎨</label> <select id="comm-type" required class="input-pastel w-full px-4 py-3 rounded-2xl appearance-none cursor-pointer" style="background: #FFF6F7;"> <option value="">Select a type...</option> <option value="Sketch">Sketch - $15</option> <option value="Bust">Bust - $30</option> <option value="Half Body">Half Body - $50</option> </select>
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-budget">Budget 💰</label> <input type="text" id="comm-budget" class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="Your budget range">
+    </div>
+    </div><!-- POSE SELECTOR -->
+    <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Character Pose 💃</label>
+    <div class="pose-grid">
+     <div class="pose-option" onclick="selectPose('standing')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🧍
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Standing
+     </div>
+     </div>
+     <div class="pose-option" onclick="selectPose('sitting')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🧘
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Sitting
+     </div>
+     </div>
+     <div class="pose-option" onclick="selectPose('action')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🤸
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Action
+     </div>
+     </div>
+     <div class="pose-option" onclick="selectPose('custom')">
+     <div style="font-size: 28px; margin-bottom: 6px;">
+      🎭
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Custom
+     </div>
+     </div>
+    </div>
+    <div id="pose-description-area" class="hidden"><textarea class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" id="pose-description" placeholder="Describe the custom pose..." rows="2"></textarea>
+    </div>
+    </div><!-- POSE REFERENCE UPLOAD -->
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Pose Reference (Optional)</label>
+    <div class="upload-area" onclick="document.getElementById('pose-upload').click()">
+     <div style="font-size: 24px; margin-bottom: 8px;">
+     📸
+     </div>
+     <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload pose reference</p><input type="file" id="pose-upload" class="file-upload" accept="image/png,image/jpeg" onchange="previewPoseImage(event)">
+    </div>
+    <div id="pose-preview-area"></div>
+    </div><!-- EXPRESSION PICKER -->
+    <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Character Expression 😊</label>
+    <div class="expression-grid">
+     <div class="expression-option" onclick="selectExpression('happy')">
+     <div style="font-size: 28px;">
+      😊
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Happy
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('angry')">
+     <div style="font-size: 28px;">
+      😠
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Angry
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('shy')">
+     <div style="font-size: 28px;">
+      🥰
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Shy
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('smug')">
+     <div style="font-size: 28px;">
+      😏
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Smug
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('sad')">
+     <div style="font-size: 28px;">
+      😢
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Sad
+     </div>
+     </div>
+     <div class="expression-option" onclick="selectExpression('surprised')">
+     <div style="font-size: 28px;">
+      😲
+     </div>
+     <div style="font-size: 11px; color: #8B7A8B;">
+      Surprised
+     </div>
+     </div>
+    </div>
+    </div><!-- COLOR PALETTE UPLOAD -->
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Color Palette Reference (Optional)</label>
+    <div class="upload-area" onclick="document.getElementById('palette-upload').click()">
+     <div style="font-size: 24px; margin-bottom: 8px;">
+     🎨
+     </div>
+     <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload color palette</p><input type="file" id="palette-upload" class="file-upload" accept="image/png,image/jpeg" onchange="previewPaletteImage(event)">
+    </div>
+    <div id="palette-preview-area"></div>
+    </div><!-- CHARACTER DESCRIPTION -->
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-desc">Description 📋</label> <textarea id="comm-desc" required rows="4" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="Tell me about your character!"></textarea>
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="character-name">Character Name 🐱</label> <input type="text" id="character-name" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="What's your character called?">
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="character-species">Character Species/Type 🦁</label> <input type="text" id="character-species" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="e.g., Cat, Wolf, Dragon, Human, etc.">
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="color-prefs">Color Preferences 🎨</label> <textarea id="color-prefs" rows="2" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="e.g., Pastels, warm tones, dark colors, etc."></textarea>
+    </div>
+    <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-notes">Extra Notes 📝</label> <textarea id="comm-notes" rows="2" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="Any additional details?"></textarea>
+    </div><!-- REFERENCE CHECKLIST -->
+    <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Before You Submit ✓</label>
+    <div class="checkbox-group">
+     <div class="checkbox-item"><input type="checkbox" id="check-references" onchange="updateSubmitButton()"> <label for="check-references">I included character references</label>
+     </div>
+     <div class="checkbox-item"><input type="checkbox" id="check-terms" onchange="updateSubmitButton()"> <label for="check-terms">I read the Terms of Service</label>
+     </div>
+     <div class="checkbox-item"><input type="checkbox" id="check-turnaround" onchange="updateSubmitButton()"> <label for="check-turnaround">I understand the 2-4 week turnaround time</label>
+     </div>
+    </div>
+    </div>
+    <div class="text-center pt-4"><button type="submit" id="submit-btn" disabled class="btn-pastel px-8 py-4 rounded-full text-lg font-bold shadow-lg" style="background: linear-gradient(145deg, #CFF7E6, #CDE7FF); color: #5A8B6B; opacity: 0.5;">🐾 Submit Commission</button>
+    </div>
+   </form>
+   </div>
+  </div>
+  </div><!-- MY REQUESTS PAGE -->
+  <div id="page-my-requests" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">📋 My Commission Requests</h2>
+   <p style="color: #A88B9D;">Track the status of your requests</p>
+  </div>
+  <div id="my-requests-container" class="space-y-4">
+   <div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span>
+   <p>You haven't submitted any requests yet!</p>
+   </div>
+  </div>
+  </div><!-- PORTFOLIO PAGE -->
+  <div id="page-portfolio" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🖼️ Art Gallery</h2>
+   <p style="color: #A88B9D;">Browse my latest creations! (Hover for details)</p>
+  </div>
+  <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+  </div><!-- EXTRA PAGE -->
+  <div id="page-extra" class="page-content hidden">
+  <div class="text-center mb-8">
+   <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">✨ Extra Info</h2>
+   <p style="color: #A88B9D;">Everything else you need to know!</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">📜</span>
+    <h3 class="text-xl font-bold" style="color: #E8A4BF;">Terms of Service</h3>
+   </div>
+   <ul class="space-y-2 text-sm" style="color: #8B7A8B;">
+    <li class="flex items-start gap-2"><span>🐾</span> Payment required upfront</li>
+    <li class="flex items-start gap-2"><span>🐾</span> Turnaround 2-4 weeks</li>
+    <li class="flex items-start gap-2"><span>🐾</span> May post on social media</li>
+   </ul>
+   </div>
+   <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #F8F0FF);">
+   <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🔐</span>
+    <h3 class="text-xl font-bold" style="color: #C4A4E8;">Owner Area</h3>
+   </div>
+   <p class="text-sm mb-4" style="color: #A88B9D;">Access your commission dashboard</p><button onclick="toggleOwnerLogin()" id="login-toggle-btn" class="btn-pastel px-6 py-3 rounded-full font-semibold" style="background: #FFFFFF; color: #8B6B5A;">🐱 Owner Login</button>
+   <div id="login-form" class="hidden mt-6">
+    <div class="max-w-xs mx-auto space-y-4"><input type="password" id="owner-password" class="input-pastel w-full px-4 py-3 rounded-2xl text-center" style="background: #FFFFFF;" placeholder="Enter password"> <button onclick="attemptLogin()" class="btn-pastel w-full py-3 rounded-full font-semibold" style="background: #CFF7E6; color: #5A8B6B;">✨ Login</button>
+    <p id="login-error" class="text-sm hidden" style="color: #E88B8B;"></p>
+    </div>
+   </div>
+   </div>
+  </div>
+  </div><!-- OWNER DASHBOARD (Hidden until login) -->
+  <div id="page-dashboard" class="page-content hidden">
+  <div class="flex items-center justify-between mb-8">
+   <div>
+   <h2 class="text-3xl font-bold" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎀 Commission Dashboard</h2>
+   <p style="color: #A88B9D;">Manage your commission requests</p>
+   </div><button onclick="logout()" class="btn-pastel px-5 py-2 rounded-full font-medium" style="background: #FFD9C8; color: #8B6B5A;">🚪 Logout</button>
+  </div><!-- Stats -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+   <div class="rounded-2xl p-4 text-center" style="background: #FFD9C8;">
+   <p class="text-2xl font-bold" style="color: #8B6B5A;" id="stat-pending">0</p>
+   <p class="text-xs font-medium" style="color: #A88B7A;">Pending</p>
+   </div>
+   <div class="rounded-2xl p-4 text-center" style="background: #CFF7E6;">
+   <p class="text-2xl font-bold" style="color: #5A8B6B;" id="stat-accepted">0</p>
+   <p class="text-xs font-medium" style="color: #7AA88B;">Accepted</p>
+   </div>
+   <div class="rounded-2xl p-4 text-center" style="background: #D9C6F7;">
+   <p class="text-2xl font-bold" style="color: #6B5A8B;" id="stat-finished">0</p>
+   <p class="text-xs font-medium" style="color: #8B7AA8;">Finished</p>
+   </div>
+   <div class="rounded-2xl p-4 text-center" style="background: #F7C6D9;">
+   <p class="text-2xl font-bold" style="color: #8B5A6B;" id="stat-total">0</p>
+   <p class="text-xs font-medium" style="color: #A87A8B;">Total</p>
+   </div>
+  </div><!-- Dashboard Tabs -->
+  <div class="flex flex-wrap gap-2 mb-6 justify-center"><button onclick="showDashboardTab('active')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm active" style="background: #FFD9C8; color: #8B6B5A;" data-tab="active">📋 Active</button> <button onclick="showDashboardTab('history')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #D9C6F7; color: #6B5A8B;" data-tab="history">📜 History</button> <button onclick="showDashboardTab('messages')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #CDE7FF; color: #5A6B8B;" data-tab="messages">💬 Messages</button>
+  </div><!-- Sorting Controls -->
+  <div class="mb-6 flex gap-2 justify-center flex-wrap"><button onclick="sortCommissions('newest')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Newest</button> <button onclick="sortCommissions('oldest')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Oldest</button> <button onclick="sortCommissions('status')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Status</button>
+  </div><!-- Active Commissions -->
+  <div id="dashboard-active">
+   <div id="commission-list" class="space-y-4">
+   <div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">😺</span>
+    <p>No commission requests yet!</p>
+   </div>
+   </div>
+  </div><!-- History Section -->
+  <div id="dashboard-history" class="hidden">
+   <div class="space-y-6">
+   <div>
+    <h3 class="text-xl font-bold mb-4" style="color: #E8A4BF;">✅ Accepted &amp; Completed</h3>
+    <div id="commission-history-accepted" class="space-y-4">
+    <div class="text-center py-8" style="color: #A88B9D;">
+     <p class="text-sm">No accepted or completed commissions yet</p>
+    </div>
+    </div>
+   </div>
+   <div>
+    <h3 class="text-xl font-bold mb-4" style="color: #E8A4BF;">❌ Declined</h3>
+    <div id="commission-history-declined" class="space-y-4">
+    <div class="text-center py-8" style="color: #A88B9D;">
+     <p class="text-sm">No declined commissions yet</p>
+    </div>
+    </div>
+   </div>
+   </div>
+  </div><!-- Messages Section -->
+  <div id="dashboard-messages" class="hidden">
+   <div class="dashboard-messages-section">
+   <div class="conversations-sidebar">
+    <h3 class="font-bold mb-4" style="color: #E8A4BF;">💬 Conversations</h3>
+    <div id="dashboard-conversations-list"></div>
+   </div>
+   <div class="conversation-detail-area" id="conversation-detail">
+    <div class="text-center py-10" style="color: #A88B9D;">
+    <p>Select a conversation to view messages</p>
+    </div>
+   </div>
+   </div>
+  </div>
+  </div>
+ </main>
+ </div><!-- Detail Panel for Commission Details -->
+ <div id="detail-panel" class="detail-panel hidden">
+ <div class="detail-header">
+  <span>Commission Details</span> <button class="detail-close" onclick="closeDetailPanel()">✕</button>
+ </div>
+ <div id="detail-content"></div>
+ </div><!-- Image Modal -->
+ <div id="image-modal-backdrop" class="modal-backdrop hidden" onclick="closeImageModal()">
+ <div class="image-modal" onclick="event.stopPropagation()">
+  <button class="image-modal-close" onclick="closeImageModal()">✕</button> <img id="modal-image" src="" alt="Full size preview">
+ </div>
+ </div><!-- Chat Button --> <button id="chat-button" class="chat-button" onclick="openChat()">
+ <div class="chat-tooltip">
+  Chat with the artist!
+ </div> 🐱 </button> <!-- Chat Window -->
+ <div id="chat-window" class="chat-window hidden">
+ <div class="chat-header">
+  <div class="chat-avatar">
+  🐱
+  </div>
+  <div class="flex-1">
+  Chat with the Artist 🐾
+  </div><button onclick="minimizeChat()" class="chat-close-btn" title="Minimize">−</button> <button onclick="closeChat()" class="chat-close-btn" title="Close">✕</button>
+ </div>
+ <div id="chat-messages" class="chat-messages scrollbar-hide"></div>
+ <div class="chat-input-area">
+  <input type="text" id="chat-input" class="chat-input" placeholder="Type a message..." autocomplete="off"> <button onclick="sendChatMessage()" class="chat-send-btn">🐾</button>
+ </div>
+ </div><!-- Success Popup -->
+ <div id="success-popup" class="fixed inset-0 hidden z-50 flex items-center justify-center popup-overlay">
+ <div class="bounce-in rounded-3xl p-8 text-center max-w-sm mx-4 shadow-2xl" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+  <div class="text-6xl mb-4">
+  😻
+  </div>
+  <h3 class="text-2xl font-bold mb-2" style="color: #E8A4BF;">Meow-velous!</h3>
+  <p style="color: #8B7A8B;" id="popup-message">Your commission request has been sent!</p><button onclick="closePopup()" class="btn-pastel mt-6 px-6 py-2 rounded-full font-semibold" style="background: #F7C6D9; color: #8B5A6B;">Okay! 💕</button>
+ </div>
+ </div>
+ <script>
+  const defaultConfig = {
+   artist_name: 'Meowy Artist',
+   artist_bio: "Hi there! I'm a digital artist who loves creating cute, kawaii-style artwork featuring adorable cats and whimsical characters. I've been drawing for over 5 years and specialize in soft, pastel aesthetics. When I'm not drawing, you can find me cuddling with my three cats! 🐾",
+   welcome_message: 'Welcome to my cozy art corner! ✨',
+   background_color: '#FFF6F7',
+   surface_color: '#FFFFFF',
+   text_color: '#8B7A8B',
+   primary_action_color: '#F7C6D9',
+   secondary_action_color: '#D9C6F7'
+  };
+  
+  let currentPage = 'home';
+  let isOwnerLoggedIn = false;
+  let commissionData = [];
+  let userEmail = null;
+  let chatMessages = [];
+  let currentChatId = null;
+  let chatConversations = [];
+  let currentViewingConversation = null;
+  let selectedPose = null;
+  let selectedExpression = null;
+  let sortOrder = 'newest';
+  let yarnBallPosition = { x: Math.random() * 80, y: Math.random() * 80 };
+  
+  // Progress stages for commissions
+  const progressStages = ['Requested', 'Sketching', 'Lineart', 'Coloring', 'Finished'];
+  
+  // Gallery items with hover preview
+  const galleryItems = [
+   { id: 1, title: 'Sleepy Kitty', category: 'finished', emoji: '😴', bg: '#F7C6D9' },
+   { id: 2, title: 'Character Sketch', category: 'sketches', emoji: '✏️', bg: '#FFD9C8' },
+   { id: 3, title: 'Magical Cat Girl', category: 'commissions', emoji: '🧙‍♀️', bg: '#D9C6F7' },
+   { id: 4, title: 'Flower Crown', category: 'finished', emoji: '🌸', bg: '#CFF7E6' },
+   { id: 5, title: 'Quick Doodle', category: 'sketches', emoji: '🖊️', bg: '#CDE7FF' },
+   { id: 6, title: 'Pet Portrait', category: 'commissions', emoji: '🐱', bg: '#FFECD9' }
+  ];
+  
+  // ELEMENT SDK
+  window.elementSdk.init({
+   defaultConfig,
+   onConfigChange: async (config) => {
+    document.getElementById('artist-name-display').textContent = config.artist_name || defaultConfig.artist_name;
+    document.getElementById('artist-bio-display').textContent = config.artist_bio || defaultConfig.artist_bio;
+    document.getElementById('welcome-msg-display').textContent = config.welcome_message || defaultConfig.welcome_message;
+   },
+   mapToCapabilities: (config) => ({
+    recolorables: [
+     { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+     { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+     { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+     { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+     { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || 'Quicksand', set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || 16, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+   }),
+   mapToEditPanelValues: (config) => new Map([
+    ['artist_name', config.artist_name || defaultConfig.artist_name],
+    ['artist_bio', config.artist_bio || defaultConfig.artist_bio],
+    ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+   ])
+  });
+  
+  // DATA SDK
+  const dataHandler = {
+   onDataChanged(data) {
+    commissionData = data;
+    renderCommissionList();
+    renderMyRequests();
+    updateStats();
+   }
+  };
+  
+  window.dataSdk.init(dataHandler);
+  
+  // Pose selection
+  function selectPose(pose) {
+   selectedPose = pose;
+   document.querySelectorAll('.pose-option').forEach(el => el.classList.remove('selected'));
+   event.target.closest('.pose-option').classList.add('selected');
+   
+   const descArea = document.getElementById('pose-description-area');
+   if (pose === 'custom') {
+    descArea.classList.remove('hidden');
+   } else {
+    descArea.classList.add('hidden');
+   }
+  }
+  
+  // Expression selection
+  function selectExpression(expression) {
+   selectedExpression = expression;
+   document.querySelectorAll('.expression-option').forEach(el => el.classList.remove('selected'));
+   event.target.closest('.expression-option').classList.add('selected');
+  }
+  
+  let poseImageName = null;
+  let paletteImageName = null;
+  
+  // Store images as base64 for display
+  let uploadedImages = {};
+  
+  // Pose reference preview
+  function previewPoseImage(e) {
+   const file = e.target.files[0];
+   if (!file) return;
+   
+   poseImageName = file.name;
+   const reader = new FileReader();
+   
+   reader.onload = function(event) {
+    uploadedImages['pose'] = event.target.result;
+    const previewArea = document.getElementById('pose-preview-area');
+    previewArea.innerHTML = `
+     <div style="margin-top: 12px; padding: 10px; background: #F0E8F5; border-radius: 8px;">
+      <div style="width: 100%; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;">
+       <img src="${event.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <p style="font-size: 0.9rem; color: #8B7A8B; margin: 0;">✅ ${file.name} (${(file.size / 1024).toFixed(1)}KB)</p>
+     </div>
+    `;
+   };
+   
+   reader.readAsDataURL(file);
+  }
+  
+  // Palette preview
+  function previewPaletteImage(e) {
+   const file = e.target.files[0];
+   if (!file) return;
+   
+   paletteImageName = file.name;
+   const reader = new FileReader();
+   
+   reader.onload = function(event) {
+    uploadedImages['palette'] = event.target.result;
+    const previewArea = document.getElementById('palette-preview-area');
+    previewArea.innerHTML = `
+     <div style="margin-top: 12px; padding: 10px; background: #F0E8F5; border-radius: 8px;">
+      <div style="width: 100%; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;">
+       <img src="${event.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <p style="font-size: 0.9rem; color: #8B7A8B; margin: 0;">✅ ${file.name} (${(file.size / 1024).toFixed(1)}KB)</p>
+     </div>
+    `;
+   };
+   
+   reader.readAsDataURL(file);
+  }
+  
+  // Update submit button state
+  function updateSubmitButton() {
+   const check1 = document.getElementById('check-references').checked;
+   const check2 = document.getElementById('check-terms').checked;
+   const check3 = document.getElementById('check-turnaround').checked;
+   
+   const btn = document.getElementById('submit-btn');
+   if (check1 && check2 && check3) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+   } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+   }
+  }
+  
+  function showPage(pageName) {
+   document.querySelectorAll('.page-content').forEach(page => page.classList.add('hidden'));
+   const targetPage = document.getElementById(`page-${pageName}`);
+   if (targetPage) targetPage.classList.remove('hidden');
+   
+   document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.classList.remove('active');
+    if (tab.dataset.tab === pageName) tab.classList.add('active');
+   });
+   currentPage = pageName;
+  }
+  
+  function openCommissionForm() {
+   document.getElementById('commission-form-container').classList.remove('hidden');
+  }
+  
+  function closeCommissionForm() {
+   document.getElementById('commission-form-container').classList.add('hidden');
+  }
+  
+  document.getElementById('commission-form').addEventListener('submit', async function(e) {
+   e.preventDefault();
+   
+   if (commissionData.length >= 999) {
+    showPopup('Maximum commission limit reached!');
+    return;
+   }
+   
+   // Show loading state
+   const submitBtn = document.getElementById('submit-btn');
+   const originalText = submitBtn.textContent;
+   submitBtn.disabled = true;
+   submitBtn.textContent = '⏳ Submitting...';
+   
+   try {
+    // Collect all required fields
+    const name = document.getElementById('comm-name').value.trim();
+    const contact = document.getElementById('comm-contact').value.trim();
+    const commissionType = document.getElementById('comm-type').value;
+    const description = document.getElementById('comm-desc').value.trim();
+    const characterName = document.getElementById('character-name').value.trim();
+    const characterSpecies = document.getElementById('character-species').value.trim();
+    
+    // Validate required fields
+    if (!name || !contact || !commissionType || !description || !characterName || !characterSpecies) {
+     showPopup('Please fill in all required fields! 🐾');
+     submitBtn.disabled = false;
+     submitBtn.textContent = originalText;
+     return;
+    }
+    
+    // Validate checkboxes
+    if (!document.getElementById('check-references').checked || !document.getElementById('check-terms').checked || !document.getElementById('check-turnaround').checked) {
+     showPopup('Please check all boxes before submitting! ✓');
+     submitBtn.disabled = false;
+     submitBtn.textContent = originalText;
+     return;
+    }
+    
+    // Store files as simple string (Data SDK doesn't support complex objects)
+    let filesDescription = 'No files uploaded';
+    if (poseImageName || paletteImageName) {
+     filesDescription = `Files: ${poseImageName ? 'pose (' + poseImageName + ')' : ''}${poseImageName && paletteImageName ? ', ' : ''}${paletteImageName ? 'palette (' + paletteImageName + ')' : ''}`;
+    }
+    
+    const commissionRequest = {
+     name: name,
+     contact: contact,
+     commission_type: commissionType,
+     description: description,
+     budget: document.getElementById('comm-budget').value.trim() || 'Not specified',
+     extra_notes: document.getElementById('comm-notes').value.trim() || 'None',
+     character_name: characterName,
+     character_species: characterSpecies,
+     color_preferences: document.getElementById('color-prefs').value.trim() || 'No preference',
+     status: 'pending',
+     pose: selectedPose || 'standing',
+     expression: selectedExpression || 'happy',
+     progress_stage: 'Requested',
+     files: filesDescription,
+     created_at: new Date().toISOString()
+    };
+    
+    userEmail = contact;
+    
+    const result = await window.dataSdk.create(commissionRequest);
+    
+    if (result.isOk) {
+     showPopup('Your commission request has been sent! I\'ll get back to you soon! 💕');
+     // Reset form completely
+     document.getElementById('commission-form').reset();
+     document.querySelectorAll('.pose-option, .expression-option').forEach(el => el.classList.remove('selected'));
+     selectedPose = null;
+     selectedExpression = null;
+     poseImageName = null;
+     paletteImageName = null;
+     document.getElementById('pose-description-area').classList.add('hidden');
+     document.getElementById('pose-preview-area').innerHTML = '';
+     document.getElementById('palette-preview-area').innerHTML = '';
+     document.getElementById('check-references').checked = false;
+     document.getElementById('check-terms').checked = false;
+     document.getElementById('check-turnaround').checked = false;
+     updateSubmitButton();
+     setTimeout(() => closeCommissionForm(), 1500);
+    } else {
+     const errorMsg = result.error ? (result.error.message || 'Submission failed') : 'Unknown error';
+     console.error('Submission error:', result.error);
+     showPopup('Oops! ' + errorMsg + ' 😿');
+    }
+   } catch (error) {
+    console.error('Exception during submission:', error);
+    showPopup('Oops! Something went wrong. Please try again! 😿');
+   } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+   }
+  });
+  
+  function renderGallery() {
+   const grid = document.getElementById('gallery-grid');
+   grid.innerHTML = galleryItems.map(item => `
+    <div class="gallery-item rounded-2xl aspect-square shadow-md" style="background: ${item.bg};">
+     <div class="w-full h-full flex items-center justify-center text-5xl">
+      ${item.emoji}
+      <div class="gallery-sparkles">✨</div>
+      <div class="gallery-overlay rounded-b-2xl">
+       <p class="font-semibold text-sm" style="color: #6B5A8B;">${item.title}</p>
+      </div>
+     </div>
+    </div>
+   `).join('');
+  }
+  
+  function renderMyRequests() {
+   const container = document.getElementById('my-requests-container');
+   if (!userEmail) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span><p>You haven't submitted any requests yet!</p></div>`;
+    return;
+   }
+   
+   const userRequests = commissionData.filter(comm => comm.contact === userEmail);
+   if (userRequests.length === 0) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span><p>You haven't submitted any requests yet!</p></div>`;
+    return;
+   }
+   
+   container.innerHTML = userRequests.map(comm => {
+    let statusEmoji, statusColor, statusText;
+    if (comm.status === 'pending') {
+     statusEmoji = '⏳'; statusColor = '#FFD9C8'; statusText = 'Pending';
+    } else if (comm.status === 'accepted') {
+     statusEmoji = '✅'; statusColor = '#CFF7E6'; statusText = 'Accepted';
+    } else if (comm.status === 'finished') {
+     statusEmoji = '🎨'; statusColor = '#D9C6F7'; statusText = 'Completed';
+    } else if (comm.status === 'declined') {
+     statusEmoji = '❌'; statusColor = '#F7C6D9'; statusText = 'Declined';
+    }
+    
+    const progressPercent = (progressStages.indexOf(comm.progress_stage || 'Requested') + 1) / progressStages.length * 100;
+    
+    return `
+     <div class="rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div><h4 class="text-lg font-bold mb-2" style="color: #E8A4BF;">${comm.commission_type}</h4><p style="color: #8B7A8B; font-size: 0.9rem;">${comm.name}</p></div>
+       <div class="text-center rounded-2xl p-3" style="background: ${statusColor};"><div style="font-size: 1.5rem; margin-bottom: 0.25rem;">${statusEmoji}</div><p style="font-size: 0.75rem; font-weight: 600; color: #6B5A8B;">${statusText}</p></div>
+      </div>
+      <div class="mt-4 space-y-3">
+       <p style="color: #8B7A8B;"><strong>Pose:</strong> ${comm.pose || 'Standing'}</p>
+       <p style="color: #8B7A8B;"><strong>Expression:</strong> ${comm.expression || 'Happy'}</p>
+       <p style="color: #8B7A8B;"><strong>Request:</strong> ${comm.description}</p>
+       <p style="color: #8B7A8B;"><strong>Budget:</strong> ${comm.budget}</p>
+       <div>
+        <p style="font-size: 0.85rem; color: #A88B9D; margin-bottom: 8px;">Progress: ${comm.progress_stage || 'Requested'}</p>
+        <div class="progress-bar-container">
+         <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+    `;
+   }).join('');
+  }
+  
+  function sortCommissions(order) {
+   sortOrder = order;
+   if (sortOrder === 'newest') {
+    commissionData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+   } else if (sortOrder === 'oldest') {
+    commissionData.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+   } else if (sortOrder === 'status') {
+    const statusOrder = { 'pending': 0, 'accepted': 1, 'finished': 2, 'declined': 3 };
+    commissionData.sort((a, b) => (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99));
+   }
+   renderCommissionList();
+  }
+  
+  function renderCommissionList() {
+   const container = document.getElementById('commission-list');
+   if (commissionData.length === 0) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">😺</span><p>No commission requests yet!</p></div>`;
+    return;
+   }
+   
+   container.innerHTML = commissionData.filter(c => c.status === 'pending' || c.status === 'accepted').map(comm => {
+    const progressPercent = (progressStages.indexOf(comm.progress_stage || 'Requested') + 1) / progressStages.length * 100;
+    
+    return `
+     <div class="rounded-3xl p-5 shadow-md commission-card">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div class="flex items-center gap-3 flex-1 cursor-pointer" onclick="showCommissionDetails('${comm.__backendId}')">
+        <span class="text-3xl">😺</span>
+        <div>
+         <h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4>
+         <p class="text-sm" style="color: #A88B9D;">${comm.contact}</p>
+        </div>
+       </div>
+       <span class="px-3 py-1 rounded-full text-xs font-semibold status-${comm.status}" style="color: #6B5A8B;">${comm.status.charAt(0).toUpperCase() + comm.status.slice(1)}</span>
+      </div>
+      <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+      <div class="mt-3 space-y-2">
+       <p style="color: #8B7A8B; font-size: 0.85rem;"><strong>Pose:</strong> ${comm.pose || 'Standing'} | <strong>Expression:</strong> ${comm.expression || 'Happy'}</p>
+       <div>
+        <p style="font-size: 0.8rem; color: #A88B9D; margin-bottom: 6px;">Stage: ${comm.progress_stage || 'Requested'}</p>
+        <div class="progress-bar-container">
+         <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+       </div>
+      </div>
+      <div class="mt-4 flex flex-wrap gap-2">
+       <button onclick="updateCommissionProgress('${comm.__backendId}', 'next')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #FFD9C8; color: #8B6B5A;">⏭️ Next Stage</button>
+       <button onclick="updateCommissionStatus('${comm.__backendId}', 'accepted')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #CFF7E6; color: #5A8B6B;">✅ Accept</button>
+       <button onclick="updateCommissionStatus('${comm.__backendId}', 'finished')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #D9C6F7; color: #6B5A8B;">🎨 Finished</button>
+       <button onclick="updateCommissionStatus('${comm.__backendId}', 'declined')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #F7C6D9; color: #8B5A6B;">❌ Decline</button>
+      </div>
+     </div>
+    `;
+   }).join('');
+  }
+  
+  function updateCommissionProgress(backendId, action) {
+   const commission = commissionData.find(c => c.__backendId === backendId);
+   if (!commission) return;
+   
+   const currentIndex = progressStages.indexOf(commission.progress_stage || 'Requested');
+   let newStage = commission.progress_stage || 'Requested';
+   
+   if (action === 'next' && currentIndex < progressStages.length - 1) {
+    newStage = progressStages[currentIndex + 1];
+   }
+   
+   updateCommissionField(backendId, 'progress_stage', newStage);
+  }
+  
+  async function updateCommissionField(backendId, field, value) {
+   const commission = commissionData.find(c => c.__backendId === backendId);
+   if (!commission) return;
+   
+   const updated = { ...commission, [field]: value };
+   if (field === 'status' && value === 'finished') {
+    updated.progress_stage = 'Finished';
+   }
+   
+   const result = await window.dataSdk.update(updated);
+   if (!result.isOk) showPopup('Failed to update! 😿');
+  }
+  
+  async function updateCommissionStatus(backendId, newStatus) {
+   await updateCommissionField(backendId, 'status', newStatus);
+  }
+  
+  function renderDashboardHistory() {
+   const acceptedFinished = commissionData.filter(c => c.status === 'accepted' || c.status === 'finished');
+   const acceptedContainer = document.getElementById('commission-history-accepted');
+   
+   if (acceptedFinished.length === 0) {
+    acceptedContainer.innerHTML = `<div class="text-center py-8" style="color: #A88B9D;"><p class="text-sm">No accepted or completed commissions yet</p></div>`;
+   } else {
+    acceptedContainer.innerHTML = acceptedFinished.map(comm => `
+     <div class="rounded-3xl p-5 shadow-md commission-card" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div class="flex items-center gap-3">
+        <span class="text-3xl">${comm.status === 'finished' ? '🎨' : '✅'}</span>
+        <div><h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4><p class="text-sm" style="color: #A88B9D;">${comm.contact}</p></div>
+       </div>
+       <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background: ${comm.status === 'finished' ? '#D9C6F7' : '#CFF7E6'}; color: #6B5A8B;">${comm.status === 'finished' ? '🎨 Completed' : '✅ Accepted'}</span>
+      </div>
+      <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+     </div>
+    `).join('');
+   }
+   
+   const declined = commissionData.filter(c => c.status === 'declined');
+   const declinedContainer = document.getElementById('commission-history-declined');
+   
+   if (declined.length === 0) {
+    declinedContainer.innerHTML = `<div class="text-center py-8" style="color: #A88B9D;"><p class="text-sm">No declined commissions yet</p></div>`;
+   } else {
+    declinedContainer.innerHTML = declined.map(comm => `
+     <div class="rounded-3xl p-5 shadow-md commission-card" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+       <div class="flex items-center gap-3">
+        <span class="text-3xl">❌</span>
+        <div><h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4><p class="text-sm" style="color: #A88B9D;">${comm.contact}</p></div>
+       </div>
+       <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background: #F7C6D9; color: #8B5A6B;">❌ Declined</span>
+      </div>
+      <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+     </div>
+    `).join('');
+   }
+  }
+  
+  function showDashboardTab(tabName) {
+   document.getElementById('dashboard-active').classList.add('hidden');
+   document.getElementById('dashboard-history').classList.add('hidden');
+   if (document.getElementById('dashboard-messages')) {
+    document.getElementById('dashboard-messages').classList.add('hidden');
+   }
+   
+   if (tabName === 'active') {
+    document.getElementById('dashboard-active').classList.remove('hidden');
+   } else if (tabName === 'history') {
+    document.getElementById('dashboard-history').classList.remove('hidden');
+    renderDashboardHistory();
+   } else if (tabName === 'messages') {
+    if (document.getElementById('dashboard-messages')) {
+     document.getElementById('dashboard-messages').classList.remove('hidden');
+     renderDashboardConversations();
+    }
+   }
+   
+   document.querySelectorAll('.dashboard-tab').forEach(tab => {
+    tab.classList.remove('active');
+    if (tab.dataset.tab === tabName) tab.classList.add('active');
+   });
+  }
+  
+  function updateStats() {
+   document.getElementById('stat-pending').textContent = commissionData.filter(c => c.status === 'pending').length;
+   document.getElementById('stat-accepted').textContent = commissionData.filter(c => c.status === 'accepted').length;
+   document.getElementById('stat-finished').textContent = commissionData.filter(c => c.status === 'finished').length;
+   document.getElementById('stat-total').textContent = commissionData.length;
+   updateUnreadDot();
+  }
+  
+  function updateUnreadDot() {
+   let totalUnread = 0;
+   chatConversations.forEach(conv => { totalUnread += conv.unread; });
+   
+   const dot = document.getElementById('unread-dot');
+   if (totalUnread > 0) {
+    dot.classList.remove('hidden');
+    dot.textContent = totalUnread > 9 ? '9+' : totalUnread;
+   } else {
+    dot.classList.add('hidden');
+   }
+  }
+  
+  function toggleOwnerLogin() {
+   document.getElementById('login-form').classList.toggle('hidden');
+  }
+  
+  function attemptLogin() {
+   const password = document.getElementById('owner-password').value;
+   const errorEl = document.getElementById('login-error');
+   if (password === '102710') {
+    isOwnerLoggedIn = true;
+    errorEl.classList.add('hidden');
+    document.getElementById('dashboard-nav-btn').classList.remove('hidden');
+    showPage('dashboard');
+   } else {
+    errorEl.textContent = 'Wrong password!';
+    errorEl.classList.remove('hidden');
+   }
+  }
+  
+  function logout() {
+   isOwnerLoggedIn = false;
+   document.getElementById('owner-password').value = '';
+   document.getElementById('dashboard-nav-btn').classList.add('hidden');
+   showPage('extra');
+  }
+  
+  function showPopup(message) {
+   document.getElementById('popup-message').textContent = message;
+   document.getElementById('success-popup').classList.remove('hidden');
+  }
+  
+  function closePopup() {
+   document.getElementById('success-popup').classList.add('hidden');
+  }
+  
+  // Cat rain easter egg
+  function triggerEasterEgg() {
+   for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+     const cat = document.createElement('div');
+     cat.className = 'falling-cat';
+     cat.innerHTML = ['🐱', '😺', '😸', '😻'][Math.floor(Math.random() * 4)];
+     cat.style.left = Math.random() * 100 + '%';
+     document.body.appendChild(cat);
+     setTimeout(() => cat.remove(), 3000);
+    }, i * 150);
+   }
+  }
+  
+  // Yarn ball interaction
+  function playWithYarn() {
+   const yarnBall = document.getElementById('yarn-ball');
+   
+   // Move yarn ball to random position
+   yarnBallPosition.x = Math.random() * 80 + 10;
+   yarnBallPosition.y = Math.random() * 80 + 10;
+   yarnBall.style.left = yarnBallPosition.x + '%';
+   yarnBall.style.top = yarnBallPosition.y + '%';
+   
+   // Trigger cat chase
+   triggerYarnChase();
+   
+   // Add paw prints
+   for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+     const print = document.createElement('div');
+     print.className = 'paw-print';
+     print.innerHTML = '🐾';
+     print.style.left = (yarnBallPosition.x + (Math.random() - 0.5) * 20) + '%';
+     print.style.top = (yarnBallPosition.y + (Math.random() - 0.5) * 20) + '%';
+     document.body.appendChild(print);
+     setTimeout(() => print.remove(), 2000);
+    }, i * 100);
+   }
+  }
+  
+  function triggerYarnChase() {
+   const cat = document.createElement('div');
+   cat.className = 'running-cat';
+   cat.innerHTML = '🐱';
+   cat.style.left = Math.random() > 0.5 ? '-80px' : 'calc(100% + 80px)';
+   cat.style.bottom = yarnBallPosition.y + '%';
+   document.body.appendChild(cat);
+   setTimeout(() => cat.remove(), 6000);
+  }
+  
+  // Random cat visitor
+  function spawnRandomCat() {
+   setInterval(() => {
+    if (Math.random() < 0.3) {
+     const cat = document.createElement('div');
+     cat.className = 'running-cat';
+     cat.innerHTML = ['🐱', '😺', '😸', '😻'][Math.floor(Math.random() * 4)];
+     cat.style.left = Math.random() > 0.5 ? '-80px' : 'calc(100% + 80px)';
+     document.body.appendChild(cat);
+     setTimeout(() => cat.remove(), 6000);
+    }
+   }, 15000);
+  }
+  
+  function showCommissionDetails(backendId) {
+   const commission = commissionData.find(c => c.__backendId === backendId);
+   if (!commission) return;
+   
+   const detailContent = document.getElementById('detail-content');
+   
+   // Files are stored as simple text strings like "Files: pose (filename.jpg), palette (filename.png)"
+   const filesText = commission.files || 'No files uploaded';
+   const hasFiles = filesText && filesText !== 'No files uploaded' && filesText.includes('Files:');
+   
+   detailContent.innerHTML = `
+    <div class="detail-section">
+     <div class="detail-section-title">Client Info</div>
+     <div class="detail-item"><strong>Name:</strong> ${commission.name}</div>
+     <div class="detail-item"><strong>Contact:</strong> ${commission.contact}</div>
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Commission Details</div>
+     <div class="detail-item"><strong>Type:</strong> ${commission.commission_type}</div>
+     <div class="detail-item"><strong>Budget:</strong> ${commission.budget}</div>
+     <div class="detail-item"><strong>Status:</strong> ${commission.status.charAt(0).toUpperCase() + commission.status.slice(1)}</div>
+     <div class="detail-item"><strong>Progress:</strong> ${commission.progress_stage || 'Requested'}</div>
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Character Info</div>
+     <div class="detail-item"><strong>Name:</strong> ${commission.character_name || 'Not specified'}</div>
+     <div class="detail-item"><strong>Species:</strong> ${commission.character_species || 'Not specified'}</div>
+     <div class="detail-item"><strong>Pose:</strong> ${commission.pose || 'Standing'}</div>
+     <div class="detail-item"><strong>Expression:</strong> ${commission.expression || 'Happy'}</div>
+     <div class="detail-item"><strong>Colors:</strong> ${commission.color_preferences || 'No preference'}</div>
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Description</div>
+     <div class="detail-item">${commission.description}</div>
+    </div>
+    
+    ${commission.extra_notes && commission.extra_notes !== 'None' ? `
+    <div class="detail-section">
+     <div class="detail-section-title">Extra Notes</div>
+     <div class="detail-item">${commission.extra_notes}</div>
+    </div>
+    ` : ''}
+    
+    <div class="detail-section">
+     <div class="detail-section-title">📁 Uploaded Files</div>
+     <div class="detail-item" style="color: #8B7A8B; font-size: 0.9rem;">${filesText}</div>
+     ${hasFiles ? `
+      <div class="mt-4 space-y-3">
+       ${commission.files.includes('pose') ? `
+        <div style="border: 2px solid #F4A6C1; border-radius: 12px; overflow: hidden; background: rgba(247, 198, 217, 0.1);">
+         <div style="background: #F4A6C1; padding: 8px 12px; font-weight: 600; color: white; font-size: 0.9rem;">📸 Pose Reference</div>
+         <div style="padding: 12px; cursor: pointer;" onclick="openImageModal('${uploadedImages['pose'] || ''}')">
+          <img src="${uploadedImages['pose'] || ''}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;" alt="Pose reference">
+          <p style="font-size: 0.8rem; color: #A88B9D; margin-top: 8px; margin-bottom: 0; text-align: center;">Click to view full size</p>
+         </div>
+        </div>
+       ` : ''}
+       ${commission.files.includes('palette') ? `
+        <div style="border: 2px solid #D9C6F7; border-radius: 12px; overflow: hidden; background: rgba(217, 198, 247, 0.1);">
+         <div style="background: #D9C6F7; padding: 8px 12px; font-weight: 600; color: white; font-size: 0.9rem;">🎨 Color Palette</div>
+         <div style="padding: 12px; cursor: pointer;" onclick="openImageModal('${uploadedImages['palette'] || ''}')">
+          <img src="${uploadedImages['palette'] || ''}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;" alt="Color palette">
+          <p style="font-size: 0.8rem; color: #A88B9D; margin-top: 8px; margin-bottom: 0; text-align: center;">Click to view full size</p>
+         </div>
+        </div>
+       ` : ''}
+      </div>
+     ` : ''}
+    </div>
+    
+    <div class="detail-section">
+     <div class="detail-section-title">Submitted</div>
+     <div class="detail-item">${new Date(commission.created_at).toLocaleString()}</div>
+    </div>
+   `;
+   
+   document.getElementById('detail-panel').classList.remove('hidden');
+  }
+  
+  function closeDetailPanel() {
+   document.getElementById('detail-panel').classList.add('hidden');
+  }
+  
+  function openImageModal(src) {
+   document.getElementById('modal-image').src = src;
+   document.getElementById('image-modal-backdrop').classList.remove('hidden');
+  }
+  
+  function closeImageModal() {
+   document.getElementById('image-modal-backdrop').classList.add('hidden');
+  }
+  
+  // Chat functions
+  function openChat() {
+   document.getElementById('chat-window').classList.remove('hidden');
+   document.getElementById('chat-input').focus();
+   renderChatMessages();
+  }
+  
+  function sendChatMessage() {
+   const input = document.getElementById('chat-input');
+   const message = input.value.trim();
+   
+   if (!message) return;
+   
+   if (!userEmail) {
+    userEmail = 'visitor@' + Date.now() + '.com';
+   }
+   
+   if (!currentChatId) {
+    currentChatId = 'chat_' + userEmail.replace(/[^a-z0-9]/g, '_');
+   }
+   
+   const messageObj = {
+    id: 'msg_' + Date.now(),
+    chat_id: currentChatId,
+    sender: 'visitor',
+    sender_email: userEmail,
+    message: message,
+    timestamp: new Date().toISOString()
+   };
+   
+   chatMessages.push(messageObj);
+   localStorage.setItem('whisker_chat_messages', JSON.stringify(chatMessages));
+   input.value = '';
+   renderChatMessages();
+   
+   if (message.toLowerCase().includes('meow')) {
+    triggerYarnChase();
+   }
+   
+   if (isOwnerLoggedIn) {
+    renderDashboardConversations();
+   }
+  }
+  
+  function renderChatMessages() {
+   const container = document.getElementById('chat-messages');
+   container.innerHTML = chatMessages.map(msg => {
+    const date = new Date(msg.timestamp);
+    const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `
+     <div class="message ${msg.sender}">
+      <span class="paw-emoji">🐾</span>
+      ${msg.message}
+      <div class="message-time">${time}</div>
+      <div class="message-reactions">
+       <button class="reaction-btn" onclick="addReaction(this)">❤️</button>
+       <button class="reaction-btn" onclick="addReaction(this)">👍</button>
+       <button class="reaction-btn" onclick="addReaction(this)">🐾</button>
+      </div>
+     </div>
+    `;
+   }).join('');
+   container.scrollTop = container.scrollHeight;
+  }
+  
+  function addReaction(btn) {
+   btn.style.opacity = '0.7';
+   setTimeout(() => { btn.style.opacity = '1'; }, 200);
+  }
+  
+  function renderDashboardConversations() {
+   const container = document.getElementById('dashboard-conversations-list');
+   if (!container) return;
+   
+   if (chatMessages.length === 0) {
+    container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-4xl mb-4 block">💬</span><p>No messages yet!</p></div>`;
+    return;
+   }
+   
+   const uniqueChats = [...new Set(chatMessages.map(m => m.chat_id))];
+   
+   container.innerHTML = uniqueChats.map(chatId => {
+    const chatMsgs = chatMessages.filter(m => m.chat_id === chatId);
+    const lastMsg = chatMsgs[chatMsgs.length - 1];
+    const time = new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    return `
+     <div class="conversation-card" onclick="viewConversation('${chatId}')">
+      <div class="font-medium text-sm" style="color: #E8A4BF;">Chat - ${chatId.substring(5, 10)}</div>
+      <div class="text-xs mt-2" style="color: #A88B9D; max-height: 2em; overflow: hidden;">${lastMsg.message}</div>
+      <div class="text-xs mt-2" style="color: #D9A6B8;">${time}</div>
+     </div>
+    `;
+   }).join('');
+  }
+  
+  function viewConversation(chatId) {
+   const convMessages = chatMessages.filter(m => m.chat_id === chatId);
+   const detailContainer = document.getElementById('conversation-detail');
+   
+   detailContainer.innerHTML = `
+    <div class="flex flex-col h-full">
+     <div class="border-b-2 pb-4 mb-4" style="border-color: #F4A6C1;">
+      <div style="color: #E8A4BF;" class="font-bold">Chat - ${chatId.substring(5, 10)}</div>
+     </div>
+     
+     <div id="conversation-messages" class="flex-1 overflow-y-auto space-y-3 mb-4 scrollbar-hide">
+      ${convMessages.map(msg => {
+       const date = new Date(msg.timestamp);
+       const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+       return `
+        <div class="message ${msg.sender}">
+         <span class="paw-emoji">🐾</span>
+         ${msg.message}
+         <div class="message-time">${time}</div>
+        </div>
+       `;
+      }).join('')}
+     </div>
+     
+     <div class="chat-input-area mt-auto">
+      <input type="text" id="dashboard-chat-input" class="chat-input" placeholder="Reply..." autocomplete="off">
+      <button onclick="sendDashboardMessage('${chatId}')" class="chat-send-btn">🐾</button>
+     </div>
+    </div>
+   `;
+   
+   setTimeout(() => {
+    const messagesContainer = document.getElementById('conversation-messages');
+    if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    const input = document.getElementById('dashboard-chat-input');
+    if (input) {
+     input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+       e.preventDefault();
+       sendDashboardMessage(chatId);
+      }
+     });
+    }
+   }, 0);
+  }
+  
+  function sendDashboardMessage(chatId) {
+   const input = document.getElementById('dashboard-chat-input');
+   const message = input.value.trim();
+   
+   if (!message) return;
+   
+   const messageObj = {
+    id: 'msg_' + Date.now(),
+    chat_id: chatId,
+    sender: 'artist',
+    sender_email: 'artist@whiskerai.com',
+    message: message,
+    timestamp: new Date().toISOString()
+   };
+   
+   chatMessages.push(messageObj);
+   localStorage.setItem('whisker_chat_messages', JSON.stringify(chatMessages));
+   input.value = '';
+   
+   viewConversation(chatId);
+   renderDashboardConversations();
+  }
+  
+  function minimizeChat() {
+   document.getElementById('chat-window').classList.add('hidden');
+  }
+  
+  function closeChat() {
+   document.getElementById('chat-window').classList.add('hidden');
+  }
+  
+  // Initialize
+  showPage('home');
+  renderGallery();
+  
+  const saved = localStorage.getItem('whisker_chat_messages');
+  if (saved) {
+   try {
+    chatMessages = JSON.parse(saved);
+   } catch (e) {}
+  }
+  
+  document.getElementById('chat-input').addEventListener('keypress', function(e) {
+   if (e.key === 'Enter') {
+    e.preventDefault();
+    sendChatMessage();
+   }
+  });
+  
+  spawnRandomCat();
+ </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d9c7fe9e123f04d',t:'MTc3MzA4NDY4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+
+<!-- Mood Board Builder -->
+<section id="moodboard_section" style="margin-top:40px;">
+<h2>Mood Board Builder</h2>
+<p>Add inspiration images (poses, lighting, outfits, vibe).</p>
+<input type="file" id="moodBoardUpload" accept="image/png,image/jpeg" multiple>
+<div id="moodBoardPreview" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;"></div>
+</section>
+
+<!-- Automatic Palette Extractor -->
+<section id="palette_section" style="margin-top:40px;">
+<h2>Automatic Color Palette Extractor</h2>
+<p>Upload a PNG. Generate a palette, download it, and upload it in the optional PNG palette slot if you want.</p>
+<input type="file" id="paletteUpload" accept="image/png,image/jpeg">
+<div id="palettePreview" style="display:flex;flex-wrap:wrap;margin-top:10px;"></div>
+<br>
+<button onclick="downloadPalette()">Download Palette PNG</button>
+<canvas id="paletteCanvas" width="400" height="80" style="display:none;"></canvas>
+</section>
+
+
+
+<script>
+
+const moodUpload=document.getElementById("moodBoardUpload");
+const moodPreview=document.getElementById("moodBoardPreview");
+
+if(moodUpload){
+moodUpload.addEventListener("change",function(){
+moodPreview.innerHTML="";
+Array.from(this.files).forEach(file=>{
+const reader=new FileReader();
+reader.onload=function(e){
+const img=document.createElement("img");
+img.src=e.target.result;
+img.style.width="120px";
+img.style.borderRadius="8px";
+moodPreview.appendChild(img);
+}
+reader.readAsDataURL(file);
+});
+});
+}
+
+let paletteColors=[];
+
+const paletteUpload=document.getElementById("paletteUpload");
+const palettePreview=document.getElementById("palettePreview");
+
+if(paletteUpload){
+paletteUpload.addEventListener("change",function(){
+
+const file=this.files[0];
+const img=new Image();
+const reader=new FileReader();
+
+reader.onload=function(e){
+img.src=e.target.result;
+img.onload=function(){
+
+palettePreview.innerHTML="";
+
+const canvas=document.createElement("canvas");
+const ctx=canvas.getContext("2d");
+
+canvas.width=img.width;
+canvas.height=img.height;
+ctx.drawImage(img,0,0);
+
+const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+
+paletteColors=[];
+
+for(let i=0;i<data.length;i+=40){
+let r=data[i];
+let g=data[i+1];
+let b=data[i+2];
+paletteColors.push(`rgb(${r},${g},${b})`);
+if(paletteColors.length>=8)break;
+}
+
+paletteColors.forEach(c=>{
+const box=document.createElement("div");
+box.style.width="40px";
+box.style.height="40px";
+box.style.margin="4px";
+box.style.borderRadius="6px";
+box.style.background=c;
+palettePreview.appendChild(box);
+});
+
+}
+}
+
+reader.readAsDataURL(file);
+
+});
+}
+
+function downloadPalette(){
+
+if(!paletteColors.length){
+alert("Generate a palette first.");
+return;
+}
+
+const canvas=document.getElementById("paletteCanvas");
+const ctx=canvas.getContext("2d");
+
+const size=canvas.width/paletteColors.length;
+
+paletteColors.forEach((c,i)=>{
+ctx.fillStyle=c;
+ctx.fillRect(i*size,0,size,canvas.height);
+});
+
+const link=document.createElement("a");
+link.download="palette.png";
+link.href=canvas.toDataURL();
+link.click();
+
+}
+
+</script>
+
+
+</body>
+</html>
+
