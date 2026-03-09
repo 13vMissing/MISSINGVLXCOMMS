@@ -1,25 +1,61 @@
-<!-- Complete JavaScript implementation replacing the external SDK dependencies with inline code -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Document</title>
-    <script>
-        // Inline JavaScript here for interactive features
-        function interactiveFeature() {
-            // Replace SDK dependency with inline code
-            console.log('Interactive feature works!');
-            // (Add more functionality as needed)
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            interactiveFeature();
-        });
-    </script>
+    <title>Whisker Studio Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <h1>Welcome to the Interactive Document</h1>
-    <button onclick="interactiveFeature()">Click Me!</button>
+    <header>
+        <h1>Welcome to Whisker Studio</h1>
+        <nav>
+            <ul>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#commission">Commission Request</a></li>
+                <li><a href="#chat">Chat</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="gallery">
+            <h2>Art Gallery</h2>
+            <div class="gallery-container">
+                <!-- Art Images would be inserted here -->
+            </div>
+        </section>
+        <section id="commission">
+            <h2>Commission Request</h2>
+            <form id="commissionForm">
+                <label for="username">Your Name:</label>
+                <input type="text" id="username" name="username" required>
+                <button type="submit">Request Commission</button>
+            </form>
+        </section>
+        <section id="chat">
+            <h2>Chat with Us</h2>
+            <div id="chatWidget">
+                <!-- Chat widget implementation here -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Whisker Studio. All rights reserved.</p>
+    </footer>
+    <script>
+        // JavaScript for maintaining localStorage and other functionalities
+        document.getElementById('commissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            localStorage.setItem('username', username);
+            alert('Commission request submitted for ' + username);
+        });
+        // Fetching username from localStorage
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername) {
+            console.log('Welcome back, ' + storedUsername);
+        }
+    </script>
 </body>
 </html>
