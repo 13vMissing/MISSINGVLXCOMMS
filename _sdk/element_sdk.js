@@ -26,5 +26,3 @@ class ElementSDK {
 // const sdk = new ElementSDK();
 // sdk.addElement('button', '<button>Click me</button>');
 // console.log(sdk.listElements());
-
-export default ElementSDK;
