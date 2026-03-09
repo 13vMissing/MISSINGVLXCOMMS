@@ -1,0 +1,3528 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whisker Studio - Cute Cat Artist Portfolio</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FFF6F7;
+      --blush: #F7C6D9;
+      --lavender: #D9C6F7;
+      --mint: #CFF7E6;
+      --baby-blue: #CDE7FF;
+      --peach: #FFD9C8;
+      --soft-coral: #FFB8A8;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    .app-wrapper {
+      min-height: 100%;
+      width: 100%;
+      background: linear-gradient(135deg, var(--cream) 0%, #FFF0F3 50%, #F8F0FF 100%);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    .nav-tab {
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    
+    .nav-tab:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(247, 198, 217, 0.4);
+    }
+    
+    .nav-tab.active {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(247, 198, 217, 0.5);
+    }
+    
+    .card-hover {
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(217, 198, 247, 0.3);
+    }
+    
+    .btn-pastel {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-pastel:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-pastel::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+    }
+    
+    .btn-pastel:hover::after {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #FFE4EC 0%, transparent 70%);
+      border-radius: 50%;
+      animation: sparkle 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    
+    .floating-paw {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0.3;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    
+    .cat-peek {
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 40px;
+      transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
+    }
+    
+    .profile-container:hover .cat-peek {
+      bottom: -5px;
+    }
+    
+    .gallery-item {
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .gallery-item:hover {
+      transform: scale(1.08);
+      z-index: 10;
+      filter: drop-shadow(0 10px 30px rgba(247, 198, 217, 0.4));
+    }
+    
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    
+    .gallery-sparkles {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      opacity: 0;
+      font-size: 20px;
+      animation: twinkle 0.6s ease-in-out;
+    }
+    
+    .gallery-item:hover .gallery-sparkles {
+      opacity: 1;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(247, 198, 217, 0.9));
+      padding: 20px 15px 15px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 0 0 16px 16px;
+    }
+    
+    .page-content {
+      animation: fadeIn 0.4s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .input-pastel {
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .input-pastel:focus {
+      border-color: var(--lavender);
+      box-shadow: 0 0 20px rgba(217, 198, 247, 0.4);
+      outline: none;
+    }
+    
+    .commission-card {
+      background: linear-gradient(145deg, #FFFFFF 0%, var(--cream) 100%);
+    }
+    
+    .secret-paw {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      opacity: 0.4;
+    }
+    
+    .secret-paw:hover {
+      transform: scale(1.3) rotate(15deg);
+      opacity: 0.7;
+    }
+    
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      animation: confettiFall 3s ease-out forwards;
+    }
+    
+    @keyframes confettiFall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100%) rotate(720deg); opacity: 0; }
+    }
+    
+    .running-cat {
+      position: fixed;
+      font-size: 40px;
+      z-index: 1001;
+      animation: runAcross 6s ease-in-out forwards;
+    }
+    
+    @keyframes runAcross {
+      0% { left: -80px; bottom: 50%; }
+      25% { left: 30%; bottom: 48%; transform: scaleX(1); }
+      50% { left: 60%; bottom: 52%; transform: scaleX(1); }
+      75% { left: 80%; bottom: 50%; }
+      100% { left: 110%; bottom: 50%; }
+    }
+    
+    .falling-cat {
+      position: fixed;
+      font-size: 40px;
+      z-index: 1001;
+      animation: catFall 3s ease-in forwards;
+      pointer-events: none;
+    }
+    
+    @keyframes catFall {
+      0% { top: -50px; opacity: 1; transform: rotate(0deg); }
+      100% { top: 100%; opacity: 0; transform: rotate(360deg); }
+    }
+    
+    .paw-print {
+      position: fixed;
+      font-size: 20px;
+      z-index: 999;
+      opacity: 0.5;
+      animation: pawFade 2s ease-out forwards;
+      pointer-events: none;
+    }
+    
+    @keyframes pawFade {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+    
+    .yarn-ball {
+      position: fixed;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 35;
+      transition: all 0.2s ease;
+      animation: yarnBob 3s ease-in-out infinite;
+    }
+    
+    @keyframes yarnBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .popup-overlay {
+      background: rgba(255, 246, 247, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    
+    .chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 70px;
+      height: 70px;
+      background: #F4A6C1;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 40px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .chat-button:hover {
+      background: #E68BB0;
+      transform: scale(1.1);
+      animation: wiggle 0.5s ease-in-out;
+    }
+    
+    @keyframes wiggle {
+      0%, 100% { transform: scale(1.1) rotate(0deg); }
+      25% { transform: scale(1.1) rotate(-5deg); }
+      75% { transform: scale(1.1) rotate(5deg); }
+    }
+    
+    .chat-tooltip {
+      position: absolute;
+      bottom: 100%;
+      right: 0;
+      background: #F4A6C1;
+      color: #8B5A6B;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      margin-bottom: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chat-button:hover .chat-tooltip {
+      opacity: 1;
+    }
+    
+    .chat-window {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 320px;
+      height: 420px;
+      background: linear-gradient(145deg, #FFE4F0, #FFF6F7);
+      border-radius: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+      animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      overflow: hidden;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .chat-window.hidden { display: none; }
+    
+    .chat-header {
+      background: linear-gradient(145deg, #F4A6C1, #E68BB0);
+      padding: 15px;
+      text-align: center;
+      color: #8B5A6B;
+      font-weight: bold;
+      position: relative;
+      border-radius: 30px 30px 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      background: #D9C6F7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .message {
+      padding: 10px 14px;
+      border-radius: 18px;
+      max-width: 80%;
+      word-wrap: break-word;
+      font-size: 13px;
+      animation: fadeIn 0.3s ease;
+      position: relative;
+    }
+    
+    .message.visitor {
+      background: #CDE7FF;
+      color: #5A6B8B;
+      align-self: flex-end;
+    }
+    
+    .message.artist {
+      background: #D9C6F7;
+      color: #6B5A8B;
+      align-self: flex-start;
+    }
+    
+    .message-time {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    
+    .message-reactions {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    
+    .reaction-btn {
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      padding: 2px 6px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .reaction-btn:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: scale(1.15);
+    }
+    
+    .chat-input-area {
+      padding: 12px;
+      border-top: 2px solid rgba(247, 198, 217, 0.3);
+      display: flex;
+      gap: 8px;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid #F4A6C1;
+      border-radius: 20px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 13px;
+      transition: all 0.3s ease;
+      background: #FFFFFF;
+      color: #8B7A8B;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: #E68BB0;
+      box-shadow: 0 0 10px rgba(244, 166, 193, 0.3);
+    }
+    
+    .chat-send-btn {
+      width: 40px;
+      height: 40px;
+      background: #F4A6C1;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .chat-send-btn:hover {
+      background: #E68BB0;
+      transform: scale(1.1);
+    }
+    
+    .chat-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #8B5A6B;
+      transition: transform 0.2s ease;
+    }
+    
+    .chat-close-btn:hover {
+      transform: scale(1.2);
+    }
+    
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: flex-end;
+      padding: 10px 14px;
+      background: #D9C6F7;
+      border-radius: 18px;
+      width: fit-content;
+    }
+    
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #6B5A8B;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+    
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+    
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .paw-emoji {
+      margin-right: 6px;
+      opacity: 0.6;
+      animation: pawBounce 0.6s ease-in-out;
+    }
+    
+    @keyframes pawBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    
+    .unread-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: #E88B8B;
+      color: white;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    
+    .conversation-card {
+      padding: 12px;
+      border-radius: 15px;
+      background: #FFFFFF;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 8px;
+    }
+    
+    .conversation-card:hover {
+      border-color: #F4A6C1;
+      box-shadow: 0 4px 12px rgba(244, 166, 193, 0.2);
+      transform: translateX(4px);
+    }
+    
+    .conversation-card.active {
+      background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+      border-color: #F4A6C1;
+      box-shadow: 0 4px 15px rgba(244, 166, 193, 0.3);
+    }
+    
+    .dashboard-messages-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      height: 600px;
+    }
+    
+    @media (min-width: 1024px) {
+      .dashboard-messages-section {
+        grid-template-columns: 280px 1fr;
+      }
+    }
+    
+    .conversations-sidebar {
+      border-radius: 20px;
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+      padding: 16px;
+      overflow-y: auto;
+      border: 2px solid #F4A6C1;
+    }
+    
+    .conversation-detail-area {
+      border-radius: 20px;
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+      padding: 16px;
+      border: 2px solid #F4A6C1;
+    }
+    
+    .bounce-in {
+      animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    @keyframes bounceIn {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .status-pending { background: var(--peach); }
+    .status-accepted { background: var(--mint); }
+    .status-declined { background: var(--blush); }
+    .status-finished { background: var(--lavender); }
+    
+    .progress-bar-container {
+      background: #F0E8F5;
+      border-radius: 10px;
+      height: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #F7C6D9, #D9C6F7);
+      height: 100%;
+      transition: width 0.4s ease;
+      border-radius: 10px;
+    }
+    
+    .pose-grid, .expression-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .pose-option, .expression-option {
+      padding: 12px;
+      border: 2px solid #E0E0E0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      background: #FFFFFF;
+    }
+    
+    .pose-option:hover, .expression-option:hover {
+      border-color: #F4A6C1;
+      box-shadow: 0 4px 12px rgba(244, 166, 193, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .pose-option.selected, .expression-option.selected {
+      background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+      border-color: #F4A6C1;
+      box-shadow: 0 4px 15px rgba(244, 166, 193, 0.3);
+    }
+    
+    .upload-area {
+      border: 2px dashed #F4A6C1;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(247, 198, 217, 0.05);
+      margin-bottom: 12px;
+    }
+    
+    .upload-area:hover {
+      background: rgba(247, 198, 217, 0.1);
+      border-color: #E68BB0;
+    }
+    
+    .upload-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-top: 8px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #FFFFFF;
+    }
+    
+    .checkbox-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #F4A6C1;
+    }
+    
+    .checkbox-item label {
+      cursor: pointer;
+      flex: 1;
+      margin: 0;
+    }
+    
+    .commission-progress {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+    
+    .progress-stage {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      text-align: center;
+      background: #F0F0F0;
+      color: #999;
+      transition: all 0.3s ease;
+    }
+    
+    .progress-stage.active, .progress-stage.completed {
+      background: linear-gradient(145deg, #F7C6D9, #D9C6F7);
+      color: #6B5A8B;
+      font-weight: bold;
+    }
+    
+    .file-upload {
+      display: none;
+    }
+    
+    .dashboard-tab.active {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .detail-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 400px;
+      height: 100%;
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+      box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      overflow-y: auto;
+      animation: slideInRight 0.4s ease;
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    
+    .detail-panel.hidden { display: none; }
+    
+    .detail-header {
+      background: linear-gradient(145deg, #F4A6C1, #E68BB0);
+      padding: 20px;
+      color: #8B5A6B;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+    
+    .detail-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #8B5A6B;
+      transition: transform 0.2s ease;
+    }
+    
+    .detail-close:hover {
+      transform: scale(1.2);
+    }
+    
+    .detail-section {
+      padding: 16px;
+      border-bottom: 2px solid rgba(244, 166, 193, 0.2);
+    }
+    
+    .detail-section-title {
+      font-weight: bold;
+      color: #E8A4BF;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    
+    .detail-item {
+      margin-bottom: 12px;
+      color: #8B7A8B;
+      font-size: 14px;
+    }
+    
+    .detail-item strong {
+      color: #E8A4BF;
+    }
+    
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .image-preview-item {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #F0E8F5;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      border: 2px solid #F4A6C1;
+    }
+    
+    .image-preview-item:hover {
+      transform: scale(1.05);
+    }
+    
+    .image-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .image-preview-label {
+      font-size: 12px;
+      text-align: center;
+      color: #A88B9D;
+      margin-top: 6px;
+    }
+    
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+    }
+    
+    .modal-backdrop.hidden {
+      display: none;
+    }
+    
+    .image-modal {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 90%;
+      max-height: 80%;
+      position: relative;
+      animation: zoomIn 0.3s ease;
+    }
+    
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    .image-modal img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 12px;
+    }
+    
+    .image-modal-close {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      background: #E68BB0;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 24px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+    
+    .image-modal-close:hover {
+      transform: scale(1.1);
+    }
+    
+    .gallery-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1002;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .gallery-modal.hidden {
+      display: none;
+    }
+    
+    .gallery-modal-content {
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.4s ease;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    @media (max-width: 1024px) {
+      .gallery-modal-content {
+        grid-template-columns: 1fr;
+        max-height: 90vh;
+      }
+    }
+    
+    .gallery-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #F7C6D9, #D9C6F7);
+      border-radius: 16px;
+      min-height: 300px;
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .gallery-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .gallery-modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #E8A4BF;
+      font-family: 'Nunito', sans-serif;
+    }
+    
+    .gallery-modal-description {
+      color: #8B7A8B;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .gallery-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(247, 198, 217, 0.1);
+      border-radius: 12px;
+      border-left: 4px solid #F7C6D9;
+    }
+    
+    .gallery-meta-item {
+      font-size: 12px;
+      color: #8B7A8B;
+    }
+    
+    .gallery-meta-label {
+      font-weight: bold;
+      color: #E8A4BF;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .palette-swatches {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    
+    .swatch {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .swatch:hover {
+      transform: scale(1.1);
+    }
+    
+    .gallery-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #E68BB0;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 24px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      z-index: 10;
+    }
+    
+    .gallery-modal-close:hover {
+      transform: scale(1.1);
+    }
+    
+    .character-counter {
+      display: inline-block;
+      font-size: 12px;
+      color: #A88B9D;
+      margin-top: 4px;
+    }
+    
+    .character-counter.warning {
+      color: #E88B8B;
+      font-weight: bold;
+    }
+    
+    .commission-summary {
+      background: linear-gradient(145deg, rgba(247, 198, 217, 0.2), rgba(217, 198, 247, 0.2));
+      border: 2px solid #F4A6C1;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 14px;
+      color: #8B7A8B;
+      border-bottom: 1px solid rgba(244, 166, 193, 0.2);
+    }
+    
+    .summary-item:last-child {
+      border-bottom: none;
+      font-weight: bold;
+      color: #E8A4BF;
+      font-size: 16px;
+    }
+    
+    .reference-upload-area {
+      border: 2px dashed #F4A6C1;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(247, 198, 217, 0.05);
+      margin-bottom: 12px;
+    }
+    
+    .reference-upload-area:hover {
+      background: rgba(247, 198, 217, 0.1);
+      border-color: #E68BB0;
+    }
+    
+    .reference-previews {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    
+    .reference-preview {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #F4A6C1;
+      background: #F0E8F5;
+    }
+    
+    .reference-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .reference-remove {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 28px;
+      height: 28px;
+      background: #E68BB0;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+    
+    .reference-preview:hover .reference-remove {
+      opacity: 1;
+    }
+    
+    .reference-remove:hover {
+      background: #D66B8F;
+      transform: scale(1.1);
+    }
+    
+    .faq-item {
+      border: 2px solid #F4A6C1;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+    }
+    
+    .faq-header {
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    
+    .faq-header:hover {
+      background: linear-gradient(145deg, #F4A6C1, #FFDBE8);
+    }
+    
+    .faq-header-text {
+      font-weight: 600;
+      color: #6B5A8B;
+      margin: 0;
+    }
+    
+    .faq-toggle {
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-item.open .faq-toggle {
+      transform: rotate(180deg);
+    }
+    
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: #FFFFFF;
+    }
+    
+    .faq-item.open .faq-content {
+      max-height: 500px;
+    }
+    
+    .faq-text {
+      padding: 16px;
+      color: #8B7A8B;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .style-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .style-preview-item {
+      border: 3px solid transparent;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+    }
+    
+    .style-preview-item:hover {
+      border-color: #F4A6C1;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(244, 166, 193, 0.3);
+    }
+    
+    .style-preview-item.active {
+      border-color: #E68BB0;
+      background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+      box-shadow: 0 8px 25px rgba(244, 166, 193, 0.4);
+    }
+    
+    .style-preview-emoji {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    
+    .style-preview-label {
+      font-weight: 600;
+      color: #E8A4BF;
+      font-size: 14px;
+    }
+    
+    .timeline {
+      position: relative;
+      margin-top: 20px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, #F7C6D9, #D9C6F7);
+    }
+    
+    .timeline-item {
+      margin-left: 80px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -60px;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #F4A6C1;
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 0 0 3px #F7C6D9;
+    }
+    
+    .timeline-content {
+      padding: 12px 16px;
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+      border-left: 3px solid #F4A6C1;
+      border-radius: 8px;
+    }
+    
+    .timeline-content strong {
+      color: #E8A4BF;
+    }
+    
+    .timeline-content p {
+      margin: 4px 0 0 0;
+      color: #8B7A8B;
+      font-size: 14px;
+    }
+    
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .tools-card {
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+      border: 2px solid #F4A6C1;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    
+    .tools-card-title {
+      font-weight: bold;
+      color: #E8A4BF;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .tools-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .tools-list li {
+      padding: 6px 0;
+      color: #8B7A8B;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .tools-list li::before {
+      content: '✨';
+      display: inline-block;
+    }
+    
+    .queue-card {
+      background: linear-gradient(145deg, #F7C6D9, #FFE4F0);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 25px rgba(247, 198, 217, 0.3);
+    }
+    
+    .queue-number {
+      font-size: 48px;
+      font-weight: bold;
+      color: #E8A4BF;
+      font-family: 'Nunito', sans-serif;
+    }
+    
+    .queue-label {
+      font-size: 16px;
+      color: #8B5A6B;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    
+    .queue-estimate {
+      font-size: 13px;
+      color: #A87A8B;
+      margin-top: 8px;
+    }
+    
+    .slots-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+    
+    .slot-card {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 24px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .slot-card.open {
+      background: linear-gradient(145deg, #CFF7E6, #E8FFD9);
+      color: #5A8B6B;
+      border: 2px solid #B8E8C8;
+    }
+    
+    .slot-card.open:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(207, 247, 230, 0.4);
+    }
+    
+    .slot-card.filled {
+      background: linear-gradient(145deg, #F7C6D9, #FFD9C8);
+      color: #E8A4BF;
+      border: 2px solid #F4A6C1;
+    }
+    
+    .slot-progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #F0E8F5;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+    
+    .slot-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #F7C6D9, #D9C6F7);
+      transition: width 0.4s ease;
+      border-radius: 10px;
+    }
+    
+    .theme-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .theme-option {
+      padding: 16px;
+      border: 3px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-weight: 600;
+      color: #8B7A8B;
+    }
+    
+    .theme-option:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .theme-option.active {
+      border-color: #E68BB0;
+      box-shadow: 0 8px 25px rgba(244, 166, 193, 0.4);
+      font-weight: bold;
+    }
+    
+    .theme-option.pastel-light {
+      background: linear-gradient(145deg, #FFFFFF, #FFF6F7);
+      color: #E8A4BF;
+    }
+    
+    .theme-option.pastel-dark {
+      background: linear-gradient(145deg, #3A2A3C, #5A3A6B);
+      color: #FFE4F0;
+      border-color: #FFB8D9;
+    }
+    
+    body.dark-theme {
+      --cream: #2A1A2C;
+      --blush: #6B3A5B;
+      --lavender: #4A3A6B;
+      --mint: #3A6B5B;
+      --baby-blue: #3A5B8B;
+      --peach: #8B5A3A;
+      --soft-coral: #A85A4A;
+    }
+    
+    body.dark-theme .app-wrapper {
+      background: linear-gradient(135deg, #2A1A2C 0%, #3A2A3E 50%, #3A2A5B 100%);
+    }
+    
+    body.dark-theme .card-hover, 
+    body.dark-theme .commission-card,
+    body.dark-theme .rounded-3xl[style*="background: linear-gradient"] {
+      background: linear-gradient(145deg, #4A3A5B, #5A4A6B) !important;
+      color: #FFE4F0;
+    }
+    
+    body.dark-theme p, 
+    body.dark-theme .detail-item,
+    body.dark-theme .faq-text {
+      color: #E0D0E8 !important;
+    }
+    
+    body.dark-theme .input-pastel {
+      background: #3A2A3C !important;
+      border-color: #6B5A8B;
+      color: #FFE4F0 !important;
+    }
+    
+    body.dark-theme .input-pastel::placeholder {
+      color: #B0A0C0;
+    }
+    
+    .emoji-reaction-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 12px;
+      width: fit-content;
+    }
+    
+    .emoji-reaction-btn {
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.6);
+      border: none;
+      padding: 4px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .emoji-reaction-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: scale(1.15);
+    }
+    
+    .message-reactions-container {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .message-reaction {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .message-reaction:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: scale(1.1);
+    }
+    
+    .message-reaction-count {
+      font-size: 11px;
+      font-weight: 600;
+      color: #8B7A8B;
+    }
+
+    .character-count-btn {
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .character-count-btn.active {
+      border-color: #E68BB0;
+    }
+
+    .deadline-input-group {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .deadline-input-wrapper {
+      flex: 1;
+    }
+
+    .rush-fee-badge {
+      background: #FFD9C8;
+      color: #8B6B5A;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+      display: inline-block;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper scrollbar-hide" id="app">
+   <div class="floating-paw" style="top: 10%; left: 5%; animation-delay: 0s;">
+    🐾
+   </div>
+   <div class="floating-paw" style="top: 30%; right: 8%; animation-delay: 1s;">
+    ✨
+   </div>
+   <div class="floating-paw" style="top: 60%; left: 3%; animation-delay: 2s;">
+    🧶
+   </div>
+   <div class="floating-paw" style="top: 80%; right: 5%; animation-delay: 1.5s;">
+    ⭐
+   </div>
+   <div class="floating-paw" style="top: 45%; left: 95%; animation-delay: 0.5s;">
+    🐱
+   </div>
+   <div class="sparkle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+   <div class="sparkle" style="top: 25%; right: 25%; animation-delay: 0.5s;"></div>
+   <div class="sparkle" style="top: 55%; left: 15%; animation-delay: 1s;"></div>
+   <div class="sparkle" style="top: 75%; right: 20%; animation-delay: 1.5s;"></div>
+   <div id="yarn-ball" class="yarn-ball" onclick="playWithYarn()">
+    🧶
+   </div>
+   <nav class="sticky top-0 z-50 px-3 py-3 md:px-4 md:py-4" style="background: linear-gradient(to bottom, rgba(255,246,247,0.98), rgba(255,246,247,0.9));">
+    <div class="max-w-4xl mx-auto">
+     <div class="flex items-center justify-between mb-3 md:mb-4">
+      <div class="flex items-center gap-2 flex-1 min-w-0">
+       <div style="position: relative; display: inline-block; flex-shrink: 0;">
+        <span class="text-2xl md:text-3xl">🐱</span>
+        <div id="unread-dot" class="hidden" style="position: absolute; top: -5px; left: -5px; width: 14px; height: 14px; background: #E88B8B; border-radius: 50%; border: 2px solid white; font-size: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"></div>
+       </div>
+       <h1 class="text-xl md:text-2xl font-bold truncate" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;" id="site-title">Whisker Studio</h1>
+      </div>
+      <div class="secret-paw text-lg md:text-xl flex-shrink-0 ml-2" onclick="triggerEasterEgg()" title="What's this?">
+       🐾
+      </div><button id="dashboard-nav-btn" type="button" class="hidden nav-tab px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm flex-shrink-0 ml-2" onclick="showPage('dashboard')" style="background: #FFD9C8; color: #8B6B5A;" data-tab="dashboard">📊 Dashboard</button>
+     </div>
+     <div class="flex flex-wrap gap-1.5 md:gap-2 justify-center">
+      <button type="button" class="nav-tab px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm active" style="background: #F7C6D9; color: #8B5A6B;" data-tab="home">🏠 Home</button> <button type="button" class="nav-tab px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm" style="background: #CFF7E6; color: #5A8B6B;" data-tab="commissions">🎨 Commissions</button> <button type="button" class="nav-tab px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm" style="background: #FFECD9; color: #8B7A5A;" data-tab="my-requests">📋 My Requests</button> <button type="button" class="nav-tab px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm" style="background: #D9C6F7; color: #6B5A8B;" data-tab="portfolio">🖼️ Portfolio</button> <button type="button" class="nav-tab px-3 md:px-6 py-2 md:py-2.5 rounded-full font-semibold text-xs md:text-sm" style="background: #CDE7FF; color: #5A6B8B;" data-tab="extra">✨ Extra</button>
+     </div>
+    </div>
+   </nav>
+   <main class="max-w-5xl mx-auto px-4 py-8 pb-20">
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page-content">
+     <div class="text-center mb-6 md:mb-8">
+      <div class="profile-container relative inline-block mb-4 md:mb-6">
+       <div class="w-28 md:w-40 h-28 md:h-40 rounded-full mx-auto overflow-hidden shadow-lg" style="background: linear-gradient(145deg, #F7C6D9, #D9C6F7); padding: 4px;">
+        <div class="w-full h-full rounded-full flex items-center justify-center text-5xl md:text-7xl" style="background: #FFF6F7;">
+         🎨
+        </div>
+       </div>
+       <div class="cat-peek">
+        😺
+       </div>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold mb-1 md:mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;" id="artist-name-display">Meowy Artist</h2>
+      <p class="text-base md:text-lg" style="color: #A88B9D;" id="welcome-msg-display">Welcome to my cozy art corner! ✨</p>
+     </div>
+     <div class="grid md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+      <div class="card-hover rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+       <div class="flex items-center gap-3 mb-4"><span class="text-xl md:text-2xl">🐱</span>
+        <h3 class="text-lg md:text-xl font-bold" style="color: #E8A4BF;">About Me</h3>
+       </div>
+       <p class="leading-relaxed text-sm md:text-base" style="color: #8B7A8B;" id="artist-bio-display">Hi there! I'm a digital artist who loves creating cute, kawaii-style artwork featuring adorable cats and whimsical characters. I've been drawing for over 5 years and specialize in soft, pastel aesthetics. When I'm not drawing, you can find me cuddling with my three cats! 🐾</p>
+      </div>
+      <div class="card-hover rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF0FF);">
+       <div class="flex items-center gap-3 mb-4"><span class="text-xl md:text-2xl">✨</span>
+        <h3 class="text-lg md:text-xl font-bold" style="color: #C4A4E8;">What I Create</h3>
+       </div>
+       <div class="flex flex-wrap gap-2"><span class="px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-medium" style="background: #F7C6D9; color: #8B5A6B;">Character Art</span> <span class="px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-medium" style="background: #CFF7E6; color: #5A8B6B;">Cute Animals</span> <span class="px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-medium" style="background: #D9C6F7; color: #6B5A8B;">Chibi</span> <span class="px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-medium" style="background: #FFD9C8; color: #8B6B5A;">Kawaii</span>
+       </div>
+      </div>
+     </div>
+     <div class="text-center">
+      <h3 class="text-base md:text-lg font-semibold mb-3 md:mb-4" style="color: #A88B9D;">Find Me Here 💕</h3>
+      <div class="flex flex-wrap justify-center gap-2 md:gap-3"><a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="btn-pastel px-4 md:px-5 py-2 md:py-2.5 rounded-full font-medium text-sm md:text-base flex items-center gap-2 inline-flex" style="background: #CDE7FF; color: #5A6B8B; text-decoration: none;"><span>🐦</span> Twitter</a> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="btn-pastel px-4 md:px-5 py-2 md:py-2.5 rounded-full font-medium text-sm md:text-base flex items-center gap-2 inline-flex" style="background: #F7C6D9; color: #8B5A6B; text-decoration: none;"><span>📸</span> Instagram</a> <a href="https://deviantart.com" target="_blank" rel="noopener noreferrer" class="btn-pastel px-4 md:px-5 py-2 md:py-2.5 rounded-full font-medium text-sm md:text-base flex items-center gap-2 inline-flex" style="background: #D9C6F7; color: #6B5A8B; text-decoration: none;"><span>🎨</span> DeviantArt</a>
+      </div>
+     </div>
+     <div class="flex justify-center gap-4 mt-10 text-4xl opacity-60"><span class="animate-bounce" style="animation-delay: 0s;">😺</span> <span class="animate-bounce" style="animation-delay: 0.2s;">😸</span> <span class="animate-bounce" style="animation-delay: 0.4s;">😻</span>
+     </div>
+    </div><!-- COMMISSIONS PAGE -->
+    <div id="page-commissions" class="page-content hidden">
+     <div class="text-center mb-6 md:mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎨 Commission Menu</h2>
+      <p class="text-sm md:text-base" style="color: #A88B9D;">Choose your purrfect art style!</p>
+     </div>
+     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-6 md:mb-10">
+      <div class="card-hover commission-card rounded-2xl md:rounded-3xl p-4 md:p-5 shadow-md text-center">
+       <div class="w-20 md:w-24 h-20 md:h-24 mx-auto mb-3 md:mb-4 rounded-xl md:rounded-2xl flex items-center justify-center text-4xl md:text-5xl" style="background: linear-gradient(145deg, #F7C6D9, #FFD9C8);">
+        ✏️
+       </div>
+       <h4 class="text-base md:text-lg font-bold mb-1" style="color: #E8A4BF;">Sketch</h4>
+       <p class="text-xl md:text-2xl font-bold mb-2" style="color: #8B5A6B;">$15</p>
+       <p class="text-xs md:text-sm" style="color: #A88B9D;">Clean lined sketch with soft shading</p>
+      </div>
+      <div class="card-hover commission-card rounded-2xl md:rounded-3xl p-4 md:p-5 shadow-md text-center">
+       <div class="w-20 md:w-24 h-20 md:h-24 mx-auto mb-3 md:mb-4 rounded-xl md:rounded-2xl flex items-center justify-center text-4xl md:text-5xl" style="background: linear-gradient(145deg, #CFF7E6, #CDE7FF);">
+        👤
+       </div>
+       <h4 class="text-base md:text-lg font-bold mb-1" style="color: #7BC4A8;">Bust</h4>
+       <p class="text-xl md:text-2xl font-bold mb-2" style="color: #5A8B6B;">$30</p>
+       <p class="text-xs md:text-sm" style="color: #A88B9D;">Head to chest, fully colored</p>
+      </div>
+      <div class="card-hover commission-card rounded-2xl md:rounded-3xl p-4 md:p-5 shadow-md text-center">
+       <div class="w-20 md:w-24 h-20 md:h-24 mx-auto mb-3 md:mb-4 rounded-xl md:rounded-2xl flex items-center justify-center text-4xl md:text-5xl" style="background: linear-gradient(145deg, #D9C6F7, #F7C6D9);">
+        🧑‍🎨
+       </div>
+       <h4 class="text-base md:text-lg font-bold mb-1" style="color: #C4A4E8;">Half Body</h4>
+       <p class="text-xl md:text-2xl font-bold mb-2" style="color: #6B5A8B;">$50</p>
+       <p class="text-xs md:text-sm" style="color: #A88B9D;">Waist up with detailed rendering</p>
+      </div>
+     </div>
+     <div class="text-center"><button onclick="openCommissionForm()" class="btn-pastel px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-lg font-bold shadow-lg" style="background: linear-gradient(145deg, #F7C6D9, #D9C6F7); color: #6B5A8B;">🐾 Request Commission</button>
+     </div>
+     <div id="commission-form-container" class="hidden mt-6 md:mt-10">
+      <div class="rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-lg" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+       <div class="flex items-center justify-between mb-6 gap-4">
+        <h3 class="text-xl md:text-2xl font-bold flex-1" style="color: #E8A4BF;">📝 Commission Request</h3><button type="button" onclick="closeCommissionForm()" class="text-2xl hover:scale-110 transition-transform flex-shrink-0">❌</button>
+       </div>
+       <form id="commission-form" class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-5">
+         <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-name">Your Name 🐱</label> <input type="text" id="comm-name" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="What should I call you?">
+         </div>
+         <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-contact">Contact 📧</label> <input type="text" id="comm-contact" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="Email or social media">
+         </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-5">
+         <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-type">Commission Type 🎨</label> <select id="comm-type" required class="input-pastel w-full px-4 py-3 rounded-2xl appearance-none cursor-pointer" style="background: #FFF6F7;"> <option value="">Select a type...</option> <option value="Sketch">Sketch - $15</option> <option value="Bust">Bust - $30</option> <option value="Half Body">Half Body - $50</option> </select>
+         </div>
+         <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-budget">Budget 💰</label> <input type="text" id="comm-budget" class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="Your budget range">
+         </div>
+        </div><!-- CHARACTER COUNT -->
+        <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Character Count 👥 (Max: 2)</label>
+         <div class="flex gap-3 flex-wrap">
+          <button type="button" class="character-count-btn px-4 py-2 rounded-full font-semibold text-sm transition-all" style="background: #CFF7E6; color: #5A8B6B;" onclick="setCharacterCount(1)">1 Character</button> <button type="button" class="character-count-btn active px-4 py-2 rounded-full font-semibold text-sm transition-all" style="background: linear-gradient(145deg, #F7C6D9, #FFE4F0); color: #E8A4BF; border: 2px solid #E68BB0;" onclick="setCharacterCount(2)">2 Characters</button>
+         </div>
+         <div class="character-counter" id="character-warning"></div>
+        </div><!-- POSE SELECTOR -->
+        <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Character Pose 💃</label>
+         <div class="pose-grid">
+          <div class="pose-option" onclick="selectPose(this, 'standing')">
+           <div style="font-size: 28px; margin-bottom: 6px;">
+            🧍
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Standing
+           </div>
+          </div>
+          <div class="pose-option" onclick="selectPose(this, 'sitting')">
+           <div style="font-size: 28px; margin-bottom: 6px;">
+            🧘
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Sitting
+           </div>
+          </div>
+          <div class="pose-option" onclick="selectPose(this, 'action')">
+           <div style="font-size: 28px; margin-bottom: 6px;">
+            🤸
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Action
+           </div>
+          </div>
+          <div class="pose-option" onclick="selectPose(this, 'custom')">
+           <div style="font-size: 28px; margin-bottom: 6px;">
+            🎭
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Custom
+           </div>
+          </div>
+         </div>
+         <div id="pose-description-area" class="hidden mt-3"><textarea class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" id="pose-description" placeholder="Describe the custom pose..." rows="2"></textarea>
+         </div>
+        </div><!-- POSE REFERENCE UPLOAD -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Pose Reference (Optional)</label>
+         <div class="upload-area" onclick="document.getElementById('pose-upload').click()">
+          <div style="font-size: 24px; margin-bottom: 8px;">
+           📸
+          </div>
+          <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload pose reference</p><input type="file" id="pose-upload" class="file-upload" accept="image/png,image/jpeg" onchange="previewPoseImage(event)">
+         </div>
+         <div id="pose-preview-area"></div>
+        </div><!-- REFERENCE IMAGES UPLOAD -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Character References (Optional) 📸</label>
+         <div class="reference-upload-area" onclick="document.getElementById('reference-images-upload').click()">
+          <div style="font-size: 24px; margin-bottom: 8px;">
+           📁
+          </div>
+          <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload multiple reference images</p><input type="file" id="reference-images-upload" class="file-upload" accept="image/png,image/jpeg" multiple onchange="previewReferenceImages(event)">
+         </div>
+         <div id="reference-previews-container" class="reference-previews"></div>
+        </div><!-- REFERENCE IMAGES UPLOAD -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Character References (Optional) 📸</label>
+         <div class="reference-upload-area" onclick="document.getElementById('reference-images-upload').click()">
+          <div style="font-size: 24px; margin-bottom: 8px;">
+           📁
+          </div>
+          <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload multiple reference images</p><input type="file" id="reference-images-upload" class="file-upload" accept="image/png,image/jpeg" multiple onchange="previewReferenceImages(event)">
+         </div>
+         <div id="reference-previews-container" class="reference-previews"></div>
+        </div><!-- MOODBOARD BUILDER -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">🎯 Moodboard Builder (Optional)</label>
+         <div class="reference-upload-area" onclick="document.getElementById('moodboard-upload').click()">
+          <div style="font-size: 24px; margin-bottom: 8px;">
+           📌
+          </div>
+          <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload multiple moodboard reference images</p><input type="file" id="moodboard-upload" class="file-upload" accept="image/png,image/jpeg" multiple onchange="addMoodboardImages(event)">
+         </div>
+         <div id="moodboard-grid" class="reference-previews"></div>
+         <div id="moodboard-count" style="font-size: 0.85rem; color: #A88B9D; margin-top: 8px;"></div>
+        </div><!-- COLOR PALETTE EXTRACTOR -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">🎨 Color Palette Extractor (Optional)</label>
+         <div class="reference-upload-area" onclick="document.getElementById('palette-char-upload').click()">
+          <div style="font-size: 24px; margin-bottom: 8px;">
+           🖼️
+          </div>
+          <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload character image for automatic color extraction</p><input type="file" id="palette-char-upload" class="file-upload" accept="image/png,image/jpeg" onchange="extractColorPalette(event)">
+         </div>
+         <div id="palette-extract-preview"></div>
+         <div id="extracted-palette"></div>
+        </div><!-- EXPRESSION PICKER -->
+        <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Character Expression 😊</label>
+         <div class="expression-grid">
+          <div class="expression-option" onclick="selectExpression(this, 'happy')">
+           <div style="font-size: 28px;">
+            😊
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Happy
+           </div>
+          </div>
+          <div class="expression-option" onclick="selectExpression(this, 'angry')">
+           <div style="font-size: 28px;">
+            😠
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Angry
+           </div>
+          </div>
+          <div class="expression-option" onclick="selectExpression(this, 'shy')">
+           <div style="font-size: 28px;">
+            🥰
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Shy
+           </div>
+          </div>
+          <div class="expression-option" onclick="selectExpression(this, 'smug')">
+           <div style="font-size: 28px;">
+            😏
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Smug
+           </div>
+          </div>
+          <div class="expression-option" onclick="selectExpression(this, 'sad')">
+           <div style="font-size: 28px;">
+            😢
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Sad
+           </div>
+          </div>
+          <div class="expression-option" onclick="selectExpression(this, 'surprised')">
+           <div style="font-size: 28px;">
+            😲
+           </div>
+           <div style="font-size: 11px; color: #8B7A8B;">
+            Surprised
+           </div>
+          </div>
+         </div>
+        </div><!-- DEADLINE SELECTOR -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Deadline (Optional) ⏰</label>
+         <div class="deadline-input-group">
+          <div class="deadline-input-wrapper">
+           <input type="date" id="deadline-date" class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" onchange="updateRushFee()">
+          </div>
+         </div>
+         <div id="rush-fee-display"></div>
+        </div><!-- COLOR PALETTE UPLOAD -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;">Color Palette Reference (Optional)</label>
+         <div class="upload-area" onclick="document.getElementById('palette-upload').click()">
+          <div style="font-size: 24px; margin-bottom: 8px;">
+           🎨
+          </div>
+          <p style="color: #8B7A8B; margin: 0; font-size: 13px;">Click to upload color palette</p><input type="file" id="palette-upload" class="file-upload" accept="image/png,image/jpeg" onchange="previewPaletteImage(event)">
+         </div>
+         <div id="palette-preview-area"></div>
+        </div><!-- CHARACTER DESCRIPTION -->
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-desc">Description 📋</label> <textarea id="comm-desc" required rows="4" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="Tell me about your character!"></textarea>
+        </div>
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="character-name">Character Name 🐱</label> <input type="text" id="character-name" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="What's your character called?">
+        </div>
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="character-species">Character Species/Type 🦁</label> <input type="text" id="character-species" required class="input-pastel w-full px-4 py-3 rounded-2xl" style="background: #FFF6F7;" placeholder="e.g., Cat, Wolf, Dragon, Human, etc.">
+        </div>
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="color-prefs">Color Preferences 🎨</label> <textarea id="color-prefs" rows="2" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="e.g., Pastels, warm tones, dark colors, etc."></textarea>
+        </div>
+        <div><label class="block text-sm font-semibold mb-2" style="color: #8B7A8B;" for="comm-notes">Extra Notes 📝</label> <textarea id="comm-notes" rows="2" class="input-pastel w-full px-4 py-3 rounded-2xl resize-none" style="background: #FFF6F7;" placeholder="Any additional details?"></textarea>
+        </div><!-- COMMISSION SUMMARY PREVIEW -->
+        <div class="commission-summary" id="commission-summary-section" style="display: none;">
+         <div style="font-weight: bold; color: #E8A4BF; margin-bottom: 12px; font-size: 16px;">
+          📋 Commission Summary
+         </div>
+         <div class="summary-item"><span>Characters</span> <span id="summary-chars">1</span>
+         </div>
+         <div class="summary-item"><span>References</span> <span id="summary-refs">0</span>
+         </div>
+         <div class="summary-item"><span>Deadline</span> <span id="summary-deadline">None</span>
+         </div>
+         <div class="summary-item"><span>Base Price</span> <span id="summary-base">$15</span>
+         </div>
+         <div class="summary-item"><span>Rush Fee</span> <span id="summary-rush">$0</span>
+         </div>
+         <div class="summary-item"><span>Total</span> <span id="summary-total">$15</span>
+         </div>
+        </div><!-- TERMS AGREEMENT -->
+        <div><label class="block text-sm font-semibold mb-3" style="color: #8B7A8B;">Before You Submit ✓</label>
+         <div class="checkbox-group">
+          <div class="checkbox-item"><input type="checkbox" id="check-references" onchange="updateCommissionSummary(); updateSubmitButton()"> <label for="check-references">I included character references</label>
+          </div>
+          <div class="checkbox-item"><input type="checkbox" id="check-terms" onchange="updateCommissionSummary(); updateSubmitButton()"> <label for="check-terms">I agree to the commission terms</label>
+          </div>
+          <div class="checkbox-item"><input type="checkbox" id="check-turnaround" onchange="updateCommissionSummary(); updateSubmitButton()"> <label for="check-turnaround">I understand the 2-4 week turnaround time</label>
+          </div>
+         </div>
+        </div>
+        <div class="text-center pt-4"><button type="submit" id="submit-btn" disabled class="btn-pastel px-8 py-4 rounded-full text-lg font-bold shadow-lg" style="background: linear-gradient(145deg, #CFF7E6, #CDE7FF); color: #5A8B6B; opacity: 0.5;">🐾 Submit Commission</button>
+        </div>
+       </form>
+      </div>
+     </div>
+    </div><!-- MY REQUESTS PAGE -->
+    <div id="page-my-requests" class="page-content hidden">
+     <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">📋 My Commission Requests</h2>
+      <p style="color: #A88B9D;">Track the status of your requests</p>
+     </div>
+     <div id="my-requests-container" class="space-y-4">
+      <div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span>
+       <p>You haven't submitted any requests yet!</p>
+      </div>
+     </div>
+    </div><!-- PORTFOLIO PAGE -->
+    <div id="page-portfolio" class="page-content hidden">
+     <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🖼️ Art Gallery</h2>
+      <p style="color: #A88B9D;">Browse my latest creations! (Click for details)</p>
+     </div>
+     <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+    </div><!-- EXTRA PAGE -->
+    <div id="page-extra" class="page-content hidden">
+     <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold mb-2" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">✨ Extra Info</h2>
+      <p style="color: #A88B9D;">Everything else you need to know!</p>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+       <div class="flex items-center gap-3 mb-4"><span class="text-2xl">📜</span>
+        <h3 class="text-xl font-bold" style="color: #E8A4BF;">Terms of Service</h3>
+       </div>
+       <ul class="space-y-2 text-sm" style="color: #8B7A8B;">
+        <li class="flex items-start gap-2"><span>🐾</span> Payment required upfront</li>
+        <li class="flex items-start gap-2"><span>🐾</span> Turnaround 2-4 weeks</li>
+        <li class="flex items-start gap-2"><span>🐾</span> May post on social media</li>
+       </ul>
+      </div>
+      <div class="card-hover rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #F8F0FF);">
+       <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🔐</span>
+        <h3 class="text-xl font-bold" style="color: #C4A4E8;">Owner Area</h3>
+       </div>
+       <p class="text-sm mb-4" style="color: #A88B9D;">Access your commission dashboard</p><button onclick="toggleOwnerLogin()" id="login-toggle-btn" class="btn-pastel px-6 py-3 rounded-full font-semibold" style="background: #FFFFFF; color: #8B6B5A;">🐱 Owner Login</button>
+       <div id="login-form" class="hidden mt-6">
+        <div class="max-w-xs mx-auto space-y-4"><input type="password" id="owner-password" class="input-pastel w-full px-4 py-3 rounded-2xl text-center" style="background: #FFFFFF;" placeholder="Enter password"> <button type="button" onclick="attemptLogin()" class="btn-pastel w-full py-3 rounded-full font-semibold" style="background: #CFF7E6; color: #5A8B6B;">✨ Login</button>
+         <p id="login-error" class="text-sm hidden" style="color: #E88B8B;"></p>
+        </div>
+       </div>
+      </div>
+     </div><!-- FAQ SECTION -->
+     <div class="mb-10">
+      <h3 class="text-2xl font-bold mb-6" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">❓ Frequently Asked Questions</h3>
+      <div id="faq-container"></div>
+     </div><!-- ART STYLE PREVIEW -->
+     <div class="mb-10">
+      <h3 class="text-2xl font-bold mb-6" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎨 Art Styles</h3>
+      <div class="style-preview-grid">
+       <div class="style-preview-item" onclick="selectStyle(this, 'sketch')">
+        <div class="style-preview-emoji">
+         ✏️
+        </div>
+        <div class="style-preview-label">
+         Sketch
+        </div>
+       </div>
+       <div class="style-preview-item" onclick="selectStyle(this, 'flat')">
+        <div class="style-preview-emoji">
+         🎨
+        </div>
+        <div class="style-preview-label">
+         Flat Color
+        </div>
+       </div>
+       <div class="style-preview-item active" onclick="selectStyle(this, 'rendered')">
+        <div class="style-preview-emoji">
+         ✨
+        </div>
+        <div class="style-preview-label">
+         Fully Rendered
+        </div>
+       </div>
+      </div>
+     </div><!-- ARTIST TIMELINE -->
+     <div class="mb-10">
+      <h3 class="text-2xl font-bold mb-6" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">📅 My Journey</h3>
+      <div class="timeline" id="artist-timeline"></div>
+     </div><!-- TOOLS SECTION -->
+     <div class="mb-10">
+      <h3 class="text-2xl font-bold mb-6" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🛠️ Tools I Use</h3>
+      <div class="tools-grid" id="tools-container"></div>
+     </div><!-- COMMISSION QUEUE -->
+     <div class="mb-10">
+      <h3 class="text-2xl font-bold mb-6" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">📊 Commission Status</h3>
+      <div class="queue-card">
+       <div class="queue-number" id="queue-count">
+        0
+       </div>
+       <div class="queue-label">
+        Current Commission Queue
+       </div>
+       <div class="queue-estimate" id="queue-estimate">
+        Estimated wait: Immediate
+       </div>
+      </div>
+     </div><!-- COMMISSION SLOTS -->
+     <div class="mb-10">
+      <h3 class="text-2xl font-bold mb-6" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎟️ Commission Slots</h3>
+      <div style="text-align: center; margin-bottom: 16px;">
+       <p style="color: #8B7A8B; font-size: 14px;"><strong id="slot-status">3 / 10</strong> slots open</p>
+      </div>
+      <div class="slots-container" id="slots-container"></div>
+      <div class="slot-progress-bar">
+       <div class="slot-progress-fill" id="slot-progress" style="width: 30%;"></div>
+      </div>
+     </div><!-- THEME SWITCHER -->
+     <div class="mb-10">
+      <h3 class="text-2xl font-bold mb-6" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎨 Theme</h3>
+      <div class="theme-selector">
+       <div class="theme-option pastel-light active" onclick="switchTheme('light', this)">
+        ☀️ Light Theme
+       </div>
+       <div class="theme-option pastel-dark" onclick="switchTheme('dark', this)">
+        🌙 Dark Theme
+       </div>
+      </div>
+     </div>
+    </div><!-- OWNER DASHBOARD (Hidden until login) -->
+    <div id="page-dashboard" class="page-content hidden">
+     <div class="flex items-center justify-between mb-8">
+      <div>
+       <h2 class="text-3xl font-bold" style="color: #E8A4BF; font-family: 'Nunito', sans-serif;">🎀 Commission Dashboard</h2>
+       <p style="color: #A88B9D;">Manage your commission requests</p>
+      </div><button onclick="logout()" class="btn-pastel px-5 py-2 rounded-full font-medium" style="background: #FFD9C8; color: #8B6B5A;">🚪 Logout</button>
+     </div><!-- Stats -->
+     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="rounded-2xl p-4 text-center" style="background: #FFD9C8;">
+       <p class="text-2xl font-bold" style="color: #8B6B5A;" id="stat-pending">0</p>
+       <p class="text-xs font-medium" style="color: #A88B7A;">Pending</p>
+      </div>
+      <div class="rounded-2xl p-4 text-center" style="background: #CFF7E6;">
+       <p class="text-2xl font-bold" style="color: #5A8B6B;" id="stat-accepted">0</p>
+       <p class="text-xs font-medium" style="color: #7AA88B;">Accepted</p>
+      </div>
+      <div class="rounded-2xl p-4 text-center" style="background: #D9C6F7;">
+       <p class="text-2xl font-bold" style="color: #6B5A8B;" id="stat-finished">0</p>
+       <p class="text-xs font-medium" style="color: #8B7AA8;">Finished</p>
+      </div>
+      <div class="rounded-2xl p-4 text-center" style="background: #F7C6D9;">
+       <p class="text-2xl font-bold" style="color: #8B5A6B;" id="stat-total">0</p>
+       <p class="text-xs font-medium" style="color: #A87A8B;">Total</p>
+      </div>
+     </div><!-- Dashboard Tabs -->
+     <div class="flex flex-wrap gap-2 mb-6 justify-center"><button onclick="showDashboardTab('active')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm active" style="background: #FFD9C8; color: #8B6B5A;" data-tab="active">📋 Active</button> <button onclick="showDashboardTab('history')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #D9C6F7; color: #6B5A8B;" data-tab="history">📜 History</button> <button onclick="showDashboardTab('messages')" class="dashboard-tab btn-pastel px-6 py-2.5 rounded-full font-semibold text-sm" style="background: #CDE7FF; color: #5A6B8B;" data-tab="messages">💬 Messages</button>
+     </div><!-- Sorting Controls -->
+     <div class="mb-6 flex gap-2 justify-center flex-wrap"><button onclick="sortCommissions('newest')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Newest</button> <button onclick="sortCommissions('oldest')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Oldest</button> <button onclick="sortCommissions('status')" class="px-4 py-2 rounded-full text-sm font-medium" style="background: #FFF6F7; color: #8B7A8B; border: 1px solid #F4A6C1;">Status</button>
+     </div><!-- Active Commissions -->
+     <div id="dashboard-active">
+      <div id="commission-list" class="space-y-4">
+       <div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">😺</span>
+        <p>No commission requests yet!</p>
+       </div>
+      </div>
+     </div><!-- History Section -->
+     <div id="dashboard-history" class="hidden">
+      <div class="space-y-6">
+       <div>
+        <h3 class="text-xl font-bold mb-4" style="color: #E8A4BF;">✅ Accepted &amp; Completed</h3>
+        <div id="commission-history-accepted" class="space-y-4">
+         <div class="text-center py-8" style="color: #A88B9D;">
+          <p class="text-sm">No accepted or completed commissions yet</p>
+         </div>
+        </div>
+       </div>
+       <div>
+        <h3 class="text-xl font-bold mb-4" style="color: #E8A4BF;">❌ Declined</h3>
+        <div id="commission-history-declined" class="space-y-4">
+         <div class="text-center py-8" style="color: #A88B9D;">
+          <p class="text-sm">No declined commissions yet</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Messages Section -->
+     <div id="dashboard-messages" class="hidden">
+      <div class="dashboard-messages-section">
+       <div class="conversations-sidebar">
+        <h3 class="font-bold mb-4" style="color: #E8A4BF;">💬 Conversations</h3>
+        <div id="dashboard-conversations-list"></div>
+       </div>
+       <div class="conversation-detail-area" id="conversation-detail">
+        <div class="text-center py-10" style="color: #A88B9D;">
+         <p>Select a conversation to view messages</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div><!-- Detail Panel for Commission Details -->
+  <div id="detail-panel" class="detail-panel hidden">
+   <div class="detail-header">
+    <span>Commission Details</span> <button class="detail-close" onclick="closeDetailPanel()">✕</button>
+   </div>
+   <div id="detail-content"></div>
+  </div><!-- Image Modal -->
+  <div id="image-modal-backdrop" class="modal-backdrop hidden" onclick="closeImageModal()">
+   <div class="image-modal" onclick="event.stopPropagation()">
+    <button class="image-modal-close" onclick="closeImageModal()">✕</button> <img id="modal-image" src="" alt="Full size preview">
+   </div>
+  </div><!-- Gallery Modal -->
+  <div id="gallery-modal" class="gallery-modal hidden" onclick="closeGalleryModal()">
+   <div class="gallery-modal-content" onclick="event.stopPropagation()">
+    <button class="gallery-modal-close" onclick="closeGalleryModal()">✕</button>
+    <div class="gallery-preview" id="gallery-preview-emoji">
+     🎨
+    </div>
+    <div class="gallery-info">
+     <div class="gallery-modal-title" id="gallery-title">
+      Artwork Title
+     </div>
+     <div class="gallery-modal-description" id="gallery-description">
+      Description goes here
+     </div>
+     <div class="gallery-meta">
+      <div class="gallery-meta-item">
+       <span class="gallery-meta-label">Date Created</span> <span id="gallery-date">2024</span>
+      </div>
+      <div class="gallery-meta-item">
+       <span class="gallery-meta-label">Category</span> <span id="gallery-category">Art</span>
+      </div>
+     </div>
+     <div>
+      <div style="font-weight: 600; color: #E8A4BF; margin-bottom: 10px;">
+       Color Palette
+      </div>
+      <div class="palette-swatches" id="gallery-palette"></div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Chat Button --> <button id="chat-button" class="chat-button" onclick="openChat()">
+   <div class="chat-tooltip">
+    Chat with the artist!
+   </div> 🐱 </button> <!-- Chat Window -->
+  <div id="chat-window" class="chat-window hidden">
+   <div class="chat-header">
+    <div class="chat-avatar">
+     🐱
+    </div>
+    <div class="flex-1">
+     Chat with the Artist 🐾
+    </div><button onclick="minimizeChat()" class="chat-close-btn" title="Minimize" type="button">−</button> <button onclick="closeChat()" class="chat-close-btn" title="Close" type="button">✕</button>
+   </div>
+   <div id="chat-messages" class="chat-messages scrollbar-hide"></div>
+   <div class="chat-input-area">
+    <input type="text" id="chat-input" class="chat-input" placeholder="Type a message..." autocomplete="off"> <button type="button" onclick="sendChatMessage()" class="chat-send-btn">🐾</button>
+   </div>
+  </div><!-- Success Popup -->
+  <div id="success-popup" class="fixed inset-0 hidden z-50 flex items-center justify-center popup-overlay">
+   <div class="bounce-in rounded-3xl p-8 text-center max-w-sm mx-4 shadow-2xl" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+    <div class="text-6xl mb-4">
+     😻
+    </div>
+    <h3 class="text-2xl font-bold mb-2" style="color: #E8A4BF;">Meow-velous!</h3>
+    <p style="color: #8B7A8B;" id="popup-message">Your commission request has been sent!</p><button type="button" onclick="closePopup()" class="btn-pastel mt-6 px-6 py-2 rounded-full font-semibold" style="background: #F7C6D9; color: #8B5A6B;">Okay! 💕</button>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      artist_name: 'Meowy Artist',
+      artist_bio: "Hi there! I'm a digital artist who loves creating cute, kawaii-style artwork featuring adorable cats and whimsical characters. I've been drawing for over 5 years and specialize in soft, pastel aesthetics. When I'm not drawing, you can find me cuddling with my three cats! 🐾",
+      welcome_message: 'Welcome to my cozy art corner! ✨',
+      background_color: '#FFF6F7',
+      surface_color: '#FFFFFF',
+      text_color: '#8B7A8B',
+      primary_action_color: '#F7C6D9',
+      secondary_action_color: '#D9C6F7'
+    };
+    
+    let currentPage = 'home';
+    let isOwnerLoggedIn = false;
+    let commissionData = [];
+    let userEmail = null;
+    let chatMessages = [];
+    let currentChatId = null;
+    let chatConversations = [];
+    let currentViewingConversation = null;
+    let selectedPose = null;
+    let selectedExpression = null;
+    let selectedCharacterCount = 2;
+    let sortOrder = 'newest';
+    let yarnBallPosition = { x: Math.random() * 80, y: Math.random() * 80 };
+    let selectedDeadline = null;
+    let rushFee = 0;
+    let uploadedReferences = [];
+    
+    const progressStages = ['Requested', 'Sketching', 'Lineart', 'Coloring', 'Finished'];
+    
+    const faqData = [
+      { q: 'How long do commissions take?', a: 'Most commissions take 2-4 weeks depending on complexity. Rush orders are available for an additional $4.50.' },
+      { q: 'Do you allow commercial use?', a: 'Personal use only. Commercial licenses available upon request for an additional fee.' },
+      { q: 'What references should I send?', a: 'Character sheets, reference images, or detailed descriptions work best. The more details, the better!' },
+      { q: 'What payment methods do you accept?', a: 'I accept PayPal and Stripe. Payment is required upfront before starting your commission.' }
+    ];
+    
+    const timelineData = [
+      { title: 'Started drawing digitally', description: '2019 - First digital art pieces' },
+      { title: 'First commissions', description: '2021 - Opened to taking commissions' },
+      { title: 'Opened Whisker Studio website', description: '2024 - Launched official studio' }
+    ];
+    
+    const toolsData = [
+      { title: '💻 Software', items: ['IbisPaint X', 'Clip Studio Paint', 'Photoshop'] },
+      { title: '🖱️ Hardware', items: ['XP-Pen Display Tablet', 'Apple Pencil'] }
+    ];
+    
+    const galleryItems = [
+      { id: 1, title: 'Sleepy Kitty', description: 'A peaceful sleeping cat character in a cozy blanket', date: '2024-01-15', category: 'finished', emoji: '😴', bg: '#F7C6D9', palette: ['#FFB8D9', '#F7C6D9', '#FFFFFF', '#E8A4BF'] },
+      { id: 2, title: 'Character Sketch', description: 'Quick sketch of a character in progress', date: '2024-01-10', category: 'sketches', emoji: '✏️', bg: '#FFD9C8', palette: ['#FFD9C8', '#F5C9B5', '#E8A89B'] },
+      { id: 3, title: 'Magical Cat Girl', description: 'Fully rendered magical girl character with cat elements', date: '2024-01-05', category: 'commissions', emoji: '🧙‍♀️', bg: '#D9C6F7', palette: ['#D9C6F7', '#C9B0E8', '#B89AD9', '#A884CB'] },
+      { id: 4, title: 'Flower Crown', description: 'Character wearing a beautiful flower crown', date: '2023-12-28', category: 'finished', emoji: '🌸', bg: '#CFF7E6', palette: ['#CFF7E6', '#B8E8D9', '#A0D9CC', '#88CBBB'] },
+      { id: 5, title: 'Quick Doodle', description: 'Fun casual doodle of a cute expression', date: '2023-12-20', category: 'sketches', emoji: '🖊️', bg: '#CDE7FF', palette: ['#CDE7FF', '#B0D9FF', '#93CBFF'] },
+      { id: 6, title: 'Pet Portrait', description: 'Custom pet portrait commission', date: '2023-12-15', category: 'commissions', emoji: '🐱', bg: '#FFECD9', palette: ['#FFECD9', '#FFD9C8', '#FFC9B5', '#FFB89B'] }
+    ];
+    
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => {
+        document.getElementById('artist-name-display').textContent = config.artist_name || defaultConfig.artist_name;
+        document.getElementById('artist-bio-display').textContent = config.artist_bio || defaultConfig.artist_bio;
+        document.getElementById('welcome-msg-display').textContent = config.welcome_message || defaultConfig.welcome_message;
+      },
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+          { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+        ],
+        borderables: [],
+        fontEditable: { get: () => config.font_family || 'Quicksand', set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+        fontSizeable: { get: () => config.font_size || 16, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['artist_name', config.artist_name || defaultConfig.artist_name],
+        ['artist_bio', config.artist_bio || defaultConfig.artist_bio],
+        ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+      ])
+    });
+    
+    const dataHandler = {
+      onDataChanged(data) {
+        commissionData = data;
+        renderCommissionList();
+        renderMyRequests();
+        updateStats();
+      }
+    };
+    
+    window.dataSdk.init(dataHandler);
+    
+    // Initialize page on load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Setup navigation tabs after DOM is ready
+      document.querySelectorAll('.nav-tab[data-tab]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showPage(this.dataset.tab);
+        });
+      });
+      
+      renderFAQ();
+      renderTimeline();
+      renderTools();
+      renderSlots();
+      renderGallery();
+    });
+    
+    function setCharacterCount(count) {
+      selectedCharacterCount = count;
+      document.querySelectorAll('.character-count-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.borderColor = 'transparent';
+        btn.style.background = '';
+      });
+      const clickedBtn = event.currentTarget || event.target;
+      clickedBtn.classList.add('active');
+      clickedBtn.style.background = 'linear-gradient(145deg, #F7C6D9, #FFE4F0)';
+      clickedBtn.style.borderColor = '#E68BB0';
+      if (count > 2) {
+        document.getElementById('character-warning').classList.add('warning');
+        document.getElementById('character-warning').textContent = '⚠️ Maximum 2 characters allowed';
+      } else {
+        document.getElementById('character-warning').textContent = '';
+      }
+      updateCommissionSummary();
+      updateSubmitButton();
+    }
+    
+    function selectPose(element, pose) {
+      selectedPose = pose;
+      document.querySelectorAll('.pose-option').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      
+      const descArea = document.getElementById('pose-description-area');
+      if (pose === 'custom') {
+        descArea.classList.remove('hidden');
+      } else {
+        descArea.classList.add('hidden');
+      }
+    }
+    
+    function selectExpression(element, expression) {
+      selectedExpression = expression;
+      document.querySelectorAll('.expression-option').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+    
+    let poseImageName = null;
+    let paletteImageName = null;
+    let uploadedImages = {};
+    
+    function previewPoseImage(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      poseImageName = file.name;
+      const reader = new FileReader();
+      
+      reader.onload = function(event) {
+        uploadedImages['pose'] = event.target.result;
+        const previewArea = document.getElementById('pose-preview-area');
+        previewArea.innerHTML = `
+          <div style="margin-top: 12px; padding: 10px; background: #F0E8F5; border-radius: 8px;">
+            <div style="width: 100%; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;">
+              <img src="${event.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <p style="font-size: 0.9rem; color: #8B7A8B; margin: 0;">✅ ${file.name} (${(file.size / 1024).toFixed(1)}KB)</p>
+          </div>
+        `;
+        uploadedReferences.push({ type: 'pose', name: file.name });
+        updateCommissionSummary();
+      };
+      
+      reader.readAsDataURL(file);
+    }
+    
+    let moodboardImages = [];
+    
+    function addMoodboardImages(e) {
+      const files = Array.from(e.target.files);
+      const grid = document.getElementById('moodboard-grid');
+      
+      files.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const moodIndex = moodboardImages.length;
+          moodboardImages.push({ name: file.name, data: event.target.result });
+          
+          const preview = document.createElement('div');
+          preview.className = 'reference-preview';
+          preview.innerHTML = `
+            <img src="${event.target.result}" alt="${file.name}">
+            <button class="reference-remove" onclick="removeMoodboardImage(${moodIndex})" type="button">✕</button>
+          `;
+          grid.appendChild(preview);
+          updateMoodboardCount();
+        };
+        reader.readAsDataURL(file);
+      });
+      
+      e.target.value = '';
+    }
+    
+    function removeMoodboardImage(index) {
+      moodboardImages.splice(index, 1);
+      const grid = document.getElementById('moodboard-grid');
+      const previews = grid.querySelectorAll('.reference-preview');
+      if (previews[index]) previews[index].remove();
+      updateMoodboardCount();
+    }
+    
+    function updateMoodboardCount() {
+      const count = moodboardImages.length;
+      const countEl = document.getElementById('moodboard-count');
+      if (count > 0) {
+        countEl.textContent = `✅ ${count} image${count !== 1 ? 's' : ''} added to moodboard`;
+      } else {
+        countEl.textContent = '';
+      }
+    }
+    
+    let extractedColors = [];
+    
+    function extractColorPalette(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          extractedColors = getAveragedColors(img, 6);
+          displayExtractedPalette(extractedColors, file.name, event.target.result);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    function getAveragedColors(img, numColors) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      
+      const colorMap = {};
+      
+      for (let i = 0; i < data.length; i += 4) {
+        const r = Math.round(data[i] / 25) * 25;
+        const g = Math.round(data[i + 1] / 25) * 25;
+        const b = Math.round(data[i + 2] / 25) * 25;
+        const key = `${r},${g},${b}`;
+        colorMap[key] = (colorMap[key] || 0) + 1;
+      }
+      
+      const colors = Object.entries(colorMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, numColors)
+        .map(([rgb]) => {
+          const [r, g, b] = rgb.split(',').map(Number);
+          return rgbToHex(r, g, b);
+        });
+      
+      return colors;
+    }
+    
+    function rgbToHex(r, g, b) {
+      return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+    }
+    
+    function displayExtractedPalette(colors, fileName, imageData) {
+      const previewArea = document.getElementById('palette-extract-preview');
+      previewArea.innerHTML = `
+        <div style="margin-top: 12px; padding: 10px; background: #F0E8F5; border-radius: 8px;">
+          <div style="width: 100%; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;">
+            <img src="${imageData}" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <p style="font-size: 0.9rem; color: #8B7A8B; margin: 0;">✅ ${fileName}</p>
+        </div>
+      `;
+      
+      const paletteContainer = document.getElementById('extracted-palette');
+      paletteContainer.innerHTML = `
+        <div style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7); border: 2px solid #F4A6C1; border-radius: 12px; padding: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <p style="font-weight: 600; color: #E8A4BF; margin: 0;">🎨 Extracted Palette</p>
+            <button onclick="downloadPaletteImage()" class="btn-pastel px-3 py-1 rounded-full text-xs font-medium" style="background: #CFF7E6; color: #5A8B6B;" type="button">📥 Download</button>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            ${colors.map(color => `
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 50px; height: 50px; background: ${color}; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s ease;" onclick="copyToClipboard('${color}')"></div>
+                <p style="font-size: 0.75rem; color: #8B7A8B; margin: 6px 0 0 0; font-weight: 600; cursor: pointer;" onclick="copyToClipboard('${color}')">${color}</p>
+              </div>
+            `).join('')}
+          </div>
+          <p style="font-size: 0.8rem; color: #A88B9D; margin-top: 10px; text-align: center;">💡 Click any color to copy HEX code</p>
+        </div>
+      `;
+    }
+    
+    function copyToClipboard(color) {
+      try {
+        navigator.clipboard.writeText(color).then(() => {
+          showCopyFeedback(color);
+        }).catch(() => {
+          fallbackCopy(color);
+        });
+      } catch (e) {
+        fallbackCopy(color);
+      }
+    }
+    
+    function fallbackCopy(color) {
+      const textarea = document.createElement('textarea');
+      textarea.value = color;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showCopyFeedback(color);
+    }
+    
+    function showCopyFeedback(color) {
+      const temp = document.createElement('div');
+      temp.textContent = `✅ Copied: ${color}`;
+      temp.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #F7C6D9; color: #8B5A6B; padding: 12px 20px; border-radius: 20px; font-weight: 600; z-index: 9999; animation: slideUp 0.4s ease;';
+      document.body.appendChild(temp);
+      setTimeout(() => temp.remove(), 2000);
+    }
+    
+    function downloadPaletteImage() {
+      if (extractedColors.length === 0) {
+        showPopup('No palette to download! 🎨');
+        return;
+      }
+      
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = 150;
+        canvas.height = 50;
+        const ctx = canvas.getContext('2d');
+        
+        const colorWidth = canvas.width / extractedColors.length;
+        
+        extractedColors.forEach((color, idx) => {
+          ctx.fillStyle = color;
+          ctx.fillRect(idx * colorWidth, 0, colorWidth, canvas.height);
+        });
+        
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `palette-${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showPopup('Palette downloaded! 🎨');
+      } catch (e) {
+        showPopup('Download failed! 😿');
+      }
+    }
+    
+    function previewReferenceImages(e) {
+      const files = Array.from(e.target.files);
+      const container = document.getElementById('reference-previews-container');
+      
+      files.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const refIndex = uploadedReferences.length;
+          uploadedReferences.push({ name: file.name, data: event.target.result });
+          
+          const preview = document.createElement('div');
+          preview.className = 'reference-preview';
+          preview.innerHTML = `
+            <img src="${event.target.result}" alt="${file.name}">
+            <button class="reference-remove" onclick="removeReferenceImage(${refIndex})" type="button">✕</button>
+          `;
+          container.appendChild(preview);
+          updateCommissionSummary();
+        };
+        reader.readAsDataURL(file);
+      });
+      
+      e.target.value = '';
+    }
+    
+    function removeReferenceImage(index) {
+      uploadedReferences.splice(index, 1);
+      const container = document.getElementById('reference-previews-container');
+      const previews = container.querySelectorAll('.reference-preview');
+      if (previews[index]) previews[index].remove();
+      updateCommissionSummary();
+    }
+    
+    function updateRushFee() {
+      const deadline = document.getElementById('deadline-date').value;
+      if (deadline) {
+        const deadlineDate = new Date(deadline);
+        const today = new Date();
+        const daysUntil = Math.floor((deadlineDate - today) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntil < 7) {
+          rushFee = 4.50;
+          document.getElementById('rush-fee-display').innerHTML = '<div class="rush-fee-badge">⚡ Rush Fee: +$4.50</div>';
+        } else {
+          rushFee = 0;
+          document.getElementById('rush-fee-display').innerHTML = '';
+        }
+      } else {
+        rushFee = 0;
+        document.getElementById('rush-fee-display').innerHTML = '';
+      }
+      selectedDeadline = deadline;
+      updateCommissionSummary();
+    }
+    
+    function updateCommissionSummary() {
+      const basePrice = {
+        'Sketch': 15,
+        'Bust': 30,
+        'Half Body': 50
+      };
+      
+      const commType = document.getElementById('comm-type').value;
+      const base = basePrice[commType] || 15;
+      const total = base + rushFee;
+      
+      document.getElementById('summary-chars').textContent = selectedCharacterCount;
+      document.getElementById('summary-refs').textContent = uploadedReferences.length;
+      document.getElementById('summary-deadline').textContent = selectedDeadline ? selectedDeadline : 'None';
+      document.getElementById('summary-base').textContent = `$${base}`;
+      document.getElementById('summary-rush').textContent = `$${rushFee.toFixed(2)}`;
+      document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+      
+      if (document.getElementById('check-references').checked || uploadedReferences.length > 0) {
+        document.getElementById('commission-summary-section').style.display = 'block';
+      }
+    }
+    
+    function updateSubmitButton() {
+      const check1 = document.getElementById('check-references').checked;
+      const check2 = document.getElementById('check-terms').checked;
+      const check3 = document.getElementById('check-turnaround').checked;
+      const commType = document.getElementById('comm-type').value;
+      const name = document.getElementById('comm-name').value.trim();
+      const contact = document.getElementById('comm-contact').value.trim();
+      const description = document.getElementById('comm-desc').value.trim();
+      
+      const btn = document.getElementById('submit-btn');
+      if (check1 && check2 && check3 && commType && name && contact && description) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.background = 'linear-gradient(145deg, #F7C6D9, #D9C6F7)';
+        btn.style.color = '#6B5A8B';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+      }
+    }
+    
+    function renderFAQ() {
+      const container = document.getElementById('faq-container');
+      container.innerHTML = faqData.map((item, idx) => `
+        <div class="faq-item" id="faq-${idx}">
+          <div class="faq-header" onclick="toggleFAQ(${idx})">
+            <p class="faq-header-text">${item.q}</p>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-content">
+            <div class="faq-text">${item.a}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function toggleFAQ(idx) {
+      const item = document.getElementById(`faq-${idx}`);
+      item.classList.toggle('open');
+    }
+    
+    function renderTimeline() {
+      const container = document.getElementById('artist-timeline');
+      container.innerHTML = timelineData.map(item => `
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <strong>${item.title}</strong>
+            <p>${item.description}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderTools() {
+      const container = document.getElementById('tools-container');
+      container.innerHTML = toolsData.map(tool => `
+        <div class="tools-card">
+          <div class="tools-card-title">${tool.title}</div>
+          <ul class="tools-list">
+            ${tool.items.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+    
+    function renderSlots() {
+      const container = document.getElementById('slots-container');
+      const totalSlots = 10;
+      const filledSlots = commissionData.filter(c => c.status === 'pending' || c.status === 'accepted').length;
+      const openSlots = Math.max(0, totalSlots - filledSlots);
+      
+      let html = '';
+      for (let i = 0; i < totalSlots; i++) {
+        const filled = i < filledSlots;
+        html += `<div class="slot-card ${filled ? 'filled' : 'open'}">${filled ? '✓' : '+'}</div>`;
+      }
+      container.innerHTML = html;
+      
+      const slotStatus = document.getElementById('slot-status');
+      if (slotStatus) slotStatus.textContent = `${openSlots} / ${totalSlots}`;
+      
+      const progressFill = document.getElementById('slot-progress');
+      if (progressFill) progressFill.style.width = ((filledSlots / totalSlots) * 100) + '%';
+      
+      document.getElementById('queue-count').textContent = commissionData.length;
+      const waitDays = commissionData.length * 14;
+      document.getElementById('queue-estimate').textContent = commissionData.length > 0 ? `Estimated wait: ~${waitDays} days` : 'Estimated wait: Immediate';
+    }
+    
+    function selectStyle(element, style) {
+      document.querySelectorAll('.style-preview-item').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+    }
+    
+    function switchTheme(theme, element) {
+      document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      
+      if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        localStorage.setItem('whisker-theme', 'dark');
+      } else {
+        document.body.classList.remove('dark-theme');
+        localStorage.setItem('whisker-theme', 'light');
+      }
+    }
+    
+    function showPage(pageName) {
+      event?.preventDefault?.();
+      document.querySelectorAll('.page-content').forEach(page => page.classList.add('hidden'));
+      const targetPage = document.getElementById(`page-${pageName}`);
+      if (targetPage) targetPage.classList.remove('hidden');
+      
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.tab === pageName) tab.classList.add('active');
+      });
+      currentPage = pageName;
+      
+      if (pageName === 'portfolio') renderGallery();
+      if (pageName === 'extra') {
+        renderFAQ();
+        renderTimeline();
+        renderTools();
+        renderSlots();
+      }
+    }
+    
+    function openCommissionForm() {
+      document.getElementById('commission-form-container').classList.remove('hidden');
+      uploadedReferences = [];
+    }
+    
+    function closeCommissionForm() {
+      document.getElementById('commission-form-container').classList.add('hidden');
+    }
+    
+    document.getElementById('commission-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (commissionData.length >= 999) {
+        showPopup('Maximum commission limit reached!');
+        return;
+      }
+      
+      const submitBtn = document.getElementById('submit-btn');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ Submitting...';
+      
+      try {
+        const name = document.getElementById('comm-name').value.trim();
+        const contact = document.getElementById('comm-contact').value.trim();
+        const commissionType = document.getElementById('comm-type').value;
+        const description = document.getElementById('comm-desc').value.trim();
+        const characterName = document.getElementById('character-name').value.trim();
+        const characterSpecies = document.getElementById('character-species').value.trim();
+        
+        if (!name || !contact || !commissionType || !description || !characterName || !characterSpecies) {
+          showPopup('Please fill in all required fields! 🐾');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          return;
+        }
+        
+        if (!document.getElementById('check-references').checked || !document.getElementById('check-terms').checked || !document.getElementById('check-turnaround').checked) {
+          showPopup('Please check all boxes before submitting! ✓');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          return;
+        }
+        
+        let filesDescription = uploadedReferences.length > 0 ? `Files: ${uploadedReferences.map(r => r.name).join(', ')}` : 'No files uploaded';
+        
+        const commissionRequest = {
+          name: name,
+          contact: contact,
+          commission_type: commissionType,
+          description: description,
+          budget: document.getElementById('comm-budget').value.trim() || 'Not specified',
+          extra_notes: document.getElementById('comm-notes').value.trim() || 'None',
+          character_name: characterName,
+          character_species: characterSpecies,
+          color_preferences: document.getElementById('color-prefs').value.trim() || 'No preference',
+          status: 'pending',
+          pose: selectedPose || 'standing',
+          expression: selectedExpression || 'happy',
+          character_count: selectedCharacterCount.toString(),
+          deadline: selectedDeadline || '',
+          rush_fee: rushFee.toFixed(2),
+          progress_stage: 'Requested',
+          files: filesDescription,
+          created_at: new Date().toISOString()
+        };
+        
+        userEmail = contact;
+        
+        const result = await window.dataSdk.create(commissionRequest);
+        
+        if (result.isOk) {
+          showPopup('Your commission request has been sent! I\'ll get back to you soon! 💕');
+          document.getElementById('commission-form').reset();
+          document.querySelectorAll('.pose-option, .expression-option').forEach(el => el.classList.remove('selected'));
+          selectedPose = null;
+          selectedExpression = null;
+          selectedCharacterCount = 2;
+          rushFee = 0;
+          selectedDeadline = null;
+          uploadedReferences = [];
+          poseImageName = null;
+          paletteImageName = null;
+          document.getElementById('pose-description-area').classList.add('hidden');
+          document.getElementById('pose-preview-area').innerHTML = '';
+          document.getElementById('palette-preview-area').innerHTML = '';
+          document.getElementById('rush-fee-display').innerHTML = '';
+          document.getElementById('commission-summary-section').style.display = 'none';
+          document.getElementById('check-references').checked = false;
+          document.getElementById('check-terms').checked = false;
+          document.getElementById('check-turnaround').checked = false;
+          document.getElementById('reference-previews-container').innerHTML = '';
+          updateSubmitButton();
+          setTimeout(() => closeCommissionForm(), 1500);
+        } else {
+          const errorMsg = result.error ? (result.error.message || 'Submission failed') : 'Unknown error';
+          showPopup('Oops! ' + errorMsg + ' 😿');
+        }
+      } catch (error) {
+        showPopup('Oops! Something went wrong. Please try again! 😿');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+    
+    function renderGallery() {
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = galleryItems.map(item => `
+        <div class="gallery-item rounded-2xl aspect-square shadow-md cursor-pointer" style="background: ${item.bg};" onclick="openGalleryModal(${item.id})">
+          <div class="w-full h-full flex items-center justify-center text-5xl relative">
+            ${item.emoji}
+            <div class="gallery-sparkles">✨</div>
+            <div class="gallery-overlay rounded-b-2xl">
+              <p class="font-semibold text-sm" style="color: #6B5A8B;">${item.title}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function openGalleryModal(itemId) {
+      const item = galleryItems.find(i => i.id === itemId);
+      if (!item) return;
+      
+      document.getElementById('gallery-preview-emoji').textContent = item.emoji;
+      document.getElementById('gallery-title').textContent = item.title;
+      document.getElementById('gallery-description').textContent = item.description;
+      document.getElementById('gallery-date').textContent = new Date(item.date).toLocaleDateString();
+      document.getElementById('gallery-category').textContent = item.category.charAt(0).toUpperCase() + item.category.slice(1);
+      
+      const paletteContainer = document.getElementById('gallery-palette');
+      paletteContainer.innerHTML = item.palette.map(color => `
+        <div class="swatch" style="background: ${color};" title="${color}">${color}</div>
+      `).join('');
+      
+      document.getElementById('gallery-modal').classList.remove('hidden');
+    }
+    
+    function closeGalleryModal() {
+      document.getElementById('gallery-modal').classList.add('hidden');
+    }
+    
+    function openGalleryModal(itemId) {
+      const item = galleryItems.find(i => i.id === itemId);
+      if (!item) return;
+      
+      document.getElementById('gallery-preview-emoji').textContent = item.emoji;
+      document.getElementById('gallery-title').textContent = item.title;
+      document.getElementById('gallery-description').textContent = item.description;
+      document.getElementById('gallery-date').textContent = new Date(item.date).toLocaleDateString();
+      document.getElementById('gallery-category').textContent = item.category.charAt(0).toUpperCase() + item.category.slice(1);
+      
+      const paletteContainer = document.getElementById('gallery-palette');
+      paletteContainer.innerHTML = item.palette.map(color => `
+        <div class="swatch" style="background: ${color};" title="${color}">${color}</div>
+      `).join('');
+      
+      document.getElementById('gallery-modal').classList.remove('hidden');
+    }
+    
+    function closeGalleryModal() {
+      document.getElementById('gallery-modal').classList.add('hidden');
+    }
+    
+    function renderMyRequests() {
+      const container = document.getElementById('my-requests-container');
+      if (!userEmail) {
+        container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span><p>You haven't submitted any requests yet!</p></div>`;
+        return;
+      }
+      
+      const userRequests = commissionData.filter(comm => comm.contact === userEmail);
+      if (userRequests.length === 0) {
+        container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">🐾</span><p>You haven't submitted any requests yet!</p></div>`;
+        return;
+      }
+      
+      container.innerHTML = userRequests.map(comm => {
+        let statusEmoji, statusColor, statusText;
+        if (comm.status === 'pending') {
+          statusEmoji = '⏳'; statusColor = '#FFD9C8'; statusText = 'Pending';
+        } else if (comm.status === 'accepted') {
+          statusEmoji = '✅'; statusColor = '#CFF7E6'; statusText = 'Accepted';
+        } else if (comm.status === 'finished') {
+          statusEmoji = '🎨'; statusColor = '#D9C6F7'; statusText = 'Completed';
+        } else if (comm.status === 'declined') {
+          statusEmoji = '❌'; statusColor = '#F7C6D9'; statusText = 'Declined';
+        }
+        
+        const progressPercent = (progressStages.indexOf(comm.progress_stage || 'Requested') + 1) / progressStages.length * 100;
+        
+        return `
+          <div class="rounded-3xl p-6 shadow-md" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div><h4 class="text-lg font-bold mb-2" style="color: #E8A4BF;">${comm.commission_type}</h4><p style="color: #8B7A8B; font-size: 0.9rem;">${comm.name}</p></div>
+              <div class="text-center rounded-2xl p-3" style="background: ${statusColor};"><div style="font-size: 1.5rem; margin-bottom: 0.25rem;">${statusEmoji}</div><p style="font-size: 0.75rem; font-weight: 600; color: #6B5A8B;">${statusText}</p></div>
+            </div>
+            <div class="mt-4 space-y-3">
+              <p style="color: #8B7A8B;"><strong>Pose:</strong> ${comm.pose || 'Standing'}</p>
+              <p style="color: #8B7A8B;"><strong>Expression:</strong> ${comm.expression || 'Happy'}</p>
+              <p style="color: #8B7A8B;"><strong>Request:</strong> ${comm.description}</p>
+              <p style="color: #8B7A8B;"><strong>Budget:</strong> ${comm.budget}</p>
+              <div>
+                <p style="font-size: 0.85rem; color: #A88B9D; margin-bottom: 8px;">Progress: ${comm.progress_stage || 'Requested'}</p>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function sortCommissions(order) {
+      sortOrder = order;
+      if (sortOrder === 'newest') {
+        commissionData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      } else if (sortOrder === 'oldest') {
+        commissionData.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      } else if (sortOrder === 'status') {
+        const statusOrder = { 'pending': 0, 'accepted': 1, 'finished': 2, 'declined': 3 };
+        commissionData.sort((a, b) => (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99));
+      }
+      renderCommissionList();
+    }
+    
+    function renderCommissionList() {
+      const container = document.getElementById('commission-list');
+      if (commissionData.length === 0) {
+        container.innerHTML = `<div class="text-center py-10" style="color: #A88B9D;"><span class="text-5xl mb-4 block">😺</span><p>No commission requests yet!</p></div>`;
+        return;
+      }
+      
+      container.innerHTML = commissionData.filter(c => c.status === 'pending' || c.status === 'accepted').map(comm => {
+        const progressPercent = (progressStages.indexOf(comm.progress_stage || 'Requested') + 1) / progressStages.length * 100;
+        
+        return `
+          <div class="rounded-3xl p-5 shadow-md commission-card">
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div class="flex items-center gap-3 flex-1 cursor-pointer" onclick="showCommissionDetails('${comm.__backendId}')">
+                <span class="text-3xl">😺</span>
+                <div>
+                  <h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4>
+                  <p class="text-sm" style="color: #A88B9D;">${comm.contact}</p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold status-${comm.status}" style="color: #6B5A8B;">${comm.status.charAt(0).toUpperCase() + comm.status.slice(1)}</span>
+            </div>
+            <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+            <div class="mt-3 space-y-2">
+              <p style="color: #8B7A8B; font-size: 0.85rem;"><strong>Pose:</strong> ${comm.pose || 'Standing'} | <strong>Expression:</strong> ${comm.expression || 'Happy'}</p>
+              <div>
+                <p style="font-size: 0.8rem; color: #A88B9D; margin-bottom: 6px;">Stage: ${comm.progress_stage || 'Requested'}</p>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <button onclick="updateCommissionProgress('${comm.__backendId}', 'next')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #FFD9C8; color: #8B6B5A;" type="button">⏭️ Next Stage</button>
+              <button onclick="updateCommissionStatus('${comm.__backendId}', 'accepted')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #CFF7E6; color: #5A8B6B;" type="button">✅ Accept</button>
+              <button onclick="updateCommissionStatus('${comm.__backendId}', 'finished')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #D9C6F7; color: #6B5A8B;" type="button">🎨 Finished</button>
+              <button onclick="updateCommissionStatus('${comm.__backendId}', 'declined')" class="btn-pastel px-3 py-2 rounded-full text-xs font-medium" style="background: #F7C6D9; color: #8B5A6B;" type="button">❌ Decline</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function updateCommissionProgress(backendId, action) {
+      const commission = commissionData.find(c => c.__backendId === backendId);
+      if (!commission) return;
+      
+      const currentIndex = progressStages.indexOf(commission.progress_stage || 'Requested');
+      let newStage = commission.progress_stage || 'Requested';
+      
+      if (action === 'next' && currentIndex < progressStages.length - 1) {
+        newStage = progressStages[currentIndex + 1];
+      }
+      
+      updateCommissionField(backendId, 'progress_stage', newStage);
+    }
+    
+    async function updateCommissionField(backendId, field, value) {
+      const commission = commissionData.find(c => c.__backendId === backendId);
+      if (!commission) return;
+      
+      const updated = { ...commission, [field]: value };
+      if (field === 'status' && value === 'finished') {
+        updated.progress_stage = 'Finished';
+      }
+      
+      const result = await window.dataSdk.update(updated);
+      if (!result.isOk) showPopup('Failed to update! 😿');
+    }
+    
+    async function updateCommissionStatus(backendId, newStatus) {
+      await updateCommissionField(backendId, 'status', newStatus);
+    }
+    
+    function renderDashboardHistory() {
+      const acceptedFinished = commissionData.filter(c => c.status === 'accepted' || c.status === 'finished');
+      const acceptedContainer = document.getElementById('commission-history-accepted');
+      
+      if (acceptedFinished.length === 0) {
+        acceptedContainer.innerHTML = `<div class="text-center py-8" style="color: #A88B9D;"><p class="text-sm">No accepted or completed commissions yet</p></div>`;
+      } else {
+        acceptedContainer.innerHTML = acceptedFinished.map(comm => `
+          <div class="rounded-3xl p-5 shadow-md commission-card" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div class="flex items-center gap-3">
+                <span class="text-3xl">${comm.status === 'finished' ? '🎨' : '✅'}</span>
+                <div><h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4><p class="text-sm" style="color: #A88B9D;">${comm.contact}</p></div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background: ${comm.status === 'finished' ? '#D9C6F7' : '#CFF7E6'}; color: #6B5A8B;">${comm.status === 'finished' ? '🎨 Completed' : '✅ Accepted'}</span>
+            </div>
+            <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+          </div>
+        `).join('');
+      }
+      
+      const declined = commissionData.filter(c => c.status === 'declined');
+      const declinedContainer = document.getElementById('commission-history-declined');
+      
+      if (declined.length === 0) {
+        declinedContainer.innerHTML = `<div class="text-center py-8" style="color: #A88B9D;"><p class="text-sm">No declined commissions yet</p></div>`;
+      } else {
+        declinedContainer.innerHTML = declined.map(comm => `
+          <div class="rounded-3xl p-5 shadow-md commission-card" style="background: linear-gradient(145deg, #FFFFFF, #FFF6F7);">
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div class="flex items-center gap-3">
+                <span class="text-3xl">❌</span>
+                <div><h4 class="font-bold" style="color: #E8A4BF;">${comm.name}</h4><p class="text-sm" style="color: #A88B9D;">${comm.contact}</p></div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background: #F7C6D9; color: #8B5A6B;">❌ Declined</span>
+            </div>
+            <div class="mt-3"><p style="color: #6B5A8B;"><strong>${comm.commission_type}</strong> - ${comm.description}</p></div>
+          </div>
+        `).join('');
+      }
+    }
+    
+    function showDashboardTab(tabName) {
+      document.getElementById('dashboard-active').classList.add('hidden');
+      document.getElementById('dashboard-history').classList.add('hidden');
+      if (document.getElementById('dashboard-messages')) {
+        document.getElementById('dashboard-messages').classList.add('hidden');
+      }
+      
+      if (tabName === 'active') {
+        document.getElementById('dashboard-active').classList.remove('hidden');
+      } else if (tabName === 'history') {
+        document.getElementById('dashboard-history').classList.remove('hidden');
+        renderDashboardHistory();
+      } else if (tabName === 'messages') {
+        if (document.getElementById('dashboard-messages')) {
+          document.getElementById('dashboard-messages').classList.remove('hidden');
+          renderDashboardConversations();
+        }
+      }
+      
+      document.querySelectorAll('.dashboard-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.tab === tabName) tab.classList.add('active');
+      });
+    }
+    
+    function updateStats() {
+      document.getElementById('stat-pending').textContent = commissionData.filter(c => c.status === 'pending').length;
+      document.getElementById('stat-accepted').textContent = commissionData.filter(c => c.status === 'accepted').length;
+      document.getElementById('stat-finished').textContent = commissionData.filter(c => c.status === 'finished').length;
+      document.getElementById('stat-total').textContent = commissionData.length;
+      updateUnreadDot();
+      renderSlots();
+    }
+    
+    function updateUnreadDot() {
+      let totalUnread = 0;
+      chatConversations.forEach(conv => { totalUnread += conv.unread; });
+      
+      const dot = document.getElementById('unread-dot');
+      if (totalUnread > 0) {
+        dot.classList.remove('hidden');
+        dot.textContent = totalUnread > 9 ? '9+' : totalUnread;
+      } else {
+        dot.classList.add('hidden');
+      }
+    }
+    
+    function toggleOwnerLogin() {
+      document.getElementById('login-form').classList.toggle('hidden');
+    }
+    
+    function attemptLogin() {
+      const password = document.getElementById('owner-password').value;
+      const errorEl = document.getElementById('login-error');
+      if (password === '102710') {
+        isOwnerLoggedIn = true;
+        errorEl.classList.add('hidden');
+        document.getElementById('dashboard-nav-btn').classList.remove('hidden');
+        showPage('dashboard');
+      } else {
+        errorEl.textContent = 'Wrong password!';
+        errorEl.classList.remove('hidden');
+      }
+    }
+    
+    function logout() {
+      isOwnerLoggedIn = false;
+      document.getElementById('owner-password').value = '';
+      document.getElementById('dashboard-nav-btn').classList.add('hidden');
+      showPage('extra');
+    }
+    
+    function showPopup(message) {
+      document.getElementById('popup-message').textContent = message;
+      document.getElementById('success-popup').classList.remove('hidden');
+    }
+    
+    function closePopup() {
+      document.getElementById('success-popup').classList.add('hidden');
+    }
+    
+    function triggerEasterEgg() {
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const cat = document.createElement('div');
+          cat.className = 'falling-cat';
+          cat.innerHTML = ['🐱', '😺', '😸', '😻'][Math.floor(Math.random() * 4)];
+          cat.style.left = Math.random() * 100 + '%';
+          document.body.appendChild(cat);
+          setTimeout(() => cat.remove(), 3000);
+        }, i * 150);
+      }
+    }
+    
+    function playWithYarn() {
+      const yarnBall = document.getElementById('yarn-ball');
+      
+      yarnBallPosition.x = Math.random() * 80 + 10;
+      yarnBallPosition.y = Math.random() * 80 + 10;
+      yarnBall.style.left = yarnBallPosition.x + '%';
+      yarnBall.style.top = yarnBallPosition.y + '%';
+      
+      triggerYarnChase();
+      
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          const print = document.createElement('div');
+          print.className = 'paw-print';
+          print.innerHTML = '🐾';
+          print.style.left = (yarnBallPosition.x + (Math.random() - 0.5) * 20) + '%';
+          print.style.top = (yarnBallPosition.y + (Math.random() - 0.5) * 20) + '%';
+          document.body.appendChild(print);
+          setTimeout(() => print.remove(), 2000);
+        }, i * 100);
+      }
+    }
+    
+    function triggerYarnChase() {
+      const cat = document.createElement('div');
+      cat.className = 'running-cat';
+      cat.innerHTML = '🐱';
+      cat.style.left = Math.random() > 0.5 ? '-80px' : 'calc(100% + 80px)';
+      cat.style.bottom = yarnBallPosition.y + '%';
+      document.body.appendChild(cat);
+      setTimeout(() => cat.remove(), 6000);
+    }
+    
+    function showCommissionDetails(backendId) {
+      const commission = commissionData.find(c => c.__backendId === backendId);
+      if (!commission) return;
+      
+      const detailContent = document.getElementById('detail-content');
+      
+      const filesText = commission.files || 'No files uploaded';
+      
+      detailContent.innerHTML = `
+        <div class="detail-section">
+          <div class="detail-section-title">Client Info</div>
+          <div class="detail-item"><strong>Name:</strong> ${commission.name}</div>
+          <div class="detail-item"><strong>Contact:</strong> ${commission.contact}</div>
+        </div>
+        
+        <div class="detail-section">
+          <div class="detail-section-title">Commission Details</div>
+          <div class="detail-item"><strong>Type:</strong> ${commission.commission_type}</div>
+          <div class="detail-item"><strong>Budget:</strong> ${commission.budget}</div>
+          <div class="detail-item"><strong>Status:</strong> ${commission.status.charAt(0).toUpperCase() + commission.status.slice(1)}</div>
+          <div class="detail-item"><strong>Progress:</strong> ${commission.progress_stage || 'Requested'}</div>
+          ${commission.character_count ? `<div class="detail-item"><strong>Characters:</strong> ${commission.character_count}</div>` : ''}
+          ${commission.deadline ? `<div class="detail-item"><strong>Deadline:</strong> ${commission.deadline}</div>` : ''}
+          ${commission.rush_fee && commission.rush_fee !== '0' ? `<div class="detail-item"><strong>Rush Fee:</strong> $${commission.rush_fee}</div>` : ''}
+        </div>
+        
+        <div class="detail-section">
+          <div class="detail-section-title">Character Info</div>
+          <div class="detail-item"><strong>Name:</strong> ${commission.character_name || 'Not specified'}</div>
+          <div class="detail-item"><strong>Species:</strong> ${commission.character_species || 'Not specified'}</div>
+          <div class="detail-item"><strong>Pose:</strong> ${commission.pose || 'Standing'}</div>
+          <div class="detail-item"><strong>Expression:</strong> ${commission.expression || 'Happy'}</div>
+          <div class="detail-item"><strong>Colors:</strong> ${commission.color_preferences || 'No preference'}</div>
+        </div>
+        
+        <div class="detail-section">
+          <div class="detail-section-title">Description</div>
+          <div class="detail-item">${commission.description}</div>
+        </div>
+        
+        ${commission.extra_notes && commission.extra_notes !== 'None' ? `
+        <div class="detail-section">
+          <div class="detail-section-title">Extra Notes</div>
+          <div class="detail-item">${commission.extra_notes}</div>
+        </div>
+        ` : ''}
+        
+        <div class="detail-section">
+          <div class="detail-section-title">📁 Uploaded Files</div>
+          <div class="detail-item" style="color: #8B7A8B; font-size: 0.9rem;">${filesText}</div>
+        </div>
+        
+        <div class="detail-section">
+          <div class="detail-section-title">Submitted</div>
+          <div class="detail-item">${new Date(commission.created_at).toLocaleString()}</div>
+        </div>
+      `;
+      
+      document.getElementById('detail-panel').classList.remove('hidden');
+    }
+    
+    function closeDetailPanel() {
+      document.getElementById('detail-panel').classList.add('hidden');
+    }
+    
+    function openImageModal(src) {
+      document.getElementById('modal-image').src = src;
+      document.getElementById('image-modal-backdrop').classList.remove('hidden');
+    }
+    
+    function closeImageModal() {
+      document.getElementById('image-modal-backdrop').classList.add('hidden');
+    }
+    
+    function openChat() {
+      event?.preventDefault?.();
+      document.getElementById('chat-window').classList.remove('hidden');
+      document.getElementById('chat-input').focus();
+      renderChatMessages();
+    }
+    
+    function closeChat() {
+      event?.preventDefault?.();
+      document.getElementById('chat-window').classList.add('hidden');
+    }
+    
+    function minimizeChat() {
+      event?.preventDefault?.();
+      document.getElementById('chat-window').classList.add('hidden');
+    }
+    
+    function sendChatMessage() {
+      event?.preventDefault?.();
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      if (!userEmail) {
+        userEmail = 'visitor@' + Date.now() + '.com';
+      }
+      
+      if (!currentChatId) {
+        currentChatId = 'chat_' + userEmail.replace(/[^a-z0-9]/g, '_');
+      }
+      
+      const messageObj = {
+        id: 'msg_' + Date.now(),
+        chat_id: currentChatId,
+        sender: 'visitor',
+        sender_email: userEmail,
+        message: message,
+        timestamp: new Date().toISOString()
+      };
+      
+      chatMessages.push(messageObj);
+      localStorage.setItem('whisker_chat_messages', JSON.stringify(chatMessages));
+      input.value = '';
+      renderChatMessages();
+      
+      if (message.toLowerCase().includes('meow')) {
+        triggerYarnChase();
+      }
+      
+      if (isOwnerLoggedIn) {
+        renderDashboardConversations();
+      }
+    }
+    
+    function renderChatMessages() {
+      const container = document.getElementById('chat-messages');
+      container.innerHTML = chatMessages.map(msg => {
+        const date = new Date(msg.timestamp);
+        const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `
+          <div class="message ${msg.sender}">
+            <span class="paw-emoji">🐾</span>
+            ${msg.message}
+            <div class="message-time">${time}</div>
+            ${msg.sender === 'visitor' ? `
+              <div class="emoji-reaction-bar">
+                <button class="emoji-reaction-btn" onclick="addMessageReaction('${msg.id}', '❤️')" type="button">❤️</button>
+                <button class="emoji-reaction-btn" onclick="addMessageReaction('${msg.id}', '👍')" type="button">👍</button>
+                <button class="emoji-reaction-btn" onclick="addMessageReaction('${msg.id}', '🎨')" type="button">🎨</button>
+                <button class="emoji-reaction-btn" onclick="addMessageReaction('${msg.id}', '😄')" type="button">😄</button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+      container.scrollTop = container.scrollHeight;
+    }
+    
+    function addMessageReaction(messageId, emoji) {
+      const msgElement = document.querySelector(`[data-message-id="${messageId}"]`);
+      if (!msgElement) return;
+      
+      let reactionsContainer = msgElement.querySelector('.message-reactions-container');
+      if (!reactionsContainer) {
+        reactionsContainer = document.createElement('div');
+        reactionsContainer.className = 'message-reactions-container';
+        msgElement.appendChild(reactionsContainer);
+      }
+      
+      let reaction = reactionsContainer.querySelector(`[data-emoji="${emoji}"]`);
+      if (reaction) {
+        const count = parseInt(reaction.dataset.count || 1) + 1;
+        reaction.dataset.count = count;
+        reaction.innerHTML = `${emoji} <span class="message-reaction-count">${count}</span>`;
+      } else {
+        reaction = document.createElement('div');
+        reaction.className = 'message-reaction';
+        reaction.dataset.emoji = emoji;
+        reaction.dataset.count = 1;
+        reaction.innerHTML = `${emoji} <span class="message-reaction-count">1</span>`;
+        reactionsContainer.appendChild(reaction);
+      }
+    }
+    
+    function renderDashboardConversations() {
+      const conversationsList = document.getElementById('dashboard-conversations-list');
+      if (!conversationsList) return;
+      
+      const conversations = {};
+      chatMessages.forEach(msg => {
+        if (!conversations[msg.chat_id]) {
+          conversations[msg.chat_id] = {
+            id: msg.chat_id,
+            email: msg.sender_email,
+            lastMessage: msg.message,
+            timestamp: msg.timestamp,
+            unread: 0
+          };
+        }
+        conversations[msg.chat_id].lastMessage = msg.message;
+        conversations[msg.chat_id].timestamp = msg.timestamp;
+      });
+      
+      const convArray = Object.values(conversations);
+      if (convArray.length === 0) {
+        conversationsList.innerHTML = '<div style="color: #A88B9D; text-align: center; padding: 20px;">No conversations yet</div>';
+        return;
+      }
+      
+      conversationsList.innerHTML = convArray.map(conv => `
+        <div class="conversation-card ${currentViewingConversation === conv.id ? 'active' : ''}" onclick="viewConversation('${conv.id}', '${conv.email}')">
+          <div class="flex justify-between items-center mb-2">
+            <span style="font-weight: 600; color: #6B5A8B;">${conv.email}</span>
+            <span class="unread-badge">${conv.unread}</span>
+          </div>
+          <p style="font-size: 0.85rem; color: #A88B9D; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${conv.lastMessage}</p>
+        </div>
+      `).join('');
+    }
+    
+    function viewConversation(chatId, email) {
+      currentViewingConversation = chatId;
+      const detailArea = document.getElementById('conversation-detail');
+      
+      const convMessages = chatMessages.filter(m => m.chat_id === chatId);
+      detailArea.innerHTML = `
+        <div style="display: flex; flex-direction: column; height: 100%;">
+          <div style="padding: 16px; border-bottom: 2px solid #F4A6C1;">
+            <h3 style="color: #E8A4BF; font-weight: bold; margin: 0;">${email}</h3>
+          </div>
+          <div id="conversation-messages" class="chat-messages scrollbar-hide" style="flex: 1; overflow-y: auto; padding: 16px;">
+            ${convMessages.map(msg => `
+              <div class="message ${msg.sender}">
+                <span class="paw-emoji">🐾</span>
+                ${msg.message}
+              </div>
+            `).join('')}
+          </div>
+          <div class="chat-input-area">
+            <input type="text" class="chat-input" placeholder="Type a response..." id="conv-response-input" onkeypress="if(event.key==='Enter') sendConversationResponse('${chatId}', event)">
+            <button class="chat-send-btn" onclick="sendConversationResponse('${chatId}')" type="button">🐾</button>
+          </div>
+        </div>
+      `;
+      
+      renderDashboardConversations();
+    }
+    
+    function sendConversationResponse(chatId, event) {
+      if (event && event.key !== 'Enter') return;
+      
+      const input = document.getElementById('conv-response-input');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      const messageObj = {
+        id: 'msg_' + Date.now(),
+        chat_id: chatId,
+        sender: 'artist',
+        sender_email: 'artist@whisker-studio.com',
+        message: message,
+        timestamp: new Date().toISOString()
+      };
+      
+      chatMessages.push(messageObj);
+      localStorage.setItem('whisker_chat_messages', JSON.stringify(chatMessages));
+      input.value = '';
+      viewConversation(chatId, chatMessages.find(m => m.chat_id === chatId)?.sender_email || 'Unknown');
+    }
+    
+    // Load chat messages from localStorage on init
+    window.addEventListener('DOMContentLoaded', function() {
+      const saved = localStorage.getItem('whisker_chat_messages');
+      if (saved) chatMessages = JSON.parse(saved);
+      
+      const savedTheme = localStorage.getItem('whisker-theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        document.querySelector('.theme-option.pastel-dark').classList.add('active');
+        document.querySelector('.theme-option.pastel-light').classList.remove('active');
+      }
+    });</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d9dbde444e4f554',t:'MTc3MzA5NzcwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  </html>
